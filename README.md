@@ -123,6 +123,12 @@ Then open http://localhost:8000 in your browser.
 
 ## Troubleshooting
 
+### Python version issues on Netlify?
+The project uses Python 3.11 (specified in `runtime.txt`). If you see build errors about pandas compilation:
+- Make sure `runtime.txt` exists in your repository root
+- Verify it contains exactly: `python-3.11`
+- Don't use Python 3.14 - pandas doesn't have prebuilt wheels for it yet
+
 ### Scraper not updating?
 - Check GitHub Actions logs for errors
 - Verify NCAA.com hasn't changed their page structure
