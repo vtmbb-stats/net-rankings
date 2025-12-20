@@ -81,13 +81,15 @@
         .header-right {
             display: flex;
             align-items: center;
+            gap: 15px;
             margin-top: 10px;
         }
         
         .last-update {
             color: #6c757d;
             font-size: 13px;
-            margin-top: 8px;
+            margin: 0;
+            white-space: nowrap;
         }
         
         .last-update span {
@@ -300,10 +302,10 @@
         <div class="header">
             <div class="header-left">
                 <h1>Virginia Tech Men's Basketball NET Rankings Dashboard</h1>
-                <p class="subtitle">Historical data (2021-2024) with current 2025 rankings • Updated daily</p>
-                <p class="last-update">Last Updated: <span id="last-updated"></span></p>
+                <p class="subtitle">Historical data (2021-2024) with current 2025 rankings • Automatically updates daily</p>
             </div>
             <div class="header-right">
+                <p class="last-update">Last Updated: <span id="last-updated"></span></p>
                 <button id="dark-mode-toggle" class="dark-mode-btn">🌙 Dark Mode</button>
             </div>
         </div>
