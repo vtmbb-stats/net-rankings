@@ -67,6 +67,34 @@
             width: 250px;
         }
         
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #dee2e6;
+            background: white;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn:hover {
+            background: #f8f9fa;
+            border-color: #adb5bd;
+        }
+        
+        .filter-btn.active {
+            background: #0d6efd;
+            color: white;
+            border-color: #0d6efd;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -202,12 +230,15 @@
         
         <div class="controls">
             <div class="control-group">
-                <label for="conference-filter">Conference:</label>
-                <select id="conference-filter">
-                    <option value="all">All Teams</option>
-                    <option value="Power Conf.">Power Conference</option>
-                    <option value="Mid Major">Mid-Major</option>
-                </select>
+                <label>Filter:</label>
+                <div class="button-group">
+                    <button class="filter-btn active" data-filter="all">All Teams</button>
+                    <button class="filter-btn" data-filter="Power 5">Power 5</button>
+                    <button class="filter-btn" data-filter="Mid-Major">Mid-Major</button>
+                    <button class="filter-btn" data-filter="Mid-Major Play">Mid-Major Play</button>
+                    <button class="filter-btn" data-filter="Mid-Major Consider">Mid-Major Consider</button>
+                    <button class="filter-btn" data-filter="Mid-Major Avoid">Mid-Major Avoid</button>
+                </div>
             </div>
             
             <div class="control-group">
@@ -220,6 +251,7 @@
             <thead>
                 <tr>
                     <th class="sortable" data-sort="Team">Team</th>
+                    <th class="sortable" data-sort="Status">Status</th>
                     <th class="sortable" data-sort="2025 NET Rank">2025 Rank</th>
                     <th class="sortable" data-sort="2024 NET Rank">2024 Finish</th>
                     <th class="sortable" data-sort="2023 NET Rank">2023 Finish</th>
@@ -288,9 +320,9 @@
         function updateStats() {
             document.getElementById('total-teams').textContent = data.length;
             document.getElementById('power-conf-count').textContent = 
-                data.filter(t => t['Mid Major'] === 'Power Conf.').length;
+                data.filter(t => t.Status === 'Power 5').length;
             document.getElementById('mid-major-count').textContent = 
-                data.filter(t => t['Mid Major'] === 'Mid Major').length;
+                data.filter(t => t.Status && t.Status.startsWith('Mid-Major')).length;
             document.getElementById('last-updated').textContent = new Date().toLocaleDateString();
         }
 
@@ -318,6 +350,7 @@
                 
                 tr.innerHTML = `
                     <td><strong>${row['Display Name'] || row.Team}</strong></td>
+                    <td>${row.Status || '-'}</td>
                     <td class="rank-cell ${rankClass}">${rank2025}</td>
                     <td>${formatRank(row['2024 NET Rank'])}</td>
                     <td>${formatRank(row['2023 NET Rank'])}</td>
@@ -382,14 +415,27 @@
 
         // Filter data
         function filterData() {
-            const conferenceFilter = document.getElementById('conference-filter').value;
+            const activeBtn = document.querySelector('.filter-btn.active');
+            const statusFilter = activeBtn ? activeBtn.dataset.filter : 'all';
             const searchTerm = document.getElementById('search').value.toLowerCase();
             
             filteredData = data.filter(row => {
-                const conferenceMatch = conferenceFilter === 'all' || row['Mid Major'] === conferenceFilter;
+                // Status filter
+                let statusMatch = true;
+                if (statusFilter !== 'all') {
+                    if (statusFilter === 'Mid-Major') {
+                        // Mid-Major button shows all mid-major teams
+                        statusMatch = row.Status && row.Status.startsWith('Mid-Major');
+                    } else {
+                        statusMatch = row.Status === statusFilter;
+                    }
+                }
+                
+                // Search filter
                 const displayName = row['Display Name'] || row.Team;
                 const searchMatch = displayName.toLowerCase().includes(searchTerm);
-                return conferenceMatch && searchMatch;
+                
+                return statusMatch && searchMatch;
             });
             
             sortData(currentSort.column);
@@ -400,7 +446,17 @@
             th.addEventListener('click', () => sortData(th.dataset.sort));
         });
 
-        document.getElementById('conference-filter').addEventListener('change', filterData);
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                // Filter data
+                filterData();
+            });
+        });
+
         document.getElementById('search').addEventListener('input', filterData);
 
         // Initialize
