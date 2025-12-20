@@ -1,0 +1,13 @@
+# Ignore Python files - these are only for GitHub Actions
+   *.py
+   requirements.txt
+   __pycache__/
+   *.pyc
+   .Python
+
+   # Ignore source data
+   *.xlsx
+
+   # Ignore cache files
+   *_cache.html
+   create_cache.py
