@@ -176,6 +176,93 @@ def merge_and_update(historical_df, current_rankings_df):
     # Remove temporary column
     historical_df.drop('_clean_name', axis=1, inplace=True)
     
+    # Assign Status based on team categories
+    power_5_teams = [
+        'Alabama', 'Arizona', 'Arizona St.', 'Arkansas', 'Auburn', 'BYU', 'Baylor', 
+        'Boston College', 'Butler', 'California', 'Cincinnati', 'Clemson', 'Colorado', 
+        'Creighton', 'DePaul', 'Duke', 'Florida', 'Florida St.', 'Georgetown', 'Georgia', 
+        'Georgia Tech', 'Houston', 'Illinois', 'Indiana', 'Iowa', 'Iowa St.', 'Kansas', 
+        'Kansas St.', 'Kentucky', 'LSU', 'Louisville', 'Marquette', 'Maryland', 'Miami (FL)', 
+        'Michigan', 'Michigan St.', 'Minnesota', 'Mississippi St.', 'Missouri', 'NC State', 
+        'Nebraska', 'North Carolina', 'Northwestern', 'Notre Dame', 'Ohio St.', 'Oklahoma', 
+        'Oklahoma St.', 'Ole Miss', 'Oregon', 'Penn St.', 'Pittsburgh', 'Providence', 
+        'Purdue', 'Rutgers', 'SMU', 'Seton Hall', 'South Carolina', 'Southern California', 
+        "St. John's (NY)", 'Stanford', 'Syracuse', 'TCU', 'Tennessee', 'Texas', 'Texas A&M', 
+        'Texas Tech', 'UCF', 'UCLA', 'UConn', 'Utah', 'Vanderbilt', 'Villanova', 'Virginia', 
+        'Virginia Tech', 'Wake Forest', 'Washington', 'West Virginia', 'Wisconsin', 'Xavier'
+    ]
+    
+    mid_major_avoid_teams = [
+        'Gonzaga', "Saint Mary's (CA)", 'San Diego St.', 'Boise St.', 'Utah St.', 'Memphis', 
+        'VCU', 'Colorado St.', 'Drake', 'North Texas', 'Dayton', 'San Francisco', 'Nevada', 
+        'Washington St.', 'UAB', 'Grand Canyon', 'Liberty', 'Yale', 'Santa Clara', 'UC Irvine', 
+        'Fla. Atlantic', 'Bradley', 'St. Bonaventure', 'Loyola Chicago', 'Saint Louis', 'Furman', 
+        'Davidson', 'Belmont', 'Akron', 'UNLV', 'George Mason', 'Princeton', 'Wichita St.', 
+        'Louisiana Tech', 'New Mexico', 'Toledo', 'Kent St.', 'South Dakota St.', 'Colgate', 
+        'Vermont', 'Chattanooga', 'Richmond', 'UNC Greensboro', 'UC Santa Barbara', 'Ohio', 
+        'Tulane', 'James Madison', 'Col. of Charleston', 'Cornell', 'Western Ky.', 'Indiana St.', 
+        'Utah Valley', 'Hofstra', 'Missouri St.', 'UNI', 'Sam Houston', 'Wyoming', 'Murray St.', 
+        'Temple', 'Wofford', 'Samford', 'Duquesne', "Saint Joseph's", 'LMU (CA)', 'UNCW', 
+        'Southern Ill.', 'UC Riverside', 'Towson', 'Drexel', 'Seattle U', 'South Alabama', 'Troy', 
+        'New Mexico St.', 'South Fla.', 'Cleveland St.', 'Morehead St.', 'ETSU', 'Longwood', 
+        'Lipscomb', 'Middle Tenn.', 'Montana', 'North Dakota St.', 'Louisiana', 'Arkansas St.', 
+        'Youngstown St.', 'UC San Diego', 'High Point', 'Oregon St.'
+    ]
+    
+    mid_major_consider_teams = [
+        'Iona', 'Winthrop', 'App State', 'Massachusetts', 'Bryant', 'Wright St.', 'Marshall', 
+        'Montana St.', 'UTEP', 'SFA', 'Abilene Christian', 'Rhode Island', 'Jacksonville St.', 
+        'Texas St.', 'Eastern Wash.', 'Hawaii', 'Norfolk St.', 'Charlotte', 'East Carolina', 
+        'Fresno St.', 'Weber St.', 'UNC Asheville', 'Oral Roberts', 'UMass Lowell', 'St. Thomas (MN)', 
+        'Northern Colo.', 'Oakland', 'George Washington', 'Illinois St.', 'Purdue Fort Wayne', 
+        'Kennesaw St.', 'Long Beach St.', 'Miami (OH)', 'McNeese', 'Milwaukee', 'San Jose St.', 
+        'UIC', 'Western Caro.', 'North Ala.', 'CSUN', 'Dartmouth', 'Air Force', 'VMI', 'Robert Morris'
+    ]
+    
+    mid_major_play_teams = [
+        'Northern Ky.', 'Brown', 'Delaware', 'Eastern Ky.', 'UC Davis', 'Southern Utah', 
+        'California Baptist', 'Mercer', 'Quinnipiac', 'Gardner-Webb', 'Navy', 'Fordham', 
+        'Pepperdine', 'Rice', 'Harvard', 'Nicholls', 'La Salle', 'Georgia St.', 'Old Dominion', 
+        'Buffalo', 'Tarleton St.', 'Penn', 'FGCU', 'UT Arlington', "Saint Peter's", 'A&M-Corpus Christi', 
+        'Radford', 'Tulsa', 'Cal St. Fullerton', 'Queens (NC)', 'Ball St.', 'Monmouth', 
+        "Mount St. Mary's", 'Jacksonville', 'Northeastern', 'Marist', 'Campbell', 'UMBC', 'Siena', 
+        'Boston U.', 'Merrimack', 'Bowling Green', 'South Dakota', 'CSU Bakersfield', 'Valparaiso', 
+        'Fairfield', 'Portland St.', 'Southern Miss.', 'Kansas City', 'Wagner', 'UTSA', 'Niagara', 
+        'Portland', 'Coastal Carolina', 'Ga. Southern', 'Southern U.', 'Texas Southern', 'Elon', 
+        'Rider', 'Pacific', 'San Diego', 'Little Rock', 'Army West Point', 'Detroit Mercy', 'Stetson', 
+        'Stony Brook', 'American', 'Bellarmine', 'Southeast Mo. St.', 'Idaho St.', 'SIUE', 
+        'North Florida', 'New Hampshire', 'Bucknell', 'FIU', 'Utah Tech', 'Canisius', 'UAlbany', 
+        'Howard', 'Southeastern La.', 'Austin Peay', 'Evansville', 'Maine', 'Western Ill.', 
+        'Lafayette', 'UT Martin', 'Loyola Maryland', 'Grambling', 'N.C. Central', 'The Citadel', 
+        'Jackson St.', 'Lehigh', 'Lamar University', 'Central Conn. St.', 'Northwestern St.', 
+        'Tennessee St.', 'Manhattan', 'Omaha', 'North Dakota', 'Central Mich.', 'UTRGV', 'Morgan St.', 
+        'Northern Ariz.', 'LIU', 'Sacred Heart', 'Sacramento St.', 'Presbyterian', 'Prairie View', 
+        'Cal Poly', 'Alcorn', 'William & Mary', 'Binghamton', 'Denver', 'Columbia', 'USC Upstate', 
+        'South Carolina St.', 'FDU', 'ULM', 'Western Mich.', 'Hampton', 'Southern Ind.', 'Eastern Mich.', 
+        'NIU', 'Green Bay', 'Holy Cross', 'UMES', 'N.C. A&T', 'Idaho', 'New Orleans', 'Bethune-Cookman', 
+        'Alabama St.', 'Charleston So.', 'Coppin St.', 'NJIT', 'East Texas A&M', 'Florida A&M', 'UIW', 
+        'Le Moyne', 'Eastern Ill.', 'Stonehill', 'Chicago St.', 'Alabama A&M', 'Central Ark.', 
+        'Delaware St.', 'IU Indy', 'Houston Christian', 'Lindenwood', 'Ark.-Pine Bluff', 'Mississippi Val.'
+    ]
+    
+    def assign_status(display_name):
+        """Assign status category based on display name"""
+        if display_name in power_5_teams:
+            return 'Power 5'
+        elif display_name in mid_major_avoid_teams:
+            return 'Mid-Major Avoid'
+        elif display_name in mid_major_consider_teams:
+            return 'Mid-Major Consider'
+        elif display_name in mid_major_play_teams:
+            return 'Mid-Major Play'
+        else:
+            return 'Mid-Major'  # Default for any unassigned mid-majors
+    
+    historical_df['Status'] = historical_df['Display Name'].apply(assign_status)
+    
+    # Remove Saint Francis from the data
+    historical_df = historical_df[historical_df['Display Name'] != 'Saint Francis']
+    
     # Recalculate 5-year average
     year_cols = ['2021 NET Rank', '2022 NET Rank', '2023 NET Rank', '2024 NET Rank', '2025 NET Rank']
     # Convert columns to numeric first
@@ -202,6 +289,12 @@ def merge_and_update(historical_df, current_rankings_df):
     if len(not_updated) > 0:
         print(f"\n📊 {len(not_updated)} teams in your Excel file did not receive 2025 rankings")
         print("   (This is normal - these teams may not be in the current NET rankings)")
+    
+    # Reorder columns: Display Name, Status, then rankings
+    column_order = ['Display Name', 'Status', '2025 NET Rank', '2024 NET Rank', '2023 NET Rank', 
+                    '2022 NET Rank', '2021 NET Rank', 'Avergae 5 Year NET']
+    historical_df = historical_df[column_order]
+    print(f"\n✓ Status categories assigned and columns reordered")
     
     return historical_df
 
