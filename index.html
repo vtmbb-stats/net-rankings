@@ -670,6 +670,12 @@
                 chartInstance = null;
             }
         }
+
+        function parseLocalYMD(ymd) {
+            // Expect "YYYY-MM-DD"
+            const [y, m, d] = ymd.split('-').map(Number);
+            return new Date(y, m - 1, d); // local midnight
+        }
         
         function showChart(teamName) {
             // Get team's daily history
@@ -681,11 +687,11 @@
             }
             
             // Sort by date
-            teamData.sort((a, b) => new Date(a.date) - new Date(b.date));
+            teamData.sort((a, b) => parseLocalYMD(a.date) - parseLocalYMD(b.date));
             
             // Prepare chart data
             const labels = teamData.map(d => {
-                const date = new Date(d.date);
+                const date = parseLocalYMD(d.date);
                 return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
             });
             const ranks = teamData.map(d => d.rank);
@@ -728,7 +734,7 @@
                             callbacks: {
                                 title: function(context) {
                                     const index = context[0].dataIndex;
-                                    const date = new Date(teamData[index].date);
+                                    const date = parseLocalYMD(teamData[index].date);
                                     return date.toLocaleDateString('en-US', { 
                                         month: 'long', 
                                         day: 'numeric',
