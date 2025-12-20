@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from datetime import datetime
 import sys
+import os
 
 def scrape_net_rankings():
     """Scrape current NET rankings from NCAA website"""
@@ -18,10 +19,14 @@ def scrape_net_rankings():
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
     }
     
+    html_content = None
+    
     try:
+        print("Attempting to fetch from NCAA.com...")
         response = requests.get(url, headers=headers, timeout=30)
         response.raise_for_status()
         html_content = response.text
+        print(f"Successfully fetched page ({len(html_content)} characters)")
         
     except Exception as e:
         print(f"WARNING: Network request failed ({e})")
@@ -29,8 +34,12 @@ def scrape_net_rankings():
         try:
             with open('net_rankings_cache.html', 'r') as f:
                 html_content = f.read()
+            print(f"Using cached HTML ({len(html_content)} characters)")
         except:
             print("ERROR: Could not read cached file either")
+            print("\nDEBUG INFO:")
+            print(f"  Current directory: {os.getcwd()}")
+            print(f"  Files in directory: {os.listdir('.')}")
             sys.exit(1)
     
     # Parse HTML
@@ -39,11 +48,16 @@ def scrape_net_rankings():
     
     if not table:
         print("ERROR: Could not find rankings table on page")
+        print("\nDEBUG INFO:")
+        print(f"  Page title: {soup.find('title').text if soup.find('title') else 'No title'}")
+        print(f"  HTML preview (first 500 chars): {html_content[:500]}")
         sys.exit(1)
     
     # Extract data
     rows = table.find('tbody').find_all('tr')
     rankings_data = []
+    
+    print(f"Found table with {len(rows)} rows")
     
     for row in rows:
         cols = row.find_all('td')
@@ -55,7 +69,11 @@ def scrape_net_rankings():
     df = pd.DataFrame(rankings_data)
     df['Rank'] = pd.to_numeric(df['Rank'], errors='coerce')
     
-    print(f"Successfully scraped {len(df)} teams")
+    print(f"Successfully extracted {len(df)} teams")
+    if len(df) > 0:
+        print(f"  First team: #{df.iloc[0]['Rank']} {df.iloc[0]['School']}")
+        print(f"  Last team: #{df.iloc[-1]['Rank']} {df.iloc[-1]['School']}")
+    
     return df
 
 def load_historical_data(filepath):
@@ -74,6 +92,11 @@ def merge_and_update(historical_df, current_rankings_df):
     # Rename columns for clarity
     current_rankings_df = current_rankings_df.rename(columns={'School': 'Team', 'Rank': '2025 NET Rank'})
     
+    # Special case mappings for teams that don't match automatically
+    special_mappings = {
+        'Middle Tenn.': 'Mid Majordle Tenn.'  # NCAA name -> Excel name
+    }
+    
     # Create display name mapping based on your specifications
     # This removes (AQ) and cleans up state abbreviations
     def get_display_name(team_name):
@@ -81,6 +104,9 @@ def merge_and_update(historical_df, current_rankings_df):
         if pd.isna(team_name):
             return team_name
         import re
+        # Special case for Mid Majordle Tenn -> Middle Tenn.
+        if team_name == 'Mid Majordle Tenn.':
+            return 'Middle Tenn.'
         # Remove (AQ) suffix
         display = re.sub(r'\(AQ\)$', '', str(team_name)).strip()
         return display
@@ -112,6 +138,17 @@ def merge_and_update(historical_df, current_rankings_df):
     for _, row in current_rankings_df.iterrows():
         ncaa_team = row['Team']
         rank = row['2025 NET Rank']
+        
+        # Check special mappings first
+        excel_name = special_mappings.get(ncaa_team)
+        if excel_name:
+            mask = historical_df['Team'] == excel_name
+            if mask.any():
+                historical_df.loc[mask, '2025 NET Rank'] = rank
+                display_name = historical_df.loc[mask, 'Display Name'].iloc[0]
+                matches_found += 1
+                matches_details.append(f"  ✓ {ncaa_team} (#{rank}) → {excel_name} [Display: {display_name}] [SPECIAL MAPPING]")
+                continue
         
         # Try exact match with cleaned names
         mask = historical_df['_clean_name'] == ncaa_team
