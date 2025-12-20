@@ -337,45 +337,6 @@ def save_output(df, output_path):
         print(f"ERROR saving output: {e}")
         sys.exit(1)
 
-def update_daily_history(current_rankings_df, daily_history_path):
-    """Append today's rankings to daily history file"""
-    try:
-        # Get today's date
-        today = datetime.now().strftime('%Y-%m-%d')
-        
-        # Prepare today's data
-        today_data = current_rankings_df[['School', 'Rank']].copy()
-        today_data.columns = ['Team', 'NET_Rank']
-        today_data['Date'] = today
-        today_data = today_data[['Date', 'Team', 'NET_Rank']]
-        
-        # Load existing daily history or create new
-        if os.path.exists(daily_history_path):
-            daily_history = pd.read_csv(daily_history_path)
-            
-            # Check if today's data already exists
-            if today in daily_history['Date'].values:
-                print(f"Daily history already contains data for {today}, skipping append")
-                return daily_history
-            
-            # Append today's data
-            daily_history = pd.concat([daily_history, today_data], ignore_index=True)
-            print(f"Appended {len(today_data)} teams to daily history for {today}")
-        else:
-            daily_history = today_data
-            print(f"Created new daily history with {len(today_data)} teams for {today}")
-        
-        # Save updated history
-        daily_history.to_csv(daily_history_path, index=False)
-        print(f"Saved daily history to {daily_history_path}")
-        
-        return daily_history
-        
-    except Exception as e:
-        print(f"ERROR updating daily history: {e}")
-        # Don't fail the whole scraper if daily history fails
-        return None
-
 def main():
     print(f"=== NET Rankings Scraper ===")
     print(f"Run time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -401,12 +362,6 @@ def main():
     print("Step 4: Saving output...")
     output_path = 'net_rankings_data.csv'
     save_output(updated_df, output_path)
-    print()
-    
-    # Update daily history
-    print("Step 5: Updating daily history...")
-    daily_history_path = 'net_rankings_daily.csv'
-    update_daily_history(current_rankings, daily_history_path)
     print()
     
     print("✓ Complete!")
