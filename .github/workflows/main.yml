@@ -3,7 +3,7 @@ name: Update NET Rankings
 on:
   schedule:
     # Run daily at 11:59 PM EST (04:59 AM UTC)
-    - cron: '40 8 * * *'
+    - cron: '45 8 * * *'
   workflow_dispatch: # Allow manual trigger
   
 jobs:
