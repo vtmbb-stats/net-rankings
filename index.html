@@ -457,12 +457,19 @@
         // Sort data
         function sortData(column) {
             if (currentSort.column === column) {
+                // Toggle if clicking same column
                 currentSort.ascending = !currentSort.ascending;
             } else {
+                // New column - always start ascending
                 currentSort.column = column;
                 currentSort.ascending = true;
             }
             
+            applySortWithoutToggle();
+        }
+        
+        // Apply current sort without changing direction
+        function applySortWithoutToggle() {
             filteredData.sort((a, b) => {
                 let aVal = a[column];
                 let bVal = b[column];
@@ -530,7 +537,8 @@
                 });
             }
             
-            sortData(currentSort.column);
+            // Re-apply current sort without changing direction
+            applySortWithoutToggle();
         }
 
         // Event listeners
