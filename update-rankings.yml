@@ -34,11 +34,5 @@ jobs:
           git add net_rankings_data.csv
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update NET rankings data - $(date +'%Y-%m-%d')" && git push)
       
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v2.0
-        with:
-          publish-dir: '.'
-          production-deploy: true
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      # Netlify will automatically deploy when it detects the push to main branch
+      # No need to trigger deployment here - it happens automatically via GitHub integration
