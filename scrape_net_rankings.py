@@ -11,6 +11,14 @@ from datetime import datetime
 import sys
 import os
 
+# Optional embedded final NET ranks (2021-2024) generated from NCAA final spreadsheets
+try:
+    from final_net_ranks import FINAL_NET_RANKS_BY_YEAR
+except Exception:
+    FINAL_NET_RANKS_BY_YEAR = None
+
+USE_EMBEDDED_FINAL_NET_RANKS = True  # set False to revert to Excel historical columns
+
 def scrape_net_rankings():
     """Scrape current NET rankings from NCAA website"""
     url = "https://www.ncaa.com/rankings/basketball-men/d1/ncaa-mens-basketball-net-rankings"
@@ -123,6 +131,28 @@ def merge_and_update(historical_df, current_rankings_df):
     
     # Add display name column
     historical_df['Display Name'] = historical_df['Team'].apply(get_display_name)
+
+    # --- Historical override (safe) ---
+    # Replace 2021-2024 finishes using embedded final NET ranks generated from the attached files.
+    # Keeps the spreadsheet versions in *_Spreadsheet columns so you can flip back instantly.
+    if USE_EMBEDDED_FINAL_NET_RANKS and FINAL_NET_RANKS_BY_YEAR is not None:
+        def _norm_team_name(x):
+            if pd.isna(x):
+                return x
+            s = str(x).strip()
+            s = s.replace('(AQ)', '').strip()
+            return s
+
+        for yr in (2021, 2022, 2023, 2024):
+            col = f"{yr} NET Rank"
+            if col in historical_df.columns:
+                historical_df[f"{col} Spreadsheet"] = historical_df[col]
+
+            ranks = FINAL_NET_RANKS_BY_YEAR.get(str(yr), FINAL_NET_RANKS_BY_YEAR.get(yr))
+            if not ranks:
+                continue
+
+            historical_df[col] = historical_df['Display Name'].apply(lambda n: ranks.get(_norm_team_name(n), pd.NA))
     
     # Update the historical dataframe with new 2025 rankings
     # First, set all existing 2025 ranks to NaN
@@ -383,3 +413,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
