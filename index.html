@@ -6,30 +6,6 @@
     <title>NET Rankings Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        :root {
-            --bg-color: #f5f5f5;
-            --container-bg: white;
-            --text-color: #333;
-            --text-secondary: #666;
-            --border-color: #dee2e6;
-            --header-border: #e9ecef;
-            --table-header-bg: #f8f9fa;
-            --table-border: #dee2e6;
-            --hover-bg: #f8f9fa;
-        }
-        
-        body.dark-mode {
-            --bg-color: #1a1a1a;
-            --container-bg: #2d2d2d;
-            --text-color: #e0e0e0;
-            --text-secondary: #b0b0b0;
-            --border-color: #404040;
-            --header-border: #404040;
-            --table-header-bg: #3a3a3a;
-            --table-border: #404040;
-            --hover-bg: #3a3a3a;
-        }
-        
         * {
             margin: 0;
             padding: 0;
@@ -38,16 +14,15 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
+            background: #f5f5f5;
+            color: #333;
             padding: 20px;
-            transition: background-color 0.3s, color 0.3s;
         }
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: var(--container-bg);
+            background: white;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -55,13 +30,13 @@
         }
         
         h1 {
-            color: var(--text-color);
+            color: #333;
             margin-bottom: 5px;
             font-size: 28px;
         }
         
         .subtitle {
-            color: var(--text-secondary);
+            color: #666;
             margin-bottom: 5px;
             font-size: 14px;
         }
@@ -72,7 +47,7 @@
             align-items: flex-start;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 2px solid var(--header-border);
+            border-bottom: 2px solid #e9ecef;
         }
         
         .header-left {
@@ -98,25 +73,6 @@
             color: #495057;
         }
         
-        .dark-mode-btn {
-            padding: 10px 20px;
-            background: #343a40;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .dark-mode-btn:hover {
-            background: #23272b;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        
         .controls {
             display: flex;
             gap: 20px;
@@ -138,11 +94,11 @@
         
         select, input[type="text"] {
             padding: 8px 12px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #dee2e6;
             border-radius: 4px;
             font-size: 14px;
-            background: var(--container-bg);
-            color: var(--text-color);
+            background: white;
+            color: #333;
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         
@@ -162,7 +118,7 @@
         
         .autocomplete-items {
             position: absolute;
-            border: 1px solid var(--border-color);
+            border: 1px solid #dee2e6;
             border-top: none;
             z-index: 99;
             top: 100%;
@@ -170,19 +126,19 @@
             right: 0;
             max-height: 300px;
             overflow-y: auto;
-            background: var(--container-bg);
+            background: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         .autocomplete-items div {
             padding: 10px;
             cursor: pointer;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-color);
+            border-bottom: 1px solid #dee2e6;
+            color: #333;
         }
         
         .autocomplete-items div:hover {
-            background-color: var(--hover-bg);
+            background-color: #f8f9fa;
         }
         
         .button-group {
@@ -220,19 +176,19 @@
         }
         
         th {
-            background: var(--table-header-bg);
+            background: #f8f9fa;
             padding: 12px;
             text-align: left;
             font-weight: 600;
-            color: var(--text-color);
-            border-bottom: 2px solid var(--table-border);
+            color: #333;
+            border-bottom: 2px solid #dee2e6;
             cursor: pointer;
             user-select: none;
             transition: background-color 0.2s;
         }
         
         th:hover {
-            background: var(--hover-bg);
+            background: #f8f9fa;
         }
         
         th.sortable:after {
@@ -252,12 +208,23 @@
         
         td {
             padding: 12px;
-            border-bottom: 1px solid var(--table-border);
-            color: var(--text-color);
+            border-bottom: 1px solid #dee2e6;
+            color: #333;
+        }
+        
+        td:nth-child(2),  /* Status column */
+        td:nth-child(3),  /* 2021 */
+        td:nth-child(4),  /* 2022 */
+        td:nth-child(5),  /* 2023 */
+        td:nth-child(6),  /* 2024 */
+        td:nth-child(7),  /* 2025 */
+        td:nth-child(8)   /* Average */
+        {
+            text-align: center;
         }
         
         tr:hover {
-            background: var(--hover-bg);
+            background: #f8f9fa;
         }
         
         tr:hover {
@@ -324,7 +291,6 @@
             </div>
             <div class="header-right">
                 <p class="last-update">Last Updated: <span id="last-updated"></span></p>
-                <button id="dark-mode-toggle" class="dark-mode-btn">🌙 Dark Mode</button>
             </div>
         </div>
         
@@ -369,7 +335,7 @@
         </table>
         
         <div id="chart-container" style="display: none; margin-top: 40px;">
-            <h2 id="chart-title" style="margin-bottom: 20px; color: var(--text-color);"></h2>
+            <h2 id="chart-title" style="margin-bottom: 20px; color: #333;"></h2>
             <canvas id="net-chart"></canvas>
         </div>
     </div>
@@ -767,59 +733,32 @@
                             title: {
                                 display: true,
                                 text: 'NET Rank',
-                                color: getComputedStyle(document.documentElement)
-                                    .getPropertyValue('--text-color')
+                                color: '#333'
                             },
                             ticks: {
-                                color: getComputedStyle(document.documentElement)
-                                    .getPropertyValue('--text-color')
+                                color: '#333'
                             },
                             grid: {
-                                color: getComputedStyle(document.documentElement)
-                                    .getPropertyValue('--border-color')
+                                color: '#dee2e6'
                             }
                         },
                         x: {
                             title: {
                                 display: true,
                                 text: 'Date',
-                                color: getComputedStyle(document.documentElement)
-                                    .getPropertyValue('--text-color')
+                                color: '#333'
                             },
                             ticks: {
-                                color: getComputedStyle(document.documentElement)
-                                    .getPropertyValue('--text-color')
+                                color: '#333'
                             },
                             grid: {
-                                color: getComputedStyle(document.documentElement)
-                                    .getPropertyValue('--border-color')
+                                color: '#dee2e6'
                             }
                         }
                     }
                 }
             });
         }
-
-        // Dark mode toggle
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        
-        // Check for saved dark mode preference
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-            darkModeToggle.textContent = '☀️ Light Mode';
-        }
-        
-        darkModeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            
-            if (document.body.classList.contains('dark-mode')) {
-                darkModeToggle.textContent = '☀️ Light Mode';
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                darkModeToggle.textContent = '🌙 Dark Mode';
-                localStorage.setItem('darkMode', 'disabled');
-            }
-        });
 
         // Initialize
         loadData();
