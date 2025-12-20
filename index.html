@@ -681,16 +681,19 @@
             // Get team's daily history
             let teamData = dailyHistory.filter(d => d.team === teamName);
             
-            // Add today's data point from current rankings
-            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+            // Add YESTERDAY's data point from current rankings
+            // (Current rankings represent yesterday's data, published today)
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().split('T')[0]; // YYYY-MM-DD format
             const currentRank = selectedTeam['2025 NET Rank'];
             
             if (currentRank && currentRank !== '' && currentRank !== '-') {
-                // Check if today's data already exists
-                const hasToday = teamData.some(d => d.date === today);
-                if (!hasToday) {
+                // Check if yesterday's data already exists
+                const hasYesterday = teamData.some(d => d.date === yesterdayStr);
+                if (!hasYesterday) {
                     teamData.push({
-                        date: today,
+                        date: yesterdayStr,
                         team: teamName,
                         rank: parseInt(currentRank)
                     });
