@@ -679,7 +679,23 @@
         
         function showChart(teamName) {
             // Get team's daily history
-            const teamData = dailyHistory.filter(d => d.team === teamName);
+            let teamData = dailyHistory.filter(d => d.team === teamName);
+            
+            // Add today's data point from current rankings
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+            const currentRank = selectedTeam['2025 NET Rank'];
+            
+            if (currentRank && currentRank !== '' && currentRank !== '-') {
+                // Check if today's data already exists
+                const hasToday = teamData.some(d => d.date === today);
+                if (!hasToday) {
+                    teamData.push({
+                        date: today,
+                        team: teamName,
+                        rank: parseInt(currentRank)
+                    });
+                }
+            }
             
             if (teamData.length === 0) {
                 hideChart();
