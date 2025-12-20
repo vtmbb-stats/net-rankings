@@ -1,6 +1,8 @@
 [build]
   publish = "."
   command = ""
+  # No build command - just deploy static files
+  # Python scraping happens in GitHub Actions, not Netlify
 
 [[headers]]
   for = "/*.csv"
