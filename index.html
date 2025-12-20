@@ -270,29 +270,16 @@
         }
         
         /* Color coding for ranks */
-        .rank-elite {
-            color: #0d6efd;
-            background: #e7f1ff;
+        .rank-top150 {
+            background: #ffcccc;  /* Pale red for top 150 (good) */
         }
         
-        .rank-great {
-            color: #198754;
-            background: #d1e7dd;
+        .rank-mid {
+            background: #fff4cc;  /* Pale yellow for 150-200 (okay) */
         }
         
-        .rank-good {
-            color: #fd7e14;
-            background: #ffe5d0;
-        }
-        
-        .rank-okay {
-            color: #6c757d;
-            background: #e2e3e5;
-        }
-        
-        .rank-poor {
-            color: #dc3545;
-            background: #f8d7da;
+        .rank-bottom {
+            background: #ccffcc;  /* Pale green for 200+ (weaker) */
         }
         
         .rank-none {
@@ -368,11 +355,11 @@
                 <tr>
                     <th class="sortable" data-sort="Team">Team</th>
                     <th class="sortable" data-sort="Status">Status</th>
-                    <th class="sortable" data-sort="2025 NET Rank">2025 Rank</th>
-                    <th class="sortable" data-sort="2024 NET Rank">2024 Finish</th>
-                    <th class="sortable" data-sort="2023 NET Rank">2023 Finish</th>
-                    <th class="sortable" data-sort="2022 NET Rank">2022 Finish</th>
                     <th class="sortable" data-sort="2021 NET Rank">2021 Finish</th>
+                    <th class="sortable" data-sort="2022 NET Rank">2022 Finish</th>
+                    <th class="sortable" data-sort="2023 NET Rank">2023 Finish</th>
+                    <th class="sortable" data-sort="2024 NET Rank">2024 Finish</th>
+                    <th class="sortable" data-sort="2025 NET Rank">2025 Rank</th>
                     <th class="sortable" data-sort="Avergae 5 Year NET">5-Year Average</th>
                 </tr>
             </thead>
@@ -448,13 +435,11 @@
 
         // Get rank color class
         function getRankColorClass(rank) {
-            if (!rank || rank === '') return 'rank-none';
+            if (!rank || rank === '' || rank === '-') return 'rank-none';
             const r = parseInt(rank);
-            if (r <= 25) return 'rank-elite';
-            if (r <= 75) return 'rank-great';
-            if (r <= 150) return 'rank-good';
-            if (r <= 250) return 'rank-okay';
-            return 'rank-poor';
+            if (r <= 150) return 'rank-top150';      // Pale red (top 150 = good)
+            if (r <= 200) return 'rank-mid';          // Pale yellow (150-200 = okay)
+            return 'rank-bottom';                     // Pale green (200+ = weaker)
         }
 
         // Render table
@@ -465,17 +450,27 @@
             filteredData.forEach(row => {
                 const tr = document.createElement('tr');
                 
+                // Get color classes for each year
+                const rank2021 = formatRank(row['2021 NET Rank']);
+                const rank2022 = formatRank(row['2022 NET Rank']);
+                const rank2023 = formatRank(row['2023 NET Rank']);
+                const rank2024 = formatRank(row['2024 NET Rank']);
                 const rank2025 = formatRank(row['2025 NET Rank']);
-                const rankClass = getRankColorClass(rank2025);
+                
+                const class2021 = getRankColorClass(rank2021);
+                const class2022 = getRankColorClass(rank2022);
+                const class2023 = getRankColorClass(rank2023);
+                const class2024 = getRankColorClass(rank2024);
+                const class2025 = getRankColorClass(rank2025);
                 
                 tr.innerHTML = `
                     <td><strong>${row['Display Name'] || row.Team}</strong></td>
                     <td>${row.Status || '-'}</td>
-                    <td class="rank-cell ${rankClass}">${rank2025}</td>
-                    <td>${formatRank(row['2024 NET Rank'])}</td>
-                    <td>${formatRank(row['2023 NET Rank'])}</td>
-                    <td>${formatRank(row['2022 NET Rank'])}</td>
-                    <td>${formatRank(row['2021 NET Rank'])}</td>
+                    <td class="${class2021}">${rank2021}</td>
+                    <td class="${class2022}">${rank2022}</td>
+                    <td class="${class2023}">${rank2023}</td>
+                    <td class="${class2024}">${rank2024}</td>
+                    <td class="${class2025}">${rank2025}</td>
                     <td><strong>${formatAverage(row['Avergae 5 Year NET'])}</strong></td>
                 `;
                 tbody.appendChild(tr);
