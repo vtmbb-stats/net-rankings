@@ -1,22 +1,20 @@
 [build]
-  publish = "."
-  command = ""
-  # No build command - just deploy static files
-  # Python scraping happens in GitHub Actions, not Netlify
+     publish = "."
+     ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF *.html *.csv"
 
-[[headers]]
-  for = "/*.csv"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-    
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+   [[headers]]
+     for = "/*.csv"
+     [headers.values]
+       Cache-Control = "public, max-age=0, must-revalidate"
+       
+   [[headers]]
+     for = "/*.html"
+     [headers.values]
+       Cache-Control = "public, max-age=0, must-revalidate"
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "no-referrer-when-downgrade"
+   [[headers]]
+     for = "/*"
+     [headers.values]
+       X-Frame-Options = "DENY"
+       X-Content-Type-Options = "nosniff"
+       Referrer-Policy = "no-referrer-when-downgrade"
