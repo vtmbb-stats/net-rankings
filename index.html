@@ -221,11 +221,11 @@
                 <tr>
                     <th class="sortable" data-sort="Team">Team</th>
                     <th class="sortable" data-sort="2025 NET Rank">2025 Rank</th>
-                    <th class="sortable" data-sort="2024 NET Rank">2024</th>
-                    <th class="sortable" data-sort="2023 NET Rank">2023</th>
-                    <th class="sortable" data-sort="2022 NET Rank">2022</th>
-                    <th class="sortable" data-sort="2021 NET Rank">2021</th>
-                    <th class="sortable" data-sort="Avergae 5 Year NET">5-Yr Avg</th>
+                    <th class="sortable" data-sort="2024 NET Rank">2024 Finish</th>
+                    <th class="sortable" data-sort="2023 NET Rank">2023 Finish</th>
+                    <th class="sortable" data-sort="2022 NET Rank">2022 Finish</th>
+                    <th class="sortable" data-sort="2021 NET Rank">2021 Finish</th>
+                    <th class="sortable" data-sort="Avergae 5 Year NET">5-Year Average</th>
                 </tr>
             </thead>
             <tbody id="rankings-body">
@@ -238,6 +238,20 @@
         let data = [];
         let filteredData = [];
         let currentSort = { column: '2025 NET Rank', ascending: true };
+
+        // Format rank as integer (remove decimals)
+        function formatRank(value) {
+            if (!value || value === '' || value === '-') return '-';
+            const num = parseFloat(value);
+            return isNaN(num) ? '-' : Math.round(num).toString();
+        }
+
+        // Format average with one decimal place
+        function formatAverage(value) {
+            if (!value || value === '' || value === '-') return '-';
+            const num = parseFloat(value);
+            return isNaN(num) ? '-' : num.toFixed(1);
+        }
 
         // Load CSV data
         async function loadData() {
@@ -299,17 +313,17 @@
             filteredData.forEach(row => {
                 const tr = document.createElement('tr');
                 
-                const rank2025 = row['2025 NET Rank'] || '-';
+                const rank2025 = formatRank(row['2025 NET Rank']);
                 const rankClass = getRankColorClass(rank2025);
                 
                 tr.innerHTML = `
                     <td><strong>${row['Display Name'] || row.Team}</strong></td>
                     <td class="rank-cell ${rankClass}">${rank2025}</td>
-                    <td>${row['2024 NET Rank'] || '-'}</td>
-                    <td>${row['2023 NET Rank'] || '-'}</td>
-                    <td>${row['2022 NET Rank'] || '-'}</td>
-                    <td>${row['2021 NET Rank'] || '-'}</td>
-                    <td><strong>${row['Avergae 5 Year NET'] || '-'}</strong></td>
+                    <td>${formatRank(row['2024 NET Rank'])}</td>
+                    <td>${formatRank(row['2023 NET Rank'])}</td>
+                    <td>${formatRank(row['2022 NET Rank'])}</td>
+                    <td>${formatRank(row['2021 NET Rank'])}</td>
+                    <td><strong>${formatAverage(row['Avergae 5 Year NET'])}</strong></td>
                 `;
                 tbody.appendChild(tr);
             });
