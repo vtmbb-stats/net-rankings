@@ -40,36 +40,20 @@ git push -u origin main
 
 ### 4. Set up Netlify
 
-#### Option A: Connect via Netlify Dashboard (Recommended)
 1. Go to [netlify.com](https://netlify.com) and sign in
 2. Click "Add new site" → "Import an existing project"
 3. Choose GitHub and select your repository
-4. Deploy settings:
-   - Build command: (leave empty)
-   - Publish directory: `.` (root)
+4. **Build settings:**
+   - Build command: **(leave empty)**
+   - Publish directory: `.`
 5. Click "Deploy site"
-6. Note your Site ID (found in Site settings → General → Site details → API ID)
+6. Done! Deploys in ~30 seconds
 
-#### Option B: Use Netlify CLI
-```bash
-npm install -g netlify-cli
-netlify login
-netlify init
-```
+**Important:** Don't add a build command. Netlify should only deploy the static files. Python scraping happens in GitHub Actions.
 
-### 5. Configure GitHub Secrets
+**You don't need Netlify API tokens** - Netlify automatically redeploys when it sees changes pushed to your GitHub repo.
 
-Add these secrets to your GitHub repository (Settings → Secrets and variables → Actions):
-
-1. **NETLIFY_AUTH_TOKEN**
-   - Get from: https://app.netlify.com/user/applications#personal-access-tokens
-   - Click "New access token"
-   - Give it a name and copy the token
-
-2. **NETLIFY_SITE_ID**
-   - Get from: Netlify Dashboard → Site settings → Site information → API ID
-
-### 6. Test the Workflow
+### 5. Test the Workflow
 
 The workflow will run automatically daily at 8 AM EST. To test it manually:
 
@@ -77,6 +61,9 @@ The workflow will run automatically daily at 8 AM EST. To test it manually:
 2. Click "Actions" tab
 3. Select "Update NET Rankings" workflow
 4. Click "Run workflow" → "Run workflow"
+5. Wait ~30 seconds for completion
+6. Netlify will auto-redeploy (~30 seconds more)
+7. Check your live site!
 
 ## Local Development
 
@@ -114,12 +101,20 @@ Then open http://localhost:8000 in your browser.
 
 ## How It Works
 
-1. **GitHub Actions** runs the scraper daily
-2. **Python script** fetches current NET rankings from NCAA.com
-3. **Data merge** combines with your historical Excel data
-4. **CSV generation** creates updated data file
-5. **Auto-commit** pushes changes to GitHub
-6. **Netlify deployment** automatically updates the live site
+**Simple & Fast Architecture:**
+
+1. **GitHub Actions** runs the Python scraper daily at 8 AM EST
+   - Fetches current NET rankings from NCAA.com
+   - Merges with historical data
+   - Updates `net_rankings_data.csv`
+   - Commits and pushes to GitHub
+
+2. **Netlify** detects the push and redeploys automatically
+   - Only deploys static files (HTML, CSS, CSV)
+   - No Python installation needed
+   - **Deploys in 10-30 seconds** ⚡
+
+This separation keeps deployments fast and reliable. Python runs where it should (GitHub Actions), and Netlify does what it does best (instant static file hosting).
 
 ## Troubleshooting
 
