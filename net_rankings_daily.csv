@@ -1,0 +1,366 @@
+Date,Team,NET_Rank
+2024-11-30,Michigan,1
+2024-11-30,Duke,2
+2024-11-30,Purdue,3
+2024-11-30,Vanderbilt,4
+2024-11-30,Gonzaga,5
+2024-11-30,Arizona,6
+2024-11-30,Iowa St.,7
+2024-11-30,UConn,8
+2024-11-30,Louisville,9
+2024-11-30,Michigan St.,10
+2024-11-30,Indiana,11
+2024-11-30,Tennessee,12
+2024-11-30,BYU,13
+2024-11-30,Alabama,14
+2024-11-30,Kentucky,15
+2024-11-30,Iowa,16
+2024-11-30,Kansas,17
+2024-11-30,Houston,18
+2024-11-30,LSU,19
+2024-11-30,Southern California,20
+2024-11-30,Butler,21
+2024-11-30,Utah St.,22
+2024-11-30,St. John's (NY),23
+2024-11-30,Illinois,24
+2024-11-30,Yale,25
+2024-11-30,North Carolina,26
+2024-11-30,Tulsa,27
+2024-11-30,Nebraska,28
+2024-11-30,Saint Mary's (CA),29
+2024-11-30,Auburn,30
+2024-11-30,Virginia,31
+2024-11-30,Santa Clara,32
+2024-11-30,Florida,33
+2024-11-30,Clemson,34
+2024-11-30,Belmont,35
+2024-11-30,Georgia,36
+2024-11-30,Texas Tech,37
+2024-11-30,Miami (FL),38
+2024-11-30,SMU,39
+2024-11-30,NC State,40
+2024-11-30,UC San Diego,41
+2024-11-30,Akron,42
+2024-11-30,George Mason,43
+2024-11-30,McNeese,44
+2024-11-30,Arkansas,45
+2024-11-30,Colorado,46
+2024-11-30,George Washington,47
+2024-11-30,Northwestern,48
+2024-11-30,Saint Louis,49
+2024-11-30,Seton Hall,50
+2024-11-30,Missouri,51
+2024-11-30,California,52
+2024-11-30,Oklahoma St.,53
+2024-11-30,TCU,54
+2024-11-30,Kansas St.,55
+2024-11-30,Wake Forest,56
+2024-11-30,VCU,57
+2024-11-30,UCF,58
+2024-11-30,Wyoming,59
+2024-11-30,Columbia,60
+2024-11-30,California Baptist,61
+2024-11-30,High Point,62
+2024-11-30,Ohio St.,63
+2024-11-30,Villanova,64
+2024-11-30,Rhode Island,65
+2024-11-30,Colorado St.,66
+2024-11-30,Baylor,67
+2024-11-30,Texas,68
+2024-11-30,Wisconsin,69
+2024-11-30,New Mexico St.,70
+2024-11-30,William & Mary,71
+2024-11-30,Utah Valley,72
+2024-11-30,UNI,73
+2024-11-30,Washington,74
+2024-11-30,Winthrop,75
+2024-11-30,UCLA,76
+2024-11-30,South Fla.,77
+2024-11-30,Sam Houston,78
+2024-11-30,Texas A&M,79
+2024-11-30,Boise St.,80
+2024-11-30,Pacific,81
+2024-11-30,Florida St.,82
+2024-11-30,Penn St.,83
+2024-11-30,Virginia Tech,84
+2024-11-30,Northern Colo.,85
+2024-11-30,Notre Dame,86
+2024-11-30,Buffalo,87
+2024-11-30,Dayton,88
+2024-11-30,Austin Peay,89
+2024-11-30,Syracuse,90
+2024-11-30,St. Bonaventure,91
+2024-11-30,Mercer,92
+2024-11-30,Murray St.,93
+2024-11-30,Oklahoma,94
+2024-11-30,Western Ky.,95
+2024-11-30,Ole Miss,96
+2024-11-30,Davidson,97
+2024-11-30,UAB,98
+2024-11-30,South Carolina,99
+2024-11-30,Arizona St.,100
+2024-11-30,UNCW,101
+2024-11-30,Xavier,102
+2024-11-30,West Virginia,103
+2024-11-30,Wichita St.,104
+2024-11-30,Illinois St.,105
+2024-11-30,Hofstra,106
+2024-11-30,Stanford,107
+2024-11-30,Miami (OH),108
+2024-11-30,Seattle U,109
+2024-11-30,Lipscomb,110
+2024-11-30,Bowling Green,111
+2024-11-30,New Mexico,112
+2024-11-30,Towson,113
+2024-11-30,ETSU,114
+2024-11-30,Oakland,115
+2024-11-30,Cornell,116
+2024-11-30,South Alabama,117
+2024-11-30,Nevada,118
+2024-11-30,Creighton,119
+2024-11-30,Fla. Atlantic,120
+2024-11-30,San Francisco,121
+2024-11-30,Georgetown,122
+2024-11-30,San Diego St.,123
+2024-11-30,Middle Tenn.,124
+2024-11-30,Liberty,125
+2024-11-30,UC Davis,126
+2024-11-30,Providence,127
+2024-11-30,SFA,128
+2024-11-30,Tennessee St.,129
+2024-11-30,Southern Miss.,130
+2024-11-30,Idaho St.,131
+2024-11-30,Marshall,132
+2024-11-30,Troy,133
+2024-11-30,Hawaii,134
+2024-11-30,Bradley,135
+2024-11-30,Richmond,136
+2024-11-30,Portland St.,137
+2024-11-30,St. Thomas (MN),138
+2024-11-30,UT Martin,139
+2024-11-30,Vermont,140
+2024-11-30,Colgate,141
+2024-11-30,UC Irvine,142
+2024-11-30,LMU (CA),143
+2024-11-30,Minnesota,144
+2024-11-30,Stony Brook,145
+2024-11-30,Quinnipiac,146
+2024-11-30,Pittsburgh,147
+2024-11-30,Northern Ky.,148
+2024-11-30,Marist,149
+2024-11-30,Toledo,150
+2024-11-30,Central Conn. St.,151
+2024-11-30,Siena,152
+2024-11-30,Drake,153
+2024-11-30,Cincinnati,154
+2024-11-30,Elon,155
+2024-11-30,Lamar University,156
+2024-11-30,Kent St.,157
+2024-11-30,Tarleton St.,158
+2024-11-30,Fresno St.,159
+2024-11-30,Memphis,160
+2024-11-30,New Orleans,161
+2024-11-30,UT Arlington,162
+2024-11-30,Grand Canyon,163
+2024-11-30,UC Santa Barbara,164
+2024-11-30,Montana St.,165
+2024-11-30,Boston College,166
+2024-11-30,Marquette,167
+2024-11-30,Iona,168
+2024-11-30,Wright St.,169
+2024-11-30,Eastern Mich.,170
+2024-11-30,Robert Morris,171
+2024-11-30,Mississippi St.,172
+2024-11-30,Wofford,173
+2024-11-30,UTRGV,174
+2024-11-30,Utah,175
+2024-11-30,Northeastern,176
+2024-11-30,James Madison,177
+2024-11-30,South Dakota St.,178
+2024-11-30,North Dakota St.,179
+2024-11-30,Youngstown St.,180
+2024-11-30,Southern Ill.,181
+2024-11-30,Weber St.,182
+2024-11-30,DePaul,183
+2024-11-30,Cal Poly,184
+2024-11-30,Temple,185
+2024-11-30,Rutgers,186
+2024-11-30,LIU,187
+2024-11-30,SIUE,188
+2024-11-30,Arkansas St.,189
+2024-11-30,Montana,190
+2024-11-30,Idaho,191
+2024-11-30,Oregon,192
+2024-11-30,Boston U.,193
+2024-11-30,Navy,194
+2024-11-30,Cal St. Fullerton,195
+2024-11-30,UIC,196
+2024-11-30,Harvard,197
+2024-11-30,Wagner,198
+2024-11-30,Green Bay,199
+2024-11-30,Maryland,200
+2024-11-30,Georgia Tech,201
+2024-11-30,Duquesne,202
+2024-11-30,Fairfield,203
+2024-11-30,Denver,204
+2024-11-30,Indiana St.,205
+2024-11-30,Alabama St.,206
+2024-11-30,Monmouth,207
+2024-11-30,Massachusetts,208
+2024-11-30,Kennesaw St.,209
+2024-11-30,UNC Asheville,210
+2024-11-30,Jacksonville,211
+2024-11-30,N.C. A&T,212
+2024-11-30,Northern Ariz.,213
+2024-11-30,Furman,214
+2024-11-30,Norfolk St.,215
+2024-11-30,Coastal Carolina,216
+2024-11-30,Southeast Mo. St.,217
+2024-11-30,Penn,218
+2024-11-30,FGCU,219
+2024-11-30,Charlotte,220
+2024-11-30,UNLV,221
+2024-11-30,Milwaukee,222
+2024-11-30,Portland,223
+2024-11-30,Grambling,224
+2024-11-30,Washington St.,225
+2024-11-30,North Texas,226
+2024-11-30,UC Riverside,227
+2024-11-30,Valparaiso,228
+2024-11-30,Col. of Charleston,229
+2024-11-30,CSU Bakersfield,230
+2024-11-30,UIW,231
+2024-11-30,American,232
+2024-11-30,USC Upstate,233
+2024-11-30,Charleston So.,234
+2024-11-30,Queens (NC),235
+2024-11-30,Tulane,236
+2024-11-30,Louisiana Tech,237
+2024-11-30,Fordham,238
+2024-11-30,Ga. Southern,239
+2024-11-30,Bethune-Cookman,240
+2024-11-30,Old Dominion,241
+2024-11-30,A&M-Corpus Christi,242
+2024-11-30,Utah Tech,243
+2024-11-30,UMBC,244
+2024-11-30,Campbell,245
+2024-11-30,Rice,246
+2024-11-30,Pepperdine,247
+2024-11-30,Lindenwood,248
+2024-11-30,Hampton,249
+2024-11-30,East Texas A&M,250
+2024-11-30,FIU,251
+2024-11-30,IU Indy,252
+2024-11-30,Western Caro.,253
+2024-11-30,Lehigh,254
+2024-11-30,Sacramento St.,255
+2024-11-30,Presbyterian,256
+2024-11-30,NIU,257
+2024-11-30,San Jose St.,258
+2024-11-30,Southern U.,259
+2024-11-30,West Ga.,260
+2024-11-30,South Dakota,261
+2024-11-30,Morehead St.,262
+2024-11-30,Princeton,263
+2024-11-30,Merrimack,264
+2024-11-30,Oregon St.,265
+2024-11-30,Delaware,266
+2024-11-30,Saint Joseph's,267
+2024-11-30,Mercyhurst,268
+2024-11-30,Tennessee Tech,269
+2024-11-30,Bellarmine,270
+2024-11-30,Texas St.,271
+2024-11-30,Prairie View,272
+2024-11-30,Jacksonville St.,273
+2024-11-30,Samford,274
+2024-11-30,Brown,275
+2024-11-30,Alabama A&M,276
+2024-11-30,La Salle,277
+2024-11-30,Drexel,278
+2024-11-30,San Diego,279
+2024-11-30,Southeastern La.,280
+2024-11-30,Oral Roberts,281
+2024-11-30,Eastern Wash.,282
+2024-11-30,Abilene Christian,283
+2024-11-30,Nicholls,284
+2024-11-30,Central Mich.,285
+2024-11-30,Air Force,286
+2024-11-30,Ohio,287
+2024-11-30,CSUN,288
+2024-11-30,Le Moyne,289
+2024-11-30,App State,290
+2024-11-30,Chattanooga,291
+2024-11-30,Western Mich.,292
+2024-11-30,Dartmouth,293
+2024-11-30,UTSA,294
+2024-11-30,Sacred Heart,295
+2024-11-30,North Dakota,296
+2024-11-30,Missouri St.,297
+2024-11-30,Howard,298
+2024-11-30,Central Ark.,299
+2024-11-30,Purdue Fort Wayne,300
+2024-11-30,Houston Christian,301
+2024-11-30,Omaha,302
+2024-11-30,Long Beach St.,303
+2024-11-30,Bucknell,304
+2024-11-30,Longwood,305
+2024-11-30,UNC Greensboro,306
+2024-11-30,North Florida,307
+2024-11-30,Southern Ind.,308
+2024-11-30,Bryant,309
+2024-11-30,Detroit Mercy,310
+2024-11-30,Manhattan,311
+2024-11-30,UTEP,312
+2024-11-30,Loyola Maryland,313
+2024-11-30,Eastern Ky.,314
+2024-11-30,New Haven,315
+2024-11-30,Holy Cross,316
+2024-11-30,Evansville,317
+2024-11-30,Alcorn,318
+2024-11-30,North Ala.,319
+2024-11-30,East Carolina,320
+2024-11-30,Army West Point,321
+2024-11-30,Maine,322
+2024-11-30,NJIT,323
+2024-11-30,Little Rock,324
+2024-11-30,Eastern Ill.,325
+2024-11-30,UMass Lowell,326
+2024-11-30,UAlbany,327
+2024-11-30,Radford,328
+2024-11-30,Canisius,329
+2024-11-30,UMES,330
+2024-11-30,Cleveland St.,331
+2024-11-30,Stetson,332
+2024-11-30,Chicago St.,333
+2024-11-30,Mount St. Mary's,334
+2024-11-30,Ark.-Pine Bluff,335
+2024-11-30,VMI,336
+2024-11-30,Texas Southern,337
+2024-11-30,Kansas City,338
+2024-11-30,Stonehill,339
+2024-11-30,Ball St.,340
+2024-11-30,Jackson St.,341
+2024-11-30,N.C. Central,342
+2024-11-30,Southern Utah,343
+2024-11-30,Western Ill.,344
+2024-11-30,Niagara,345
+2024-11-30,Northwestern St.,346
+2024-11-30,Saint Peter's,347
+2024-11-30,Louisiana,348
+2024-11-30,Georgia St.,349
+2024-11-30,Lafayette,350
+2024-11-30,ULM,351
+2024-11-30,Florida A&M,352
+2024-11-30,Morgan St.,353
+2024-11-30,Loyola Chicago,354
+2024-11-30,New Hampshire,355
+2024-11-30,South Carolina St.,356
+2024-11-30,Gardner-Webb,357
+2024-11-30,FDU,358
+2024-11-30,Saint Francis,359
+2024-11-30,Coppin St.,360
+2024-11-30,Mississippi Val.,361
+2024-11-30,Delaware St.,362
+2024-11-30,Rider,363
+2024-11-30,Binghamton,364
+2024-11-30,The Citadel,365
