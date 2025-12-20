@@ -342,29 +342,71 @@ def main():
     print(f"Run time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
     
-    # Scrape current rankings
-    print("Step 1: Scraping current NET rankings...")
+    # Step 1: Save current rankings to daily history BEFORE scraping new data
+    print("Step 1: Archiving current rankings to daily history...")
+    daily_history_path = 'net_rankings_daily.csv'
+    current_data_path = 'net_rankings_data.csv'
+    
+    if os.path.exists(current_data_path):
+        try:
+            current_data = pd.read_csv(current_data_path)
+            # Use YESTERDAY's date since we're running at 11:59 PM
+            from datetime import timedelta
+            yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+            
+            # Prepare yesterday's data from current rankings
+            yesterday_data = current_data[['Display Name', '2025 NET Rank']].copy()
+            yesterday_data.columns = ['Team', 'NET_Rank']
+            yesterday_data['Date'] = yesterday
+            yesterday_data = yesterday_data[['Date', 'Team', 'NET_Rank']]
+            yesterday_data = yesterday_data.dropna(subset=['NET_Rank'])
+            
+            # Load existing daily history or create new
+            if os.path.exists(daily_history_path):
+                daily_history = pd.read_csv(daily_history_path)
+                
+                # Check if yesterday's data already exists
+                if yesterday in daily_history['Date'].values:
+                    print(f"   Daily history already contains data for {yesterday}, skipping archive")
+                else:
+                    # Append yesterday's data
+                    daily_history = pd.concat([daily_history, yesterday_data], ignore_index=True)
+                    daily_history.to_csv(daily_history_path, index=False)
+                    print(f"   ✓ Archived {len(yesterday_data)} teams for {yesterday}")
+            else:
+                # Create new daily history file
+                yesterday_data.to_csv(daily_history_path, index=False)
+                print(f"   ✓ Created daily history with {len(yesterday_data)} teams for {yesterday}")
+        except Exception as e:
+            print(f"   ⚠ Warning: Could not archive current data: {e}")
+            print(f"   Continuing with scrape...")
+    else:
+        print(f"   No current data file found, skipping archive (first run)")
+    print()
+    
+    # Step 2: Scrape current rankings from NCAA.com
+    print("Step 2: Scraping current NET rankings from NCAA.com...")
     current_rankings = scrape_net_rankings()
     print()
     
-    # Load historical data
-    print("Step 2: Loading historical data...")
+    # Step 3: Load historical data
+    print("Step 3: Loading historical data...")
     historical_data_path = 'ACC_Who_to_Play.xlsx'
     historical_df = load_historical_data(historical_data_path)
     print()
     
-    # Merge and update
-    print("Step 3: Merging data and recalculating averages...")
+    # Step 4: Merge and update
+    print("Step 4: Merging data and recalculating averages...")
     updated_df = merge_and_update(historical_df, current_rankings)
     print()
     
-    # Save output
-    print("Step 4: Saving output...")
+    # Step 5: Save output
+    print("Step 5: Saving updated rankings...")
     output_path = 'net_rankings_data.csv'
     save_output(updated_df, output_path)
     print()
     
-    print("✓ Complete!")
+    print("✓ Complete! Current rankings updated and archived to daily history.")
 
 if __name__ == "__main__":
     main()
