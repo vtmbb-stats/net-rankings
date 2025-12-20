@@ -470,6 +470,8 @@
         
         // Apply current sort without changing direction
         function applySortWithoutToggle() {
+            const column = currentSort.column;
+            
             filteredData.sort((a, b) => {
                 let aVal = a[column];
                 let bVal = b[column];
