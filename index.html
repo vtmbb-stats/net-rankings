@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NET Rankings Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
             --bg-color: #f5f5f5;
@@ -152,6 +153,36 @@
         input[type="text"]:focus {
             outline: none;
             border-color: #0d6efd;
+        }
+        
+        .autocomplete-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--container-bg);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+        
+        .autocomplete-items div:hover {
+            background-color: var(--hover-bg);
         }
         
         .button-group {
@@ -325,7 +356,10 @@
             
             <div class="control-group">
                 <label for="search">Search:</label>
-                <input type="text" id="search" placeholder="Search team names...">
+                <div class="autocomplete-wrapper">
+                    <input type="text" id="search" placeholder="Search team names..." autocomplete="off">
+                    <div id="autocomplete-list" class="autocomplete-items"></div>
+                </div>
             </div>
         </div>
         
@@ -346,6 +380,11 @@
                 <!-- Data will be loaded here -->
             </tbody>
         </table>
+        
+        <div id="chart-container" style="display: none; margin-top: 40px;">
+            <h2 id="chart-title" style="margin-bottom: 20px; color: var(--text-color);"></h2>
+            <canvas id="net-chart"></canvas>
+        </div>
     </div>
 
     <script>
@@ -496,28 +535,28 @@
 
         // Filter data
         function filterData() {
-            const activeBtn = document.querySelector('.filter-btn.active');
-            const statusFilter = activeBtn ? activeBtn.dataset.filter : 'all';
-            const searchTerm = document.getElementById('search').value.toLowerCase();
-            
-            filteredData = data.filter(row => {
-                // Status filter
-                let statusMatch = true;
-                if (statusFilter !== 'all') {
-                    if (statusFilter === 'Mid-Major') {
-                        // Mid-Major button shows all mid-major teams
-                        statusMatch = row.Status && row.Status.startsWith('Mid-Major');
-                    } else {
-                        statusMatch = row.Status === statusFilter;
+            // If a team is selected, show only that team
+            if (selectedTeam) {
+                filteredData = [selectedTeam];
+            } else {
+                const activeBtn = document.querySelector('.filter-btn.active');
+                const statusFilter = activeBtn ? activeBtn.dataset.filter : 'all';
+                
+                filteredData = data.filter(row => {
+                    // Status filter
+                    let statusMatch = true;
+                    if (statusFilter !== 'all') {
+                        if (statusFilter === 'Mid-Major') {
+                            // Mid-Major button shows all mid-major teams
+                            statusMatch = row.Status && row.Status.startsWith('Mid-Major');
+                        } else {
+                            statusMatch = row.Status === statusFilter;
+                        }
                     }
-                }
-                
-                // Search filter
-                const displayName = row['Display Name'] || row.Team;
-                const searchMatch = displayName.toLowerCase().includes(searchTerm);
-                
-                return statusMatch && searchMatch;
-            });
+                    
+                    return statusMatch;
+                });
+            }
             
             sortData(currentSort.column);
         }
@@ -533,12 +572,213 @@
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 // Add active class to clicked button
                 btn.classList.add('active');
+                // Clear selected team and search
+                selectedTeam = null;
+                searchInput.value = '';
+                hideChart();
                 // Filter data
                 filterData();
             });
         });
 
-        document.getElementById('search').addEventListener('input', filterData);
+        // Autocomplete search functionality
+        let selectedTeam = null;
+        let dailyHistory = [];
+        let chartInstance = null;
+        
+        const searchInput = document.getElementById('search');
+        const autocompleteList = document.getElementById('autocomplete-list');
+        
+        // Load daily history data
+        fetch('net_rankings_daily.csv')
+            .then(response => response.text())
+            .then(csvText => {
+                const rows = csvText.split('\n').slice(1); // Skip header
+                rows.forEach(row => {
+                    if (row.trim()) {
+                        const [date, team, rank] = row.split(',');
+                        dailyHistory.push({ date, team, rank: parseInt(rank) });
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading daily history:', error));
+        
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            autocompleteList.innerHTML = '';
+            
+            if (!searchTerm) {
+                selectedTeam = null;
+                filterData();
+                hideChart();
+                return;
+            }
+            
+            // Filter teams based on current button filter and search term
+            const activeBtn = document.querySelector('.filter-btn.active');
+            const statusFilter = activeBtn ? activeBtn.dataset.filter : 'all';
+            
+            const matches = data.filter(row => {
+                // Status filter
+                let statusMatch = true;
+                if (statusFilter !== 'all') {
+                    if (statusFilter === 'Mid-Major') {
+                        statusMatch = row.Status && row.Status.startsWith('Mid-Major');
+                    } else {
+                        statusMatch = row.Status === statusFilter;
+                    }
+                }
+                
+                // Search match
+                const displayName = row['Display Name'] || row.Team;
+                const searchMatch = displayName.toLowerCase().includes(searchTerm);
+                
+                return statusMatch && searchMatch;
+            }).slice(0, 10); // Limit to 10 results
+            
+            matches.forEach(team => {
+                const div = document.createElement('div');
+                const displayName = team['Display Name'] || team.Team;
+                div.textContent = displayName;
+                div.addEventListener('click', function() {
+                    selectTeam(team);
+                });
+                autocompleteList.appendChild(div);
+            });
+        });
+        
+        // Close autocomplete when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target !== searchInput) {
+                autocompleteList.innerHTML = '';
+            }
+        });
+        
+        function selectTeam(team) {
+            selectedTeam = team;
+            const displayName = team['Display Name'] || team.Team;
+            searchInput.value = displayName;
+            autocompleteList.innerHTML = '';
+            filterData();
+            showChart(displayName);
+        }
+        
+        function hideChart() {
+            document.getElementById('chart-container').style.display = 'none';
+            if (chartInstance) {
+                chartInstance.destroy();
+                chartInstance = null;
+            }
+        }
+        
+        function showChart(teamName) {
+            // Get team's daily history
+            const teamData = dailyHistory.filter(d => d.team === teamName);
+            
+            if (teamData.length === 0) {
+                hideChart();
+                return;
+            }
+            
+            // Sort by date
+            teamData.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            // Prepare chart data
+            const labels = teamData.map(d => {
+                const date = new Date(d.date);
+                return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+            });
+            const ranks = teamData.map(d => d.rank);
+            
+            // Show chart container
+            document.getElementById('chart-container').style.display = 'block';
+            document.getElementById('chart-title').textContent = `${teamName} - Daily NET Ranking`;
+            
+            // Destroy existing chart
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+            
+            // Create new chart
+            const ctx = document.getElementById('net-chart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'NET Rank',
+                        data: ranks,
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.1,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 2.5,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    const index = context[0].dataIndex;
+                                    const date = new Date(teamData[index].date);
+                                    return date.toLocaleDateString('en-US', { 
+                                        month: 'long', 
+                                        day: 'numeric',
+                                        year: 'numeric'
+                                    });
+                                },
+                                label: function(context) {
+                                    return 'NET Rank: ' + context.parsed.y;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            reverse: true, // Lower rank is better
+                            title: {
+                                display: true,
+                                text: 'NET Rank',
+                                color: getComputedStyle(document.documentElement)
+                                    .getPropertyValue('--text-color')
+                            },
+                            ticks: {
+                                color: getComputedStyle(document.documentElement)
+                                    .getPropertyValue('--text-color')
+                            },
+                            grid: {
+                                color: getComputedStyle(document.documentElement)
+                                    .getPropertyValue('--border-color')
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date',
+                                color: getComputedStyle(document.documentElement)
+                                    .getPropertyValue('--text-color')
+                            },
+                            ticks: {
+                                color: getComputedStyle(document.documentElement)
+                                    .getPropertyValue('--text-color')
+                            },
+                            grid: {
+                                color: getComputedStyle(document.documentElement)
+                                    .getPropertyValue('--border-color')
+                            }
+                        }
+                    }
+                }
+            });
+        }
 
         // Dark mode toggle
         const darkModeToggle = document.getElementById('dark-mode-toggle');
