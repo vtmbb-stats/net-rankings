@@ -303,7 +303,7 @@
                 const rankClass = getRankColorClass(rank2025);
                 
                 tr.innerHTML = `
-                    <td><strong>${row.Team}</strong></td>
+                    <td><strong>${row['Display Name'] || row.Team}</strong></td>
                     <td class="rank-cell ${rankClass}">${rank2025}</td>
                     <td>${row['2024 NET Rank'] || '-'}</td>
                     <td>${row['2023 NET Rank'] || '-'}</td>
@@ -327,6 +327,12 @@
             filteredData.sort((a, b) => {
                 let aVal = a[column];
                 let bVal = b[column];
+                
+                // Use Display Name for team sorting
+                if (column === 'Team') {
+                    aVal = a['Display Name'] || a.Team;
+                    bVal = b['Display Name'] || b.Team;
+                }
                 
                 // Handle empty values
                 if (!aVal || aVal === '') return 1;
@@ -367,7 +373,8 @@
             
             filteredData = data.filter(row => {
                 const conferenceMatch = conferenceFilter === 'all' || row['Mid Major'] === conferenceFilter;
-                const searchMatch = row.Team.toLowerCase().includes(searchTerm);
+                const displayName = row['Display Name'] || row.Team;
+                const searchMatch = displayName.toLowerCase().includes(searchTerm);
                 return conferenceMatch && searchMatch;
             });
             
