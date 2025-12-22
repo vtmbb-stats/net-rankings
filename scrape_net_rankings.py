@@ -320,9 +320,9 @@ def merge_and_update(historical_df, current_rankings_df):
         print(f"\n📊 {len(not_updated)} teams in your Excel file did not receive 2025 rankings")
         print("   (This is normal - these teams may not be in the current NET rankings)")
     
-    # Reorder columns: Display Name, Status, then rankings
-    column_order = ['Display Name', 'Status', '2025 NET Rank', '2024 NET Rank', '2023 NET Rank', 
-                    '2022 NET Rank', '2021 NET Rank', 'Avergae 5 Year NET']
+    # Reorder columns: Display Name, Status, then rankings (oldest to newest)
+    column_order = ['Display Name', 'Status', '2021 NET Rank', '2022 NET Rank', '2023 NET Rank',
+                    '2024 NET Rank', '2025 NET Rank', 'Avergae 5 Year NET']
     historical_df = historical_df[column_order]
     print(f"\n✓ Status categories assigned and columns reordered")
     
@@ -350,33 +350,32 @@ def main():
     if os.path.exists(current_data_path):
         try:
             current_data = pd.read_csv(current_data_path)
-            # Use YESTERDAY's date since we're running at 11:59 PM
-            from datetime import timedelta
-            yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+            # Use TODAY's date - the current data represents today's rankings
+            today = datetime.now().strftime('%Y-%m-%d')
             
-            # Prepare yesterday's data from current rankings
-            yesterday_data = current_data[['Display Name', '2025 NET Rank']].copy()
-            yesterday_data.columns = ['Team', 'NET_Rank']
-            yesterday_data['Date'] = yesterday
-            yesterday_data = yesterday_data[['Date', 'Team', 'NET_Rank']]
-            yesterday_data = yesterday_data.dropna(subset=['NET_Rank'])
+            # Prepare today's data from current rankings
+            today_data = current_data[['Display Name', '2025 NET Rank']].copy()
+            today_data.columns = ['Team', 'NET_Rank']
+            today_data['Date'] = today
+            today_data = today_data[['Date', 'Team', 'NET_Rank']]
+            today_data = today_data.dropna(subset=['NET_Rank'])
             
             # Load existing daily history or create new
             if os.path.exists(daily_history_path):
                 daily_history = pd.read_csv(daily_history_path)
                 
-                # Check if yesterday's data already exists
-                if yesterday in daily_history['Date'].values:
-                    print(f"   Daily history already contains data for {yesterday}, skipping archive")
+                # Check if today's data already exists
+                if today in daily_history['Date'].values:
+                    print(f"   Daily history already contains data for {today}, skipping archive")
                 else:
-                    # Append yesterday's data
-                    daily_history = pd.concat([daily_history, yesterday_data], ignore_index=True)
+                    # Append today's data
+                    daily_history = pd.concat([daily_history, today_data], ignore_index=True)
                     daily_history.to_csv(daily_history_path, index=False)
-                    print(f"   ✓ Archived {len(yesterday_data)} teams for {yesterday}")
+                    print(f"   ✓ Archived {len(today_data)} teams for {today}")
             else:
                 # Create new daily history file
-                yesterday_data.to_csv(daily_history_path, index=False)
-                print(f"   ✓ Created daily history with {len(yesterday_data)} teams for {yesterday}")
+                today_data.to_csv(daily_history_path, index=False)
+                print(f"   ✓ Created daily history with {len(today_data)} teams for {today}")
         except Exception as e:
             print(f"   ⚠ Warning: Could not archive current data: {e}")
             print(f"   Continuing with scrape...")
