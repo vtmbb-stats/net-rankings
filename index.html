@@ -261,7 +261,7 @@
         }
         
         .rank-very-bottom {
-            background: #37a637;  /* Darker green for 260+ (very weak) */
+            background: #4cc44c;  /* Darker green for 260+ (very weak) */
         }
         
         .rank-none {
@@ -382,7 +382,7 @@
                 data = parseCSV(csvText);
                 filteredData = [...data];
                 updateStats();
-                renderTable();
+                applySortWithoutToggle(); // Apply the default sort
             } catch (error) {
                 console.error('Error loading data:', error);
                 document.getElementById('rankings-body').innerHTML = 
