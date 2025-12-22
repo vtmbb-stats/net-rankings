@@ -298,7 +298,7 @@
         <div class="header">
             <div class="header-left">
                 <h1>Virginia Tech Men's Basketball NET Rankings Dashboard</h1>
-                <p class="subtitle">Historical data (2021-2024) with current 2025 rankings • Automatically updates daily</p>
+                <p class="subtitle">Historical data (2022-2025) with current 2026 rankings • Automatically updates daily</p>
             </div>
             <div class="header-right">
                 <p class="last-update">Last Updated: <span id="last-updated"></span></p>
@@ -332,11 +332,11 @@
                 <tr>
                     <th class="sortable" data-sort="Team">Team</th>
                     <th class="sortable" data-sort="Status">Status</th>
-                    <th class="sortable" data-sort="2021 NET Rank">2021 Finish</th>
-                    <th class="sortable" data-sort="2022 NET Rank">2022 Finish</th>
-                    <th class="sortable" data-sort="2023 NET Rank">2023 Finish</th>
-                    <th class="sortable" data-sort="2024 NET Rank">2024 Finish</th>
-                    <th class="sortable" data-sort="2025 NET Rank">2025 Rank</th>
+                    <th class="sortable" data-sort="2021 NET Rank">2022 Finish</th>
+                    <th class="sortable" data-sort="2022 NET Rank">2023 Finish</th>
+                    <th class="sortable" data-sort="2023 NET Rank">2024 Finish</th>
+                    <th class="sortable" data-sort="2024 NET Rank">2025 Finish</th>
+                    <th class="sortable" data-sort="2025 NET Rank">2026 Rank</th>
                     <th class="sortable" data-sort="Avergae 5 Year NET">5-Year Average</th>
                 </tr>
             </thead>
@@ -663,19 +663,18 @@
             // Get team's daily history
             let teamData = dailyHistory.filter(d => d.team === teamName);
             
-            // Add YESTERDAY's data point from current rankings
-            // (Current rankings represent yesterday's data, published today)
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yesterdayStr = yesterday.toISOString().split('T')[0]; // YYYY-MM-DD format
+            // Add TODAY's data point from current rankings
+            // (Current rankings represent today's data)
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0]; // YYYY-MM-DD format
             const currentRank = selectedTeam['2025 NET Rank'];
             
             if (currentRank && currentRank !== '' && currentRank !== '-') {
-                // Check if yesterday's data already exists
-                const hasYesterday = teamData.some(d => d.date === yesterdayStr);
-                if (!hasYesterday) {
+                // Check if today's data already exists
+                const hasToday = teamData.some(d => d.date === todayStr);
+                if (!hasToday) {
                     teamData.push({
-                        date: yesterdayStr,
+                        date: todayStr,
                         team: teamName,
                         rank: parseInt(currentRank)
                     });
