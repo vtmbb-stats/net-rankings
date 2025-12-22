@@ -257,7 +257,11 @@
         }
         
         .rank-bottom {
-            background: #ccffcc;  /* Pale green for 200+ (weaker) */
+            background: #ccffcc;  /* Light green for 200-260 (weaker) */
+        }
+        
+        .rank-very-bottom {
+            background: #37a637;  /* Darker green for 260+ (very weak) */
         }
         
         .rank-none {
@@ -354,7 +358,7 @@
     <script>
         let data = [];
         let filteredData = [];
-        let currentSort = { column: '2025 NET Rank', ascending: true };
+        let currentSort = { column: 'Average 5 Year NET', ascending: true };
 
         // Format rank as integer (remove decimals)
         function formatRank(value) {
@@ -416,7 +420,8 @@
             const r = parseInt(rank);
             if (r <= 150) return 'rank-top150';      // Pale red (top 150 = good)
             if (r <= 200) return 'rank-mid';          // Pale yellow (150-200 = okay)
-            return 'rank-bottom';                     // Pale green (200+ = weaker)
+            if (r <= 260) return 'rank-bottom';       // Light green (200-260 = weaker)
+            return 'rank-very-bottom';                // Darker green (260+ = very weak)
         }
 
         // Render table
