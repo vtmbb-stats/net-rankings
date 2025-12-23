@@ -8,7 +8,79 @@ on:
   
 jobs:
   scrape-and-deploy:
+    runs-on: ubuntu-latestname: Update NET Rankings
+
+on:
+  schedule:
+    # Run daily at 2:00 PM EST (7:00 PM UTC) - NCAA rankings should be updated by then
+    - cron: '0 19 * * *'
+  workflow_dispatch: # Allow manual trigger
+  
+jobs:
+  scrape-and-deploy:
     runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'  # Must match runtime.txt for Netlify
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r .github/scripts/requirements.txt
+
+      - name: Run scraper
+        run: python scrape_net_rankings.py
+      
+      - name: Archive today's rankings to daily history
+        run: |
+          python3 << 'EOF'
+          import pandas as pd
+          from datetime import datetime
+          
+          # Get today's date
+          today = datetime.now().strftime('%Y-%m-%d')
+          
+          # Load current rankings (just scraped)
+          current_data = pd.read_csv('net_rankings_data.csv')
+          
+          # Load daily history
+          try:
+              daily_history = pd.read_csv('net_rankings_daily.csv')
+          except:
+              daily_history = pd.DataFrame(columns=['Date', 'Team', 'NET_Rank'])
+          
+          # Check if today already exists
+          if today not in daily_history['Date'].values:
+              # Prepare today's data
+              today_data = current_data[['Display Name', '2025 NET Rank']].copy()
+              today_data.columns = ['Team', 'NET_Rank']
+              today_data['Date'] = today
+              today_data = today_data[['Date', 'Team', 'NET_Rank']]
+              today_data = today_data.dropna(subset=['NET_Rank'])
+              
+              # Append to history
+              daily_history = pd.concat([daily_history, today_data], ignore_index=True)
+              daily_history.to_csv('net_rankings_daily.csv', index=False)
+              print(f"Archived {len(today_data)} teams for {today}")
+          else:
+              print(f"{today} already in history")
+          EOF
+      
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'actions@github.com'
+          git add net_rankings_data.csv net_rankings_daily.csv
+          git diff --staged --quiet || (git commit -m "Update NET rankings data - $(date +'%Y-%m-%d')" && git push)
+      
+      # Netlify will automatically deploy when it detects the push to main branch
+      # No need to trigger deployment here - it happens automatically via GitHub integration
     
     steps:
       - name: Checkout repository
