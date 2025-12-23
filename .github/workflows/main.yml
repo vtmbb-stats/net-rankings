@@ -2,9 +2,8 @@ name: Update NET Rankings
 
 on:
   schedule:
-    # Daily at 2:00 PM America/New_York:
-    # 19:00 UTC during EST, 18:00 UTC during EDT.
-    # Pick one. This is fixed at 19:00 UTC.
+    # Runs daily at 19:00 UTC (2:00 PM EST). If you want true 2 PM local year-round,
+    # you must change this seasonally for DST.
     - cron: "0 19 * * *"
   workflow_dispatch:
 
@@ -29,7 +28,7 @@ jobs:
       - name: Run scraper
         run: python scrape_net_rankings.py
 
-      - name: Archive today's rankings to daily history
+      - name: Archive today's rankings to daily history (upsert)
         run: |
           python3 << 'EOF'
           import pandas as pd
@@ -41,23 +40,24 @@ jobs:
           current = pd.read_csv("net_rankings_data.csv")
 
           try:
-            hist = pd.read_csv("net_rankings_daily.csv")
+              hist = pd.read_csv("net_rankings_daily.csv")
           except FileNotFoundError:
-            hist = pd.DataFrame(columns=["Date", "Team", "NET_Rank"])
+              hist = pd.DataFrame(columns=["Date", "Team", "NET_Rank"])
 
-          if today not in set(hist["Date"].astype(str).values):
-            today_data = current[["Display Name", "2025 NET Rank"]].copy()
-            today_data.columns = ["Team", "NET_Rank"]
-            today_data["Date"] = today
-            today_data = today_data[["Date", "Team", "NET_Rank"]]
-            today_data = today_data.dropna(subset=["NET_Rank"])
-            today_data["NET_Rank"] = pd.to_numeric(today_data["NET_Rank"], errors="coerce").astype("Int64")
+          hist["Date"] = hist["Date"].astype(str)
+          hist = hist[hist["Date"] != today]
 
-            hist = pd.concat([hist, today_data], ignore_index=True)
-            hist.to_csv("net_rankings_daily.csv", index=False)
-            print(f"Archived {len(today_data)} teams for {today}")
-          else:
-            print(f"{today} already in history, skipping")
+          today_data = current[["Display Name", "2025 NET Rank"]].copy()
+          today_data.columns = ["Team", "NET_Rank"]
+          today_data["Date"] = today
+          today_data = today_data[["Date", "Team", "NET_Rank"]]
+          today_data = today_data.dropna(subset=["NET_Rank"])
+          today_data["NET_Rank"] = pd.to_numeric(today_data["NET_Rank"], errors="coerce").astype("Int64")
+
+          hist = pd.concat([hist, today_data], ignore_index=True)
+          hist.to_csv("net_rankings_daily.csv", index=False)
+
+          print(f"Upserted {len(today_data)} teams for {today}")
           EOF
 
       - name: Commit and push if changed
