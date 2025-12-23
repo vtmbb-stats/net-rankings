@@ -298,7 +298,7 @@ def merge_and_update(historical_df, current_rankings_df):
     # Convert columns to numeric first
     for col in year_cols:
         historical_df[col] = pd.to_numeric(historical_df[col], errors='coerce')
-    historical_df['Avergae 5 Year NET'] = historical_df[year_cols].mean(axis=1, skipna=True).round(1)
+    historical_df['Average 5 Year NET'] = historical_df[year_cols].mean(axis=1, skipna=True).round(1)
     
     teams_updated = historical_df['2025 NET Rank'].notna().sum()
     print(f"Updated {teams_updated} teams with 2025 rankings ({matches_found} matches from {len(current_rankings_df)} NCAA teams)")
