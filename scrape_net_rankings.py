@@ -322,7 +322,7 @@ def merge_and_update(historical_df, current_rankings_df):
     
     # Reorder columns: Display Name, Status, then rankings (oldest to newest)
     column_order = ['Display Name', 'Status', '2021 NET Rank', '2022 NET Rank', '2023 NET Rank',
-                    '2024 NET Rank', '2025 NET Rank', 'Avergae 5 Year NET']
+                    '2024 NET Rank', '2025 NET Rank', 'Average 5 Year NET']
     historical_df = historical_df[column_order]
     print(f"\n✓ Status categories assigned and columns reordered")
     
