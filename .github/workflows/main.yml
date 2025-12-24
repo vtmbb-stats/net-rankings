@@ -2,7 +2,7 @@ name: Update NET Rankings
 
 on:
   schedule:
-    - cron: "0 19 * * *"   # 19:00 UTC = 2 PM ET (standard time)
+    - cron: "30 20 * * *"
   workflow_dispatch:
 
 jobs:
