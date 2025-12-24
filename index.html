@@ -572,6 +572,8 @@
         let selectedTeam = null;
         let dailyHistory = [];
         let chartInstance = null;
+        let dailyHistoryReady = Promise.resolve();
+
 
         function normalizeTeam(name) {
           return (name || "")
@@ -584,7 +586,7 @@
         const searchInput = document.getElementById('search');
         const autocompleteList = document.getElementById('autocomplete-list');
         
-        fetch('net_rankings_daily.csv')
+        dailyHistoryReady = fetch('net_rankings_daily.csv')
           .then(response => response.text())
           .then(csvText => {
             const lines = csvText.trim().split('\n');
@@ -609,7 +611,10 @@
         
             console.log('Daily history loaded:', dailyHistory.length);
           })
-          .catch(error => console.error('Error loading daily history:', error));
+          .catch(error => {
+            console.error('Error loading daily history:', error);
+          });
+
 
         searchInput.addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase();
@@ -668,7 +673,7 @@
             searchInput.value = displayName;
             autocompleteList.innerHTML = '';
             filterData();
-            showChart(displayName);
+            dailyHistoryReady.then(() => showChart(displayName));
         }
         
         function hideChart() {
