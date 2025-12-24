@@ -1,802 +1,491 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NET Rankings Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #f5f5f5;
-            color: #333;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 5px;
-            font-size: 28px;
-        }
-        
-        .subtitle {
-            color: #666;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e9ecef;
-        }
-        
-        .header-left {
-            flex: 1;
-        }
-        
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        
-        .last-update {
-            color: #6c757d;
-            font-size: 13px;
-            margin: 0;
-            white-space: nowrap;
-        }
-        
-        .last-update span {
-            font-weight: 600;
-            color: #495057;
-        }
-        
-        .controls {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        label {
-            font-weight: 500;
-            color: #555;
-        }
-        
-        select, input[type="text"] {
-            padding: 8px 12px;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            font-size: 14px;
-            background: white;
-            color: #333;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        
-        input[type="text"] {
-            width: 250px;
-        }
-        
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #0d6efd;
-        }
-        
-        .autocomplete-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .autocomplete-items {
-            position: absolute;
-            border: 1px solid #dee2e6;
-            border-top: none;
-            z-index: 99;
-            top: 100%;
-            left: 0;
-            right: 0;
-            max-height: 300px;
-            overflow-y: auto;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .autocomplete-items div {
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 1px solid #dee2e6;
-            color: #333;
-        }
-        
-        .autocomplete-items div:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            padding: 8px 16px;
-            border: 2px solid #dee2e6;
-            background: white;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .filter-btn:hover {
-            background: #f8f9fa;
-            border-color: #adb5bd;
-        }
-        
-        .filter-btn.active {
-            background: #0d6efd;
-            color: white;
-            border-color: #0d6efd;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        th {
-            background: #f8f9fa;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #333;
-            border-bottom: 2px solid #dee2e6;
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.2s;
-        }
-        
-        th:hover {
-            background: #f8f9fa;
-        }
-        
-        th.sortable:after {
-            content: ' ⇅';
-            opacity: 0.3;
-        }
-        
-        th.sort-asc:after {
-            content: ' ↑';
-            opacity: 1;
-        }
-        
-        th.sort-desc:after {
-            content: ' ↓';
-            opacity: 1;
-        }
-        
-        th:nth-child(2),  /* Status header */
-        th:nth-child(3),  /* 2021 header */
-        th:nth-child(4),  /* 2022 header */
-        th:nth-child(5),  /* 2023 header */
-        th:nth-child(6),  /* 2024 header */
-        th:nth-child(7),  /* 2025 header */
-        th:nth-child(8)   /* Average header */
-        {
-            text-align: center;
-        }
-        
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #dee2e6;
-            color: #333;
-        }
-        
-        td:nth-child(2),  /* Status column */
-        td:nth-child(3),  /* 2021 */
-        td:nth-child(4),  /* 2022 */
-        td:nth-child(5),  /* 2023 */
-        td:nth-child(6),  /* 2024 */
-        td:nth-child(7),  /* 2025 */
-        td:nth-child(8)   /* Average */
-        {
-            text-align: center;
-        }
-        
-        tr:hover {
-            background: #f8f9fa;
-        }
-        
-        tr:hover {
-            background: #f8f9fa;
-        }
-        
-        .rank-cell {
-            font-weight: 600;
-            font-size: 16px;
-        }
-        
-        /* Color coding for ranks */
-        .rank-top150 {
-            background: #ffcccc;  /* Pale red for top 150 (good) */
-        }
-        
-        .rank-mid {
-            background: #fff4cc;  /* Pale yellow for 150-200 (okay) */
-        }
-        
-        .rank-bottom {
-            background: #ccffcc;  /* Light green for 200-260 (weaker) */
-        }
-        
-        .rank-very-bottom {
-            background: #4cc44c;  /* Darker green for 260+ (very weak) */
-        }
-        
-        .rank-none {
-            color: #adb5bd;
-            font-style: italic;
-        }
-        
-        .stats-row {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 4px;
-        }
-        
-        .stat-item {
-            flex: 1;
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .stat-value {
-            font-size: 24px;
-            font-weight: 600;
-            color: #333;
-            margin-top: 5px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NET Rankings Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f5f5f5; color: #333; padding: 20px;
+    }
+    .container {
+      max-width: 1400px; margin: 0 auto; background: white; padding: 30px;
+      border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    h1 { color: #333; margin-bottom: 5px; font-size: 28px; }
+    .subtitle { color: #666; margin-bottom: 5px; font-size: 14px; }
+    .header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #e9ecef;
+    }
+    .header-left { flex: 1; }
+    .header-right { display: flex; align-items: center; gap: 15px; margin-top: 10px; }
+    .last-update { color: #6c757d; font-size: 13px; margin: 0; white-space: nowrap; }
+    .last-update span { font-weight: 600; color: #495057; }
+
+    .controls { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .control-group { display: flex; align-items: center; gap: 10px; }
+    label { font-weight: 500; color: #555; }
+
+    select, input[type="text"] {
+      padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 4px;
+      font-size: 14px; background: white; color: #333;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+    input[type="text"] { width: 250px; }
+    input[type="text"]:focus { outline: none; border-color: #0d6efd; }
+
+    .autocomplete-wrapper { position: relative; display: inline-block; }
+    .autocomplete-items {
+      position: absolute; border: 1px solid #dee2e6; border-top: none; z-index: 99;
+      top: 100%; left: 0; right: 0; max-height: 300px; overflow-y: auto;
+      background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .autocomplete-items div {
+      padding: 10px; cursor: pointer; border-bottom: 1px solid #dee2e6; color: #333;
+    }
+    .autocomplete-items div:hover { background-color: #f8f9fa; }
+
+    .button-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 8px 16px; border: 2px solid #dee2e6; background: white;
+      border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { background: #f8f9fa; border-color: #adb5bd; }
+    .filter-btn.active { background: #0d6efd; color: white; border-color: #0d6efd; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th {
+      background: #f8f9fa; padding: 12px; text-align: left; font-weight: 600;
+      color: #333; border-bottom: 2px solid #dee2e6; cursor: pointer; user-select: none;
+      transition: background-color 0.2s;
+    }
+    th.sortable:after { content: ' ⇅'; opacity: 0.3; }
+    th.sort-asc:after { content: ' ↑'; opacity: 1; }
+    th.sort-desc:after { content: ' ↓'; opacity: 1; }
+
+    th:nth-child(2), th:nth-child(3), th:nth-child(4), th:nth-child(5), th:nth-child(6), th:nth-child(7), th:nth-child(8) { text-align: center; }
+    td { padding: 12px; border-bottom: 1px solid #dee2e6; color: #333; }
+    td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6), td:nth-child(7), td:nth-child(8) { text-align: center; }
+    tr:hover { background: #f8f9fa; }
+
+    .rank-top150 { background: #ffcccc; }
+    .rank-mid { background: #fff4cc; }
+    .rank-bottom { background: #ccffcc; }
+    .rank-very-bottom { background: #4cc44c; }
+    .rank-none { color: #adb5bd; font-style: italic; }
+
+    #chart-container { display: none; margin-top: 40px; }
+    #chart-title { margin-bottom: 20px; color: #333; }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="header-left">
-                <h1>Virginia Tech Men's Basketball NET Rankings Dashboard</h1>
-                <p class="subtitle">Historical data (2022-2025) with current 2026 rankings • Automatically updates daily</p>
-            </div>
-            <div class="header-right">
-                <p class="last-update">Last Updated: <span id="last-updated"></span></p>
-            </div>
-        </div>
-        
-        <div class="controls">
-            <div class="control-group">
-                <label>Filter:</label>
-                <div class="button-group">
-                    <button class="filter-btn active" data-filter="all">All Teams</button>
-                    <button class="filter-btn" data-filter="Power 5">Power 5</button>
-                    <button class="filter-btn" data-filter="Mid-Major">Mid-Major</button>
-                    <button class="filter-btn" data-filter="Mid-Major Play">Mid-Major Play</button>
-                    <button class="filter-btn" data-filter="Mid-Major Consider">Mid-Major Consider</button>
-                    <button class="filter-btn" data-filter="Mid-Major Avoid">Mid-Major Avoid</button>
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="search">Search:</label>
-                <div class="autocomplete-wrapper">
-                    <input type="text" id="search" placeholder="Search team names..." autocomplete="off">
-                    <div id="autocomplete-list" class="autocomplete-items"></div>
-                </div>
-            </div>
-        </div>
-        
-        <table id="rankings-table">
-            <thead>
-                <tr>
-                    <th class="sortable" data-sort="Team">Team</th>
-                    <th class="sortable" data-sort="Status">Status</th>
-                    <th class="sortable" data-sort="2021 NET Rank">2022 Finish</th>
-                    <th class="sortable" data-sort="2022 NET Rank">2023 Finish</th>
-                    <th class="sortable" data-sort="2023 NET Rank">2024 Finish</th>
-                    <th class="sortable" data-sort="2024 NET Rank">2025 Finish</th>
-                    <th class="sortable" data-sort="2025 NET Rank">2026 Rank</th>
-                    <th class="sortable" data-sort="Average 5 Year NET">5-Year Average</th>
-                </tr>
-            </thead>
-            <tbody id="rankings-body">
-                <!-- Data will be loaded here -->
-            </tbody>
-        </table>
-        
-        <div id="chart-container" style="display: none; margin-top: 40px;">
-            <h2 id="chart-title" style="margin-bottom: 20px; color: #333;"></h2>
-            <canvas id="net-chart"></canvas>
-        </div>
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+        <h1>Virginia Tech Men's Basketball NET Rankings Dashboard</h1>
+        <p class="subtitle">Historical data (2022-2025) with current 2026 rankings • Automatically updates daily</p>
+      </div>
+      <div class="header-right">
+        <p class="last-update">Last Updated: <span id="last-updated"></span></p>
+      </div>
     </div>
 
-    <script>
-        let data = [];
-        let filteredData = [];
-        let currentSort = { column: 'Average 5 Year NET', ascending: true };
+    <div class="controls">
+      <div class="control-group">
+        <label>Filter:</label>
+        <div class="button-group">
+          <button class="filter-btn active" data-filter="all">All Teams</button>
+          <button class="filter-btn" data-filter="Power 5">Power 5</button>
+          <button class="filter-btn" data-filter="Mid-Major">Mid-Major</button>
+          <button class="filter-btn" data-filter="Mid-Major Play">Mid-Major Play</button>
+          <button class="filter-btn" data-filter="Mid-Major Consider">Mid-Major Consider</button>
+          <button class="filter-btn" data-filter="Mid-Major Avoid">Mid-Major Avoid</button>
+        </div>
+      </div>
 
-        // Format rank as integer (remove decimals)
-        function formatRank(value) {
-            if (!value || value === '' || value === '-') return '-';
-            const num = parseFloat(value);
-            return isNaN(num) ? '-' : Math.round(num).toString();
+      <div class="control-group">
+        <label for="search">Search:</label>
+        <div class="autocomplete-wrapper">
+          <input type="text" id="search" placeholder="Search team names..." autocomplete="off" />
+          <div id="autocomplete-list" class="autocomplete-items"></div>
+        </div>
+      </div>
+    </div>
+
+    <table id="rankings-table">
+      <thead>
+        <tr>
+          <th class="sortable" data-sort="Team">Team</th>
+          <th class="sortable" data-sort="Status">Status</th>
+          <th class="sortable" data-sort="2021 NET Rank">2022 Finish</th>
+          <th class="sortable" data-sort="2022 NET Rank">2023 Finish</th>
+          <th class="sortable" data-sort="2023 NET Rank">2024 Finish</th>
+          <th class="sortable" data-sort="2024 NET Rank">2025 Finish</th>
+          <th class="sortable" data-sort="2025 NET Rank">2026 Rank</th>
+          <th class="sortable" data-sort="Average 5 Year NET">5-Year Average</th>
+        </tr>
+      </thead>
+      <tbody id="rankings-body"></tbody>
+    </table>
+
+    <div id="chart-container">
+      <h2 id="chart-title"></h2>
+      <canvas id="net-chart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    let data = [];
+    let filteredData = [];
+    let currentSort = { column: 'Average 5 Year NET', ascending: true };
+
+    let selectedTeam = null;
+    let dailyHistory = [];
+    let chartInstance = null;
+
+    function normalizeTeam(name) {
+      return (name || '')
+        .toString()
+        .replace(/\(AQ\)/g, '')
+        .trim()
+        .toLowerCase();
+    }
+
+    function formatRank(value) {
+      if (value === undefined || value === null) return '-';
+      const s = value.toString().trim();
+      if (s === '' || s === '-') return '-';
+      const num = parseFloat(s);
+      return isNaN(num) ? '-' : Math.round(num).toString();
+    }
+
+    function formatAverage(value) {
+      if (value === undefined || value === null) return '-';
+      const s = value.toString().trim();
+      if (s === '' || s === '-') return '-';
+      const num = parseFloat(s);
+      return isNaN(num) ? '-' : num.toFixed(1);
+    }
+
+    function updateStats() {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+      const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+      document.getElementById('last-updated').textContent = `${dateStr} ${timeStr}`;
+    }
+
+    function getRankColorClass(rank) {
+      if (!rank || rank === '' || rank === '-') return 'rank-none';
+      const r = parseInt(rank, 10);
+      if (!Number.isFinite(r)) return 'rank-none';
+      if (r <= 150) return 'rank-top150';
+      if (r <= 200) return 'rank-mid';
+      if (r <= 260) return 'rank-bottom';
+      return 'rank-very-bottom';
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('rankings-body');
+      tbody.innerHTML = '';
+
+      filteredData.forEach(row => {
+        const tr = document.createElement('tr');
+
+        const rank2021 = formatRank(row['2021 NET Rank']);
+        const rank2022 = formatRank(row['2022 NET Rank']);
+        const rank2023 = formatRank(row['2023 NET Rank']);
+        const rank2024 = formatRank(row['2024 NET Rank']);
+        const rank2025 = formatRank(row['2025 NET Rank']);
+
+        tr.innerHTML = `
+          <td><strong>${row['Display Name'] || row.Team || ''}</strong></td>
+          <td>${row.Status || '-'}</td>
+          <td class="${getRankColorClass(rank2021)}">${rank2021}</td>
+          <td class="${getRankColorClass(rank2022)}">${rank2022}</td>
+          <td class="${getRankColorClass(rank2023)}">${rank2023}</td>
+          <td class="${getRankColorClass(rank2024)}">${rank2024}</td>
+          <td class="${getRankColorClass(rank2025)}">${rank2025}</td>
+          <td><strong>${formatAverage(row['Average 5 Year NET'])}</strong></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function applySortWithoutToggle() {
+      const column = currentSort.column;
+
+      filteredData.sort((a, b) => {
+        let aVal = a[column];
+        let bVal = b[column];
+
+        if (column === 'Team') {
+          aVal = a['Display Name'] || a.Team || '';
+          bVal = b['Display Name'] || b.Team || '';
         }
 
-        // Format average with one decimal place
-        function formatAverage(value) {
-            if (!value || value === '' || value === '-') return '-';
-            const num = parseFloat(value);
-            return isNaN(num) ? '-' : num.toFixed(1);
+        aVal = (aVal === undefined || aVal === null) ? '' : aVal.toString().trim();
+        bVal = (bVal === undefined || bVal === null) ? '' : bVal.toString().trim();
+
+        if (aVal === '' && bVal === '') return 0;
+        if (aVal === '') return 1;
+        if (bVal === '') return -1;
+
+        const aNum = parseFloat(aVal);
+        const bNum = parseFloat(bVal);
+
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+          return currentSort.ascending ? aNum - bNum : bNum - aNum;
         }
 
-        // Load CSV data
-        async function loadData() {
-            try {
-                const response = await fetch('net_rankings_data.csv');
-                const csvText = await response.text();
-                data = parseCSV(csvText);
-                filteredData = [...data];
-                updateStats();
-                applySortWithoutToggle(); // Apply the default sort
-            } catch (error) {
-                console.error('Error loading data:', error);
-                document.getElementById('rankings-body').innerHTML = 
-                    '<tr><td colspan="7" style="text-align: center; padding: 40px;">Error loading data. Please try again later.</td></tr>';
-            }
-        }
+        return currentSort.ascending ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+      });
 
-        // Parse CSV
-        function parseCSV(csv) {
-            const lines = csv.trim().split('\n');
-            const headers = lines[0].split(',');
-            
-            return lines.slice(1).map(line => {
-                const values = line.split(',');
-                const row = {};
-                headers.forEach((header, index) => {
-                    row[header] = values[index] || '';
-                });
-                return row;
-            });
-        }
+      updateSortIndicators();
+      renderTable();
+    }
 
-        // Update statistics
-        function updateStats() {
-            // Format date and time
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
-            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-            document.getElementById('last-updated').textContent = `${dateStr} ${timeStr}`;
-        }
+    function sortData(column) {
+      if (currentSort.column === column) currentSort.ascending = !currentSort.ascending;
+      else { currentSort.column = column; currentSort.ascending = true; }
+      applySortWithoutToggle();
+    }
 
-        // Get rank color class
-        function getRankColorClass(rank) {
-            if (!rank || rank === '' || rank === '-') return 'rank-none';
-            const r = parseInt(rank);
-            if (r <= 150) return 'rank-top150';      // Pale red (top 150 = good)
-            if (r <= 200) return 'rank-mid';          // Pale yellow (150-200 = okay)
-            if (r <= 260) return 'rank-bottom';       // Light green (200-260 = weaker)
-            return 'rank-very-bottom';                // Darker green (260+ = very weak)
+    function updateSortIndicators() {
+      document.querySelectorAll('th').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        if (th.dataset.sort === currentSort.column) {
+          th.classList.add(currentSort.ascending ? 'sort-asc' : 'sort-desc');
         }
+      });
+    }
 
-        // Render table
-        function renderTable() {
-            const tbody = document.getElementById('rankings-body');
-            tbody.innerHTML = '';
-            
-            filteredData.forEach(row => {
-                const tr = document.createElement('tr');
-                
-                // Get color classes for each year
-                const rank2021 = formatRank(row['2021 NET Rank']);
-                const rank2022 = formatRank(row['2022 NET Rank']);
-                const rank2023 = formatRank(row['2023 NET Rank']);
-                const rank2024 = formatRank(row['2024 NET Rank']);
-                const rank2025 = formatRank(row['2025 NET Rank']);
-                
-                const class2021 = getRankColorClass(rank2021);
-                const class2022 = getRankColorClass(rank2022);
-                const class2023 = getRankColorClass(rank2023);
-                const class2024 = getRankColorClass(rank2024);
-                const class2025 = getRankColorClass(rank2025);
-                
-                tr.innerHTML = `
-                    <td><strong>${row['Display Name'] || row.Team}</strong></td>
-                    <td>${row.Status || '-'}</td>
-                    <td class="${class2021}">${rank2021}</td>
-                    <td class="${class2022}">${rank2022}</td>
-                    <td class="${class2023}">${rank2023}</td>
-                    <td class="${class2024}">${rank2024}</td>
-                    <td class="${class2025}">${rank2025}</td>
-                    <td><strong>${formatAverage(row['Average 5 Year NET'])}</strong></td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
+    function filterData() {
+      if (selectedTeam) {
+        filteredData = [selectedTeam];
+      } else {
+        const activeBtn = document.querySelector('.filter-btn.active');
+        const statusFilter = activeBtn ? activeBtn.dataset.filter : 'all';
 
-        // Sort data
-        function sortData(column) {
-            if (currentSort.column === column) {
-                // Toggle if clicking same column
-                currentSort.ascending = !currentSort.ascending;
-            } else {
-                // New column - always start ascending
-                currentSort.column = column;
-                currentSort.ascending = true;
-            }
-            
-            applySortWithoutToggle();
-        }
-        
-        // Apply current sort without changing direction
-        function applySortWithoutToggle() {
-            const column = currentSort.column;
-            
-            filteredData.sort((a, b) => {
-                let aVal = a[column];
-                let bVal = b[column];
-                
-                // Use Display Name for team sorting
-                if (column === 'Team') {
-                    aVal = a['Display Name'] || a.Team;
-                    bVal = b['Display Name'] || b.Team;
-                }
-                
-                // Handle empty values
-                if (!aVal || aVal === '') return 1;
-                if (!bVal || bVal === '') return -1;
-                
-                // Convert to numbers if numeric
-                const aNum = parseFloat(aVal);
-                const bNum = parseFloat(bVal);
-                
-                if (!isNaN(aNum) && !isNaN(bNum)) {
-                    return currentSort.ascending ? aNum - bNum : bNum - aNum;
-                }
-                
-                // String comparison
-                return currentSort.ascending ? 
-                    aVal.localeCompare(bVal) : 
-                    bVal.localeCompare(aVal);
-            });
-            
-            updateSortIndicators();
-            renderTable();
-        }
-
-        // Update sort indicators
-        function updateSortIndicators() {
-            document.querySelectorAll('th').forEach(th => {
-                th.classList.remove('sort-asc', 'sort-desc');
-                if (th.dataset.sort === currentSort.column) {
-                    th.classList.add(currentSort.ascending ? 'sort-asc' : 'sort-desc');
-                }
-            });
-        }
-
-        // Filter data
-        function filterData() {
-            // If a team is selected, show only that team
-            if (selectedTeam) {
-                filteredData = [selectedTeam];
-            } else {
-                const activeBtn = document.querySelector('.filter-btn.active');
-                const statusFilter = activeBtn ? activeBtn.dataset.filter : 'all';
-                
-                filteredData = data.filter(row => {
-                    // Status filter
-                    let statusMatch = true;
-                    if (statusFilter !== 'all') {
-                        if (statusFilter === 'Mid-Major') {
-                            // Mid-Major button shows all mid-major teams
-                            statusMatch = row.Status && row.Status.startsWith('Mid-Major');
-                        } else {
-                            statusMatch = row.Status === statusFilter;
-                        }
-                    }
-                    
-                    return statusMatch;
-                });
-            }
-            
-            // Re-apply current sort without changing direction
-            applySortWithoutToggle();
-        }
-
-        // Event listeners
-        document.querySelectorAll('th.sortable').forEach(th => {
-            th.addEventListener('click', () => sortData(th.dataset.sort));
+        filteredData = data.filter(row => {
+          if (statusFilter === 'all') return true;
+          if (statusFilter === 'Mid-Major') return row.Status && row.Status.startsWith('Mid-Major');
+          return row.Status === statusFilter;
         });
+      }
+      applySortWithoutToggle();
+    }
 
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active class from all buttons
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                // Add active class to clicked button
-                btn.classList.add('active');
-                // Clear selected team and search
-                selectedTeam = null;
-                searchInput.value = '';
-                hideChart();
-                // Filter data
-                filterData();
-            });
-        });
+    function parseLocalYMD(ymd) {
+      const [y, m, d] = ymd.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
 
-        // Autocomplete search functionality
-        let selectedTeam = null;
-        let dailyHistory = [];
-        let chartInstance = null;
-        let dailyHistoryReady = Promise.resolve();
+    function hideChart() {
+      document.getElementById('chart-container').style.display = 'none';
+      if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
+      }
+    }
 
+    function showChart(teamName) {
+      if (typeof Chart === 'undefined') {
+        console.error('Chart.js not loaded');
+        hideChart();
+        return;
+      }
 
-        function normalizeTeam(name) {
-          return (name || "")
-            .toString()
-            .replace(/\(AQ\)/g, "")
-            .trim()
-            .toLowerCase();
-        }
-        
-        const searchInput = document.getElementById('search');
-        const autocompleteList = document.getElementById('autocomplete-list');
-        
-        dailyHistoryReady = fetch('net_rankings_daily.csv')
-          .then(response => response.text())
-          .then(csvText => {
-            const lines = csvText.trim().split('\n');
-            dailyHistory = [];
-        
-            for (const line of lines.slice(1)) {
-              if (!line.trim()) continue;
-        
-              const [date, team, rank] = line.split(',');
-              if (!date || !team || !rank) continue;
-        
-              const r = parseInt(rank.replace('\r', '').trim(), 10);
-              if (Number.isNaN(r)) continue;
-        
-              dailyHistory.push({
-                date: date.trim(),
-                team: team.trim(),
-                teamNorm: normalizeTeam(team),
-                rank: r
-              });
-            }
-        
-            console.log('Daily history loaded:', dailyHistory.length);
-          })
-          .catch(error => {
-            console.error('Error loading daily history:', error);
-          });
+      const target = normalizeTeam(teamName);
+      let teamData = dailyHistory.filter(d => d.teamNorm === target);
 
+      if (teamData.length === 0) {
+        hideChart();
+        return;
+      }
 
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            autocompleteList.innerHTML = '';
-            
-            if (!searchTerm) {
-                selectedTeam = null;
-                filterData();
-                hideChart();
-                return;
-            }
-            
-            // Filter teams based on current button filter and search term
-            const activeBtn = document.querySelector('.filter-btn.active');
-            const statusFilter = activeBtn ? activeBtn.dataset.filter : 'all';
-            
-            const matches = data.filter(row => {
-                // Status filter
-                let statusMatch = true;
-                if (statusFilter !== 'all') {
-                    if (statusFilter === 'Mid-Major') {
-                        statusMatch = row.Status && row.Status.startsWith('Mid-Major');
-                    } else {
-                        statusMatch = row.Status === statusFilter;
-                    }
-                }
-                
-                // Search match
-                const displayName = row['Display Name'] || row.Team;
-                const searchMatch = displayName.toLowerCase().includes(searchTerm);
-                
-                return statusMatch && searchMatch;
-            }).slice(0, 10); // Limit to 10 results
-            
-            matches.forEach(team => {
-                const div = document.createElement('div');
-                const displayName = team['Display Name'] || team.Team;
-                div.textContent = displayName;
-                div.addEventListener('click', function() {
-                    selectTeam(team);
-                });
-                autocompleteList.appendChild(div);
-            });
-        });
-        
-        // Close autocomplete when clicking outside
-        document.addEventListener('click', function(e) {
-            if (e.target !== searchInput) {
-                autocompleteList.innerHTML = '';
-            }
-        });
-        
-        function selectTeam(team) {
-            selectedTeam = team;
-            const displayName = team['Display Name'] || team.Team;
-            searchInput.value = displayName;
-            autocompleteList.innerHTML = '';
-            filterData();
-            dailyHistoryReady.then(() => showChart(displayName));
-        }
-        
-        function hideChart() {
-            document.getElementById('chart-container').style.display = 'none';
-            if (chartInstance) {
-                chartInstance.destroy();
-                chartInstance = null;
-            }
-        }
+      teamData.sort((a, b) => parseLocalYMD(a.date) - parseLocalYMD(b.date));
 
-        function parseLocalYMD(ymd) {
-            // Expect "YYYY-MM-DD"
-            const [y, m, d] = ymd.split('-').map(Number);
-            return new Date(y, m - 1, d); // local midnight
-        }
-        
-        function showChart(teamName) {
-            // Get team's daily history
-            const target = normalizeTeam(teamName);
-            let teamData = dailyHistory.filter(d => d.teamNorm === target);
+      const labels = teamData.map(d => {
+        const date = parseLocalYMD(d.date);
+        return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+      });
+      const ranks = teamData.map(d => d.rank);
 
-            
-            if (teamData.length === 0) {
-                hideChart();
-                return;
-            }
-            
-            // Sort by date
-            teamData.sort((a, b) => parseLocalYMD(a.date) - parseLocalYMD(b.date));
-            
-            // Prepare chart data
-            const labels = teamData.map(d => {
-                const date = parseLocalYMD(d.date);
-                return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
-            });
-            const ranks = teamData.map(d => d.rank);
-            
-            // Show chart container
-            document.getElementById('chart-container').style.display = 'block';
-            document.getElementById('chart-title').textContent = `${teamName} - Daily NET Ranking`;
-            
-            // Destroy existing chart
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
-            
-            // Create new chart
-            const ctx = document.getElementById('net-chart').getContext('2d');
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'NET Rank',
-                        data: ranks,
-                        borderColor: '#0d6efd',
-                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.1,
-                        pointRadius: 4,
-                        pointHoverRadius: 6
-                    }]
+      document.getElementById('chart-container').style.display = 'block';
+      document.getElementById('chart-title').textContent = `${teamName} - Daily NET Ranking`;
+
+      if (chartInstance) chartInstance.destroy();
+
+      const canvas = document.getElementById('net-chart');
+      const ctx = canvas.getContext('2d');
+
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'NET Rank',
+            data: ranks,
+            borderColor: '#0d6efd',
+            backgroundColor: 'rgba(13, 110, 253, 0.1)',
+            borderWidth: 2,
+            tension: 0.1,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 2.5,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: function(context) {
+                  const index = context[0].dataIndex;
+                  const date = parseLocalYMD(teamData[index].date);
+                  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    aspectRatio: 2.5,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(context) {
-                                    const index = context[0].dataIndex;
-                                    const date = parseLocalYMD(teamData[index].date);
-                                    return date.toLocaleDateString('en-US', { 
-                                        month: 'long', 
-                                        day: 'numeric',
-                                        year: 'numeric'
-                                    });
-                                },
-                                label: function(context) {
-                                    return 'NET Rank: ' + context.parsed.y;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            reverse: true, // Lower rank is better
-                            title: {
-                                display: true,
-                                text: 'NET Rank',
-                                color: '#333'
-                            },
-                            ticks: {
-                                color: '#333'
-                            },
-                            grid: {
-                                color: '#dee2e6'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Date',
-                                color: '#333'
-                            },
-                            ticks: {
-                                color: '#333'
-                            },
-                            grid: {
-                                color: '#dee2e6'
-                            }
-                        }
-                    }
+                label: function(context) {
+                  return 'NET Rank: ' + context.parsed.y;
                 }
-            });
+              }
+            }
+          },
+          scales: {
+            y: { reverse: true, title: { display: true, text: 'NET Rank', color: '#333' }, ticks: { color: '#333' }, grid: { color: '#dee2e6' } },
+            x: { title: { display: true, text: 'Date', color: '#333' }, ticks: { color: '#333' }, grid: { color: '#dee2e6' } }
+          }
+        }
+      });
+    }
+
+    function parseSimpleCSV(text) {
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim());
+      const rows = [];
+
+      for (const line of lines.slice(1)) {
+        if (!line.trim()) continue;
+        const values = line.split(',');
+        const row = {};
+        headers.forEach((h, i) => row[h] = (values[i] ?? '').replace('\r','').trim());
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    async function loadData() {
+      try {
+        const response = await fetch('net_rankings_data.csv', { cache: 'no-store' });
+        const csvText = await response.text();
+        data = parseSimpleCSV(csvText);
+        filteredData = [...data];
+        updateStats();
+        applySortWithoutToggle();
+      } catch (err) {
+        console.error('Error loading data:', err);
+        document.getElementById('rankings-body').innerHTML =
+          '<tr><td colspan="8" style="text-align:center; padding:40px;">Error loading data.</td></tr>';
+      }
+    }
+
+    let dailyHistoryReady = (async () => {
+      try {
+        const r = await fetch('net_rankings_daily.csv', { cache: 'no-store' });
+        const t = await r.text();
+        const rows = parseSimpleCSV(t);
+
+        dailyHistory = rows
+          .map(x => ({
+            date: (x.Date || '').trim(),
+            team: (x.Team || '').trim(),
+            teamNorm: normalizeTeam(x.Team || ''),
+            rank: parseInt((x.NET_Rank || '').trim(), 10)
+          }))
+          .filter(x => x.date && x.team && Number.isFinite(x.rank));
+
+        console.log('Daily history loaded:', dailyHistory.length);
+      } catch (e) {
+        console.error('Error loading daily history:', e);
+        dailyHistory = [];
+      }
+    })();
+
+    document.querySelectorAll('th.sortable').forEach(th => {
+      th.addEventListener('click', () => sortData(th.dataset.sort));
+    });
+
+    const searchInput = document.getElementById('search');
+    const autocompleteList = document.getElementById('autocomplete-list');
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedTeam = null;
+        searchInput.value = '';
+        hideChart();
+        filterData();
+      });
+    });
+
+    function selectTeam(teamRow) {
+      selectedTeam = teamRow;
+      const displayName = teamRow['Display Name'] || teamRow.Team || '';
+      searchInput.value = displayName;
+      autocompleteList.innerHTML = '';
+      filterData();
+      dailyHistoryReady.then(() => showChart(displayName));
+    }
+
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      autocompleteList.innerHTML = '';
+
+      if (!searchTerm) {
+        selectedTeam = null;
+        filterData();
+        hideChart();
+        return;
+      }
+
+      const activeBtn = document.querySelector('.filter-btn.active');
+      const statusFilter = activeBtn ? activeBtn.dataset.filter : 'all';
+
+      const matches = data.filter(row => {
+        let statusMatch = true;
+        if (statusFilter !== 'all') {
+          if (statusFilter === 'Mid-Major') statusMatch = row.Status && row.Status.startsWith('Mid-Major');
+          else statusMatch = row.Status === statusFilter;
         }
 
-        // Initialize
-        loadData();
-    </script>
+        const displayName = (row['Display Name'] || row.Team || '').toLowerCase();
+        return statusMatch && displayName.includes(searchTerm);
+      }).slice(0, 10);
+
+      matches.forEach(team => {
+        const div = document.createElement('div');
+        const displayName = team['Display Name'] || team.Team || '';
+        div.textContent = displayName;
+        div.addEventListener('click', () => selectTeam(team));
+        autocompleteList.appendChild(div);
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      if (e.target !== searchInput) autocompleteList.innerHTML = '';
+    });
+
+    loadData();
+  </script>
 </body>
 </html>
