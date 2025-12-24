@@ -297,6 +297,63 @@ def merge_and_update(historical_df, current_rankings_df):
 
     return historical_df
 
+def update_daily_history(updated_df, daily_history_path="net_rankings_daily.csv"):
+    """
+    Append today's rankings to the daily history file for time-series tracking
+    """
+    today = datetime.now().strftime('%Y-%m-%d')
+    
+    # Load existing daily history if it exists
+    if os.path.exists(daily_history_path):
+        try:
+            daily_df = pd.read_csv(daily_history_path)
+            print(f"Loaded existing daily history: {len(daily_df)} records")
+            
+            # Remove any existing entries for today (in case we're re-running)
+            daily_df = daily_df[daily_df['date'] != today]
+            print(f"Removed any existing entries for {today}")
+        except Exception as e:
+            print(f"Warning: Could not load existing daily history ({e}), creating new file")
+            daily_df = pd.DataFrame(columns=['date', 'team', 'rank'])
+    else:
+        print("No existing daily history found, creating new file")
+        daily_df = pd.DataFrame(columns=['date', 'team', 'rank'])
+    
+    # Create today's entries from the updated rankings
+    new_entries = []
+    for _, row in updated_df.iterrows():
+        team_name = row['Display Name']
+        current_rank = row['2025 NET Rank']
+        
+        # Only add if team has a valid current ranking
+        if pd.notna(current_rank):
+            new_entries.append({
+                'date': today,
+                'team': team_name,
+                'rank': int(current_rank)
+            })
+    
+    # Append new entries
+    if new_entries:
+        new_df = pd.DataFrame(new_entries)
+        daily_df = pd.concat([daily_df, new_df], ignore_index=True)
+        print(f"Added {len(new_entries)} rankings for {today}")
+    else:
+        print("Warning: No new rankings to add for today")
+    
+    # Sort by date and team
+    daily_df = daily_df.sort_values(['date', 'team'])
+    
+    # Save updated daily history
+    daily_df.to_csv(daily_history_path, index=False)
+    print(f"✓ Daily history updated: {len(daily_df)} total records in {daily_history_path}")
+    
+    # Show some stats
+    unique_dates = daily_df['date'].nunique()
+    print(f"  Tracking {unique_dates} unique dates")
+    
+    return daily_df
+
 def save_output(df, output_path):
     try:
         df.to_csv(output_path, index=False)
@@ -327,7 +384,11 @@ def main():
     save_output(updated_df, "net_rankings_data.csv")
     print()
 
-    print("✓ Complete! Current rankings updated.")
+    print("Step 5: Updating daily history for time-series tracking...")
+    update_daily_history(updated_df, "net_rankings_daily.csv")
+    print()
+
+    print("✓ Complete! Current rankings and daily history updated.")
 
 if __name__ == "__main__":
     main()
