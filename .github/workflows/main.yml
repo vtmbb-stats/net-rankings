@@ -2,9 +2,7 @@ name: Update NET Rankings
 
 on:
   schedule:
-    # Runs daily at 19:00 UTC (2:00 PM EST). If you want true 2 PM local year-round,
-    # you must change this seasonally for DST.
-    - cron: "0 19 * * *"
+    - cron: "0 19 * * *"   # 19:00 UTC = 2 PM ET (standard time)
   workflow_dispatch:
 
 jobs:
@@ -25,40 +23,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/scripts/requirements.txt
 
-      - name: Run scraper
+      - name: Run scraper (scrape + write net_rankings_data.csv + append daily history)
         run: python scrape_net_rankings.py
-
-      - name: Archive today's rankings to daily history (upsert)
-        run: |
-          python3 << 'EOF'
-          import pandas as pd
-          from datetime import datetime
-          from zoneinfo import ZoneInfo
-
-          today = datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d")
-
-          current = pd.read_csv("net_rankings_data.csv")
-
-          try:
-              hist = pd.read_csv("net_rankings_daily.csv")
-          except FileNotFoundError:
-              hist = pd.DataFrame(columns=["Date", "Team", "NET_Rank"])
-
-          hist["Date"] = hist["Date"].astype(str)
-          hist = hist[hist["Date"] != today]
-
-          today_data = current[["Display Name", "2025 NET Rank"]].copy()
-          today_data.columns = ["Team", "NET_Rank"]
-          today_data["Date"] = today
-          today_data = today_data[["Date", "Team", "NET_Rank"]]
-          today_data = today_data.dropna(subset=["NET_Rank"])
-          today_data["NET_Rank"] = pd.to_numeric(today_data["NET_Rank"], errors="coerce").astype("Int64")
-
-          hist = pd.concat([hist, today_data], ignore_index=True)
-          hist.to_csv("net_rankings_daily.csv", index=False)
-
-          print(f"Upserted {len(today_data)} teams for {today}")
-          EOF
 
       - name: Commit and push if changed
         run: |
