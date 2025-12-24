@@ -572,24 +572,45 @@
         let selectedTeam = null;
         let dailyHistory = [];
         let chartInstance = null;
+
+        function normalizeTeam(name) {
+          return (name || "")
+            .toString()
+            .replace(/\(AQ\)/g, "")
+            .trim()
+            .toLowerCase();
+        }
         
         const searchInput = document.getElementById('search');
         const autocompleteList = document.getElementById('autocomplete-list');
         
-        // Load daily history data
         fetch('net_rankings_daily.csv')
-            .then(response => response.text())
-            .then(csvText => {
-                const rows = csvText.split('\n').slice(1); // Skip header
-                rows.forEach(row => {
-                    if (row.trim()) {
-                        const [date, team, rank] = row.split(',');
-                        dailyHistory.push({ date, team, rank: parseInt(rank) });
-                    }
-                });
-            })
-            .catch(error => console.error('Error loading daily history:', error));
+          .then(response => response.text())
+          .then(csvText => {
+            const lines = csvText.trim().split('\n');
+            dailyHistory = [];
         
+            for (const line of lines.slice(1)) {
+              if (!line.trim()) continue;
+        
+              const [date, team, rank] = line.split(',');
+              if (!date || !team || !rank) continue;
+        
+              const r = parseInt(rank.replace('\r', '').trim(), 10);
+              if (Number.isNaN(r)) continue;
+        
+              dailyHistory.push({
+                date: date.trim(),
+                team: team.trim(),
+                teamNorm: normalizeTeam(team),
+                rank: r
+              });
+            }
+        
+            console.log('Daily history loaded:', dailyHistory.length);
+          })
+          .catch(error => console.error('Error loading daily history:', error));
+
         searchInput.addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase();
             autocompleteList.innerHTML = '';
@@ -666,7 +687,9 @@
         
         function showChart(teamName) {
             // Get team's daily history
-            let teamData = dailyHistory.filter(d => d.team === teamName);
+            const target = normalizeTeam(teamName);
+            let teamData = dailyHistory.filter(d => d.teamNorm === target);
+
             
             if (teamData.length === 0) {
                 hideChart();
