@@ -1,9 +1,9 @@
 Display Name,Status,2021 NET Rank,2022 NET Rank,2023 NET Rank,2024 NET Rank,2025 NET Rank,Average 5 Year NET
-Houston,Power 5,2.0,1.0,2,2,7,2.8
+Houston,Power 5,2.0,1.0,2,2,8,3.0
 Gonzaga,Mid-Major Avoid,1.0,8.0,14,7,5,7.0
 Tennessee,Power 5,7.0,5.0,5,5,19,8.2
 Alabama,Power 5,32.0,2.0,10,6,20,14.0
-Purdue,Power 5,12.0,6.0,3,16,8,9.0
+Purdue,Power 5,12.0,6.0,3,16,7,8.8
 Kansas,Power 5,3.0,9.0,21,19,13,13.0
 Baylor,Power 5,5.0,17.0,16,31,49,23.6
 Arizona,Power 5,4.0,10.0,4,10,3,6.2
@@ -11,14 +11,14 @@ Illinois,Power 5,15.0,36.0,12,17,4,16.8
 Duke,Power 5,10.0,16.0,9,1,2,7.6
 UConn,Power 5,18.0,3.0,1,30,10,12.4
 Texas,Power 5,16.0,7.0,28,40,35,25.2
-Auburn,Power 5,13.0,35.0,7,3,34,18.4
+Auburn,Power 5,13.0,35.0,7,3,33,18.2
 Texas Tech,Power 5,8.0,62.0,34,8,17,25.8
 Kentucky,Power 5,9.0,26.0,20,15,30,20.0
 Saint Mary's (CA),Mid-Major Avoid,19.0,11.0,17,23,27,19.4
 San Diego St.,Mid-Major Avoid,30.0,15.0,18,58,44,33.0
 Creighton,Power 5,51.0,14.0,11,37,74,37.4
 North Carolina,Power 5,17.0,44.0,8,32,28,25.8
-Wisconsin,Power 5,25.0,72.0,19,14,36,33.2
+Wisconsin,Power 5,25.0,72.0,19,14,34,32.8
 Michigan St.,Power 5,38.0,33.0,22,9,12,22.8
 Ohio St.,Power 5,23.0,49.0,52,39,38,40.2
 Boise St.,Mid-Major Avoid,34.0,34.0,31,44,65,41.6
@@ -30,10 +30,10 @@ UCLA,Power 5,11.0,4.0,106,21,41,36.6
 BYU,Power 5,59.0,84.0,15,26,21,41.0
 Villanova,Power 5,6.0,71.0,42,56,29,40.8
 Arkansas,Power 5,21.0,20.0,115,35,18,41.8
-Memphis,Mid-Major Avoid,31.0,22.0,75,51,108,57.4
+Memphis,Mid-Major Avoid,31.0,22.0,75,51,109,57.6
 Oklahoma,Power 5,39.0,70.0,45,46,69,53.8
 Xavier,Power 5,37.0,18.0,64,45,97,52.2
-Clemson,Power 5,81.0,67.0,23,25,33,45.8
+Clemson,Power 5,81.0,67.0,23,25,32,45.6
 Oregon,Power 5,76.0,45.0,54,27,120,64.4
 Maryland,Power 5,90.0,32.0,77,11,150,72.0
 VCU,Mid-Major Avoid,57.0,54.0,70,33,45,51.8
@@ -44,7 +44,7 @@ Colorado,Power 5,74.0,76.0,25,87,76,67.6
 Colorado St.,Mid-Major Avoid,35.0,115.0,33,42,93,63.6
 Texas A&M,Power 5,36.0,28.0,37,20,43,32.8
 St. John's (NY),Power 5,64.0,91.0,29,13,24,44.2
-Indiana,Power 5,44.0,31.0,96,52,32,51.0
+Indiana,Power 5,44.0,31.0,96,52,37,52.0
 Drake,Mid-Major Avoid,85.0,59.0,49,55,202,90.0
 Virginia,Power 5,68.0,29.0,55,110,16,55.6
 North Texas,Mid-Major Avoid,55.0,30.0,81,64,152,76.4
@@ -54,13 +54,13 @@ Northwestern,Power 5,91.0,37.0,51,53,78,62.0
 Penn St.,Power 5,88.0,41.0,85,62,132,81.6
 Providence,Power 5,24.0,51.0,59,100,83,63.4
 TCU,Power 5,33.0,27.0,46,78,47,46.2
-West Virginia,Power 5,73.0,24.0,158,50,61,73.2
+West Virginia,Power 5,73.0,24.0,158,50,60,73.0
 Rutgers,Power 5,80.0,40.0,102,74,149,89.0
 Oklahoma St.,Power 5,45.0,42.0,126,92,77,76.4
 San Francisco,Mid-Major Avoid,26.0,114.0,65,67,123,79.0
 Nevada,Mid-Major Avoid,125.0,48.0,38,79,70,72.0
 Virginia Tech,Power 5,22.0,75.0,58,170,56,76.2
-Cincinnati,Power 5,96.0,63.0,39,49,63,62.0
+Cincinnati,Power 5,96.0,63.0,39,49,62,61.8
 LSU,Power 5,20.0,153.0,99,88,66,85.2
 Washington St.,Mid-Major Avoid,54.0,79.0,41,112,126,82.4
 UAB,Mid-Major Avoid,49.0,39.0,104,98,113,80.6
@@ -75,12 +75,12 @@ Grand Canyon,Mid-Major Avoid,92.0,106.0,50,97,68,82.6
 Seton Hall,Power 5,48.0,74.0,53,209,51,87.0
 Liberty,Mid-Major Avoid,118.0,46.0,140,66,81,90.2
 Nebraska,Power 5,145.0,92.0,35,54,11,67.4
-Yale,Mid-Major Avoid,149.0,65.0,86,70,64,86.8
+Yale,Mid-Major Avoid,149.0,65.0,86,70,63,86.6
 Santa Clara,Mid-Major Avoid,70.0,87.0,105,57,40,71.8
 NC State,Power 5,139.0,43.0,48,133,26,77.8
 Syracuse,Power 5,83.0,121.0,79,134,72,97.8
 UC Irvine,Mid-Major Avoid,136.0,102.0,82,63,115,99.6
-Pittsburgh,Power 5,193.0,56.0,32,61,124,93.2
+Pittsburgh,Power 5,193.0,56.0,32,61,125,93.4
 Stanford,Power 5,106.0,96.0,111,80,71,92.8
 Fla. Atlantic,Mid-Major Avoid,132.0,13.0,44,113,116,83.6
 Bradley,Mid-Major Avoid,102.0,78.0,60,77,118,87.0
@@ -93,48 +93,48 @@ Furman,Mid-Major Avoid,82.0,88.0,146,124,198,127.6
 Davidson,Mid-Major Avoid,46.0,145.0,123,155,104,114.6
 Belmont,Mid-Major Avoid,79.0,119.0,118,128,54,99.6
 Butler,Power 5,117.0,125.0,67,81,80,94.0
-Akron,Mid-Major Avoid,126.0,105.0,114,94,60,99.8
+Akron,Mid-Major Avoid,126.0,105.0,114,94,64,100.6
 Florida St.,Power 5,104.0,220.0,88,91,85,117.6
 UNLV,Mid-Major Avoid,97.0,94.0,74,101,133,99.8
 George Mason,Mid-Major Avoid,114.0,139.0,94,73,99,103.8
-Princeton,Mid-Major Avoid,107.0,93.0,62,169,254,137.0
+Princeton,Mid-Major Avoid,107.0,93.0,62,169,259,138.0
 Wichita St.,Mid-Major Avoid,87.0,110.0,153,139,88,115.4
 Notre Dame,Power 5,43.0,184.0,121,103,87,107.6
-Louisiana Tech,Mid-Major Avoid,101.0,161.0,101,129,242,146.8
-Miami (FL),Power 5,47.0,21.0,98,225,37,85.6
+Louisiana Tech,Mid-Major Avoid,101.0,161.0,101,129,243,147.0
+Miami (FL),Power 5,47.0,21.0,98,225,36,85.4
 New Mexico,Mid-Major Avoid,165.0,64.0,26,41,42,67.6
 Minnesota,Power 5,109.0,222.0,84,93,79,117.4
-Toledo,Mid-Major Avoid,86.0,82.0,134,235,167,140.8
+Toledo,Mid-Major Avoid,86.0,82.0,134,235,168,141.0
 Kent St.,Mid-Major Avoid,138.0,68.0,172,117,138,126.6
 Georgia,Power 5,223.0,157.0,95,38,39,110.4
 South Carolina,Power 5,93.0,235.0,56,85,110,115.8
 South Dakota St.,Mid-Major Avoid,67.0,162.0,139,130,206,140.8
 Colgate,Mid-Major Avoid,124.0,101.0,132,247,208,162.4
 Vermont,Mid-Major Avoid,56.0,112.0,103,234,224,145.8
-Georgia Tech,Power 5,157.0,177.0,122,116,171,148.6
+Georgia Tech,Power 5,157.0,177.0,122,116,170,148.4
 Washington,Power 5,113.0,124.0,69,109,50,93.0
 Chattanooga,Mid-Major Avoid,63.0,178.0,136,96,287,152.0
 Richmond,Mid-Major Avoid,84.0,160.0,80,258,142,144.8
 UNC Greensboro,Mid-Major Avoid,171.0,117.0,133,135,297,170.6
 UC Santa Barbara,Mid-Major Avoid,143.0,103.0,209,144,137,147.2
-Ohio,Mid-Major Avoid,119.0,133.0,142,175,216,157.0
+Ohio,Mid-Major Avoid,119.0,133.0,142,175,217,157.2
 Tulane,Mid-Major Avoid,94.0,107.0,141,151,182,135.0
-James Madison,Mid-Major Avoid,211.0,95.0,57,156,212,146.2
-Col. of Charleston,Mid-Major Avoid,144.0,52.0,100,147,158,120.2
+James Madison,Mid-Major Avoid,211.0,95.0,57,156,213,146.4
+Col. of Charleston,Mid-Major Avoid,144.0,52.0,100,147,157,120.0
 Cornell,Mid-Major Avoid,190.0,128.0,97,123,145,136.6
 Western Ky.,Mid-Major Avoid,122.0,169.0,138,158,177,152.8
-Indiana St.,Mid-Major Avoid,238.0,100.0,27,199,232,159.2
+Indiana St.,Mid-Major Avoid,238.0,100.0,27,199,231,159.0
 Utah Valley,Mid-Major Avoid,116.0,58.0,166,108,84,106.4
 Hofstra,Mid-Major Avoid,112.0,85.0,112,217,98,124.8
-Missouri St.,Mid-Major Avoid,72.0,144.0,147,242,213,163.6
+Missouri St.,Mid-Major Avoid,72.0,144.0,147,242,215,164.0
 UNI,Mid-Major Avoid,98.0,218.0,109,95,82,120.4
 Sam Houston,Mid-Major Avoid,153.0,69.0,152,178,103,131.0
 Wyoming,Mid-Major Avoid,58.0,180.0,155,198,100,138.2
 Murray St.,Mid-Major Avoid,29.0,214.0,170,140,101,130.8
-Iona,Mid-Major Consider,89.0,60.0,213,253,240,171.0
+Iona,Mid-Major Consider,89.0,60.0,213,253,239,170.8
 Louisville,Power 5,130.0,314.0,206,28,14,138.4
-Temple,Mid-Major Avoid,111.0,123.0,190,166,164,150.8
-Wofford,Mid-Major Avoid,108.0,228.0,183,127,233,175.8
+Temple,Mid-Major Avoid,111.0,123.0,190,166,166,151.2
+Wofford,Mid-Major Avoid,108.0,228.0,183,127,232,175.6
 Samford,Mid-Major Avoid,176.0,135.0,73,118,207,141.8
 Duquesne,Mid-Major Avoid,278.0,137.0,83,150,127,155.0
 Saint Joseph's,Mid-Major Avoid,182.0,201.0,93,82,153,142.2
@@ -142,44 +142,44 @@ LMU (CA),Mid-Major Avoid,209.0,111.0,199,161,173,170.6
 UNCW,Mid-Major Avoid,146.0,141.0,119,102,95,120.6
 Southern Ill.,Mid-Major Avoid,137.0,122.0,117,190,128,138.8
 UC Riverside,Mid-Major Avoid,163.0,140.0,229,153,277,192.4
-Boston College,Power 5,141.0,166.0,72,202,156,147.4
+Boston College,Power 5,141.0,166.0,72,202,155,147.2
 Towson,Mid-Major Avoid,71.0,130.0,148,145,178,134.4
 Georgetown,Power 5,194.0,240.0,201,89,94,163.6
-Drexel,Mid-Major Avoid,154.0,189.0,124,184,217,173.6
-Seattle U,Mid-Major Avoid,129.0,142.0,107,157,125,132.0
+Drexel,Mid-Major Avoid,154.0,189.0,124,184,218,173.8
+Seattle U,Mid-Major Avoid,129.0,142.0,107,157,124,131.8
 Winthrop,Mid-Major Consider,147.0,250.0,181,163,129,174.0
 App State,Mid-Major Consider,167.0,196.0,76,172,184,159.0
-Massachusetts,Mid-Major Consider,178.0,203.0,92,223,191,177.4
+Massachusetts,Mid-Major Consider,178.0,203.0,92,223,189,177.0
 Bryant,Mid-Major Consider,205.0,179.0,163,146,354,209.4
 Oregon St.,Mid-Major Avoid,255.0,225.0,161,84,183,181.6
-South Alabama,Mid-Major Avoid,156.0,108.0,246,122,186,163.6
+South Alabama,Mid-Major Avoid,156.0,108.0,246,122,185,163.4
 Wright St.,Mid-Major Consider,186.0,197.0,150,213,140,177.2
 Marshall,Mid-Major Consider,242.0,83.0,247,173,146,178.2
 Montana St.,Mid-Major Consider,128.0,104.0,217,186,139,154.8
 Troy,Mid-Major Avoid,189.0,134.0,137,99,135,138.8
 UTEP,Mid-Major Consider,161.0,182.0,182,159,265,189.8
 SFA,Mid-Major Consider,123.0,136.0,174,268,75,155.2
-Abilene Christian,Mid-Major Consider,121.0,204.0,224,230,235,202.8
-California,Power 5,150.0,315.0,127,126,62,156.0
-New Mexico St.,Mid-Major Avoid,78.0,191.0,291,143,169,174.4
+Abilene Christian,Mid-Major Consider,121.0,204.0,224,230,234,202.6
+California,Power 5,150.0,315.0,127,126,61,155.8
+New Mexico St.,Mid-Major Avoid,78.0,191.0,291,143,171,174.8
 Rhode Island,Mid-Major Consider,142.0,263.0,211,149,122,177.4
 South Fla.,Mid-Major Avoid,245.0,159.0,78,189,53,144.8
-Jacksonville St.,Mid-Major Consider,148.0,241.0,216,115,220,188.0
+Jacksonville St.,Mid-Major Consider,148.0,241.0,216,115,221,188.2
 Cleveland St.,Mid-Major Avoid,179.0,185.0,197,168,311,208.0
 Morehead St.,Mid-Major Avoid,115.0,219.0,108,316,266,204.8
-Texas St.,Mid-Major Consider,127.0,193.0,207,195,230,190.4
-Eastern Wash.,Mid-Major Consider,221.0,120.0,145,287,218,198.2
+Texas St.,Mid-Major Consider,127.0,193.0,207,195,229,190.2
+Eastern Wash.,Mid-Major Consider,221.0,120.0,145,287,219,198.4
 Hawaii,Mid-Major Consider,172.0,131.0,173,224,105,161.0
 ETSU,Mid-Major Avoid,185.0,265.0,179,142,121,178.4
 Longwood,Mid-Major Avoid,131.0,164.0,168,210,274,189.4
 Lipscomb,Mid-Major Avoid,268.0,147.0,167,86,179,169.4
 Norfolk St.,Mid-Major Consider,169.0,183.0,208,181,307,209.6
 Charlotte,Mid-Major Consider,188.0,98.0,116,270,181,170.6
-Middle Tenn.,Mid-Major Avoid,95.0,109.0,290,107,161,152.4
+Middle Tenn.,Mid-Major Avoid,95.0,109.0,290,107,160,152.2
 East Carolina,Mid-Major Consider,183.0,190.0,186,176,269,200.8
 Fresno St.,Mid-Major Consider,77.0,148.0,233,279,136,174.6
 Weber St.,Mid-Major Consider,166.0,192.0,156,305,201,204.0
-Montana,Mid-Major Avoid,257.0,170.0,154,148,185,182.8
+Montana,Mid-Major Avoid,257.0,170.0,154,148,186,183.0
 North Dakota St.,Mid-Major Avoid,162.0,217.0,256,137,119,178.2
 Louisiana,Mid-Major Avoid,187.0,86.0,149,318,318,211.6
 Arkansas St.,Mid-Major Avoid,184.0,285.0,144,90,143,169.2
@@ -189,16 +189,16 @@ UNC Asheville,Mid-Major Consider,217.0,143.0,160,192,236,189.6
 Oral Roberts,Mid-Major Consider,160.0,50.0,278,335,335,231.6
 UMass Lowell,Mid-Major Consider,247.0,118.0,143,244,319,214.2
 Northern Ky.,Mid-Major Play,198.0,151.0,180,227,193,189.8
-St. Thomas (MN),Mid-Major Consider,314.0,199.0,159,120,109,180.2
-Brown,Mid-Major Play,212.0,176.0,177,216,286,213.4
+St. Thomas (MN),Mid-Major Consider,314.0,199.0,159,120,108,180.0
+Brown,Mid-Major Play,212.0,176.0,177,216,282,212.6
 Delaware,Mid-Major Play,134.0,224.0,165,237,270,206.0
-Eastern Ky.,Mid-Major Play,269.0,146.0,219,188,282,220.8
+Eastern Ky.,Mid-Major Play,269.0,146.0,219,188,283,221.0
 UC Davis,Mid-Major Play,220.0,149.0,169,240,174,190.4
 Southern Utah,Mid-Major Play,164.0,113.0,265,307,278,225.4
 Northern Colo.,Mid-Major Consider,203.0,237.0,187,119,144,178.0
-Oakland,Mid-Major Consider,173.0,276.0,120,187,155,182.2
+Oakland,Mid-Major Consider,173.0,276.0,120,187,161,183.4
 California Baptist,Mid-Major Play,222.0,171.0,200,174,112,175.8
-Mercer,Mid-Major Play,191.0,227.0,215,259,166,211.6
+Mercer,Mid-Major Play,191.0,227.0,215,259,167,211.8
 George Washington,Mid-Major Consider,226.0,211.0,188,136,89,170.0
 Quinnipiac,Mid-Major Play,231.0,175.0,164,193,200,192.6
 Illinois St.,Mid-Major Consider,200.0,283.0,178,114,91,173.2
@@ -207,117 +207,117 @@ High Point,Mid-Major Avoid,258.0,290.0,113,83,73,163.4
 Navy,Mid-Major Play,174.0,172.0,317,272,147,216.4
 Fordham,Mid-Major Play,177.0,132.0,176,241,187,182.6
 Pepperdine,Mid-Major Play,285.0,208.0,222,229,273,243.4
-Rice,Mid-Major Play,215.0,188.0,241,206,243,218.6
-Harvard,Mid-Major Play,228.0,150.0,205,256,160,199.8
+Rice,Mid-Major Play,215.0,188.0,241,206,246,219.2
+Harvard,Mid-Major Play,228.0,150.0,205,256,159,199.6
 Nicholls,Mid-Major Play,192.0,264.0,240,167,260,224.6
-La Salle,Mid-Major Play,225.0,223.0,191,219,239,219.4
-Georgia St.,Mid-Major Play,158.0,291.0,225,266,284,244.8
-Purdue Fort Wayne,Mid-Major Consider,235.0,238.0,151,154,257,207.0
+La Salle,Mid-Major Play,225.0,223.0,191,219,240,219.6
+Georgia St.,Mid-Major Play,158.0,291.0,225,266,285,245.0
+Purdue Fort Wayne,Mid-Major Consider,235.0,238.0,151,154,256,206.8
 Kennesaw St.,Mid-Major Consider,224.0,116.0,263,138,176,183.4
-Old Dominion,Mid-Major Play,201.0,154.0,297,293,251,239.2
-Buffalo,Mid-Major Play,120.0,194.0,345,341,189,237.8
+Old Dominion,Mid-Major Play,201.0,154.0,297,293,250,239.0
+Buffalo,Mid-Major Play,120.0,194.0,345,341,188,237.6
 Tarleton St.,Mid-Major Play,214.0,165.0,135,303,209,205.2
 Long Beach St.,Mid-Major Consider,159.0,167.0,171,326,262,217.0
 Penn,Mid-Major Play,213.0,138.0,214,306,165,207.2
-FGCU,Mid-Major Play,199.0,181.0,248,179,252,211.8
+FGCU,Mid-Major Play,199.0,181.0,248,179,253,212.0
 UT Arlington,Mid-Major Play,236.0,249.0,125,232,154,199.2
-Saint Peter's,Mid-Major Play,105.0,305.0,193,286,228,223.4
+Saint Peter's,Mid-Major Play,105.0,305.0,193,286,235,224.8
 A&M-Corpus Christi,Mid-Major Play,243.0,174.0,194,162,199,194.4
 Miami (OH),Mid-Major Consider,256.0,287.0,237,141,48,193.8
-Radford,Mid-Major Play,288.0,173.0,234,160,241,219.2
+Radford,Mid-Major Play,288.0,173.0,234,160,242,219.4
 McNeese,Mid-Major Consider,313.0,340.0,63,59,57,166.4
 Tulsa,Mid-Major Play,180.0,324.0,198,271,55,205.6
 Cal St. Fullerton,Mid-Major Play,155.0,126.0,235,348,197,212.2
 Queens (NC),Mid-Major Play,,202.0,269,207,204,220.5
-Ball St.,Mid-Major Play,265.0,156.0,258,276,323,255.6
-Milwaukee,Mid-Major Consider,333.0,210.0,212,132,248,227.0
+Ball St.,Mid-Major Play,265.0,156.0,258,276,322,255.4
+Milwaukee,Mid-Major Consider,333.0,210.0,212,132,252,227.8
 San Jose St.,Mid-Major Consider,293.0,99.0,244,177,249,212.4
-Monmouth,Mid-Major Play,140.0,351.0,189,257,196,226.6
-Mount St. Mary's,Mid-Major Play,254.0,268.0,242,236,298,259.6
+Monmouth,Mid-Major Play,140.0,351.0,189,257,195,226.4
+Mount St. Mary's,Mid-Major Play,254.0,268.0,242,236,296,259.2
 Jacksonville,Mid-Major Play,168.0,233.0,275,194,306,235.2
 Northeastern,Mid-Major Play,251.0,309.0,243,208,276,257.4
-Marist,Mid-Major Play,210.0,279.0,196,246,168,219.8
+Marist,Mid-Major Play,210.0,279.0,196,246,163,218.8
 Campbell,Mid-Major Play,218.0,231.0,306,220,205,236.0
 UMBC,Mid-Major Play,233.0,239.0,284,298,238,258.4
 UIC,Mid-Major Consider,283.0,288.0,184,152,106,202.6
-Siena,Mid-Major Play,230.0,206.0,353,260,188,247.4
+Siena,Mid-Major Play,230.0,206.0,353,260,191,248.0
 Western Caro.,Mid-Major Consider,287.0,232.0,110,342,261,246.4
 North Ala.,Mid-Major Consider,316.0,242.0,253,121,338,254.0
 Boston U.,Mid-Major Play,206.0,256.0,292,291,268,262.6
 Merrimack,Mid-Major Play,291.0,301.0,210,180,180,232.4
 Bowling Green,Mid-Major Play,284.0,286.0,230,289,148,247.4
-South Dakota,Mid-Major Play,204.0,300.0,322,233,283,268.4
+South Dakota,Mid-Major Play,204.0,300.0,322,233,284,268.6
 CSU Bakersfield,Mid-Major Play,280.0,298.0,259,249,326,282.4
-Valparaiso,Mid-Major Play,207.0,294.0,303,203,157,232.8
-Fairfield,Mid-Major Play,202.0,262.0,162,327,245,239.6
+Valparaiso,Mid-Major Play,207.0,294.0,303,203,156,232.6
+Fairfield,Mid-Major Play,202.0,262.0,162,327,244,239.4
 Portland St.,Mid-Major Play,271.0,254.0,250,204,130,221.8
 Southern Miss.,Mid-Major Play,341.0,90.0,238,295,237,240.2
 Kansas City,Mid-Major Play,208.0,313.0,232,243,355,270.2
 Wagner,Mid-Major Play,135.0,303.0,288,339,316,276.2
 UTSA,Mid-Major Play,324.0,284.0,262,200,340,282.0
-Niagara,Mid-Major Play,195.0,244.0,257,322,342,272.0
-Portland,Mid-Major Play,181.0,168.0,298,288,222,231.4
-Coastal Carolina,Mid-Major Play,152.0,295.0,320,328,231,265.2
-Ga. Southern,Mid-Major Play,248.0,207.0,285,254,259,250.6
+Niagara,Mid-Major Play,195.0,244.0,257,322,344,272.4
+Portland,Mid-Major Play,181.0,168.0,298,288,223,231.6
+Coastal Carolina,Mid-Major Play,152.0,295.0,320,328,230,265.0
+Ga. Southern,Mid-Major Play,248.0,207.0,285,254,257,250.2
 Southern U.,Mid-Major Play,216.0,278.0,255,222,280,250.2
 Texas Southern,Mid-Major Play,196.0,307.0,277,281,305,273.2
 CSUN,Mid-Major Consider,326.0,335.0,226,111,162,232.0
 Elon,Mid-Major Play,253.0,337.0,310,191,192,256.6
-Rider,Mid-Major Play,240.0,215.0,220,315,357,269.4
+Rider,Mid-Major Play,240.0,215.0,220,315,359,269.8
 Pacific,Mid-Major Play,298.0,198.0,359,297,111,252.6
 San Diego,Mid-Major Play,219.0,234.0,254,325,225,251.4
 Little Rock,Mid-Major Play,315.0,323.0,185,231,304,271.6
 Army West Point,Mid-Major Play,279.0,246.0,339,300,331,299.0
-Detroit Mercy,Mid-Major Play,237.0,212.0,356,329,246,276.0
+Detroit Mercy,Mid-Major Play,237.0,212.0,356,329,241,275.0
 Stetson,Mid-Major Play,305.0,163.0,218,354,329,273.8
 Stony Brook,Mid-Major Play,232.0,327.0,175,340,210,256.8
-American,Mid-Major Play,335.0,260.0,287,238,255,275.0
-Bellarmine,Mid-Major Play,197.0,258.0,319,353,285,282.4
+American,Mid-Major Play,335.0,260.0,287,238,254,274.8
+Bellarmine,Mid-Major Play,197.0,258.0,319,353,286,282.6
 Southeast Mo. St.,Mid-Major Play,250.0,243.0,350,183,214,248.0
 Idaho St.,Mid-Major Play,342.0,252.0,251,196,226,253.4
-Dartmouth,Mid-Major Consider,227.0,275.0,333,211,253,259.8
+Dartmouth,Mid-Major Consider,227.0,275.0,333,211,251,259.4
 Air Force,Mid-Major Consider,264.0,152.0,270,324,349,271.8
-VMI,Mid-Major Consider,175.0,355.0,357,294,359,308.0
-SIUE,Mid-Major Play,292.0,221.0,282,221,256,254.4
+VMI,Mid-Major Consider,175.0,355.0,357,294,358,307.8
+SIUE,Mid-Major Play,292.0,221.0,282,221,255,254.2
 North Florida,Mid-Major Play,275.0,236.0,252,262,334,271.8
 New Hampshire,Mid-Major Play,234.0,267.0,228,355,337,284.2
 Bucknell,Mid-Major Play,334.0,292.0,279,215,336,291.2
-Robert Morris,Mid-Major Consider,328.0,247.0,304,131,159,233.8
+Robert Morris,Mid-Major Consider,328.0,247.0,304,131,158,233.6
 FIU,Mid-Major Play,266.0,216.0,295,261,194,246.4
-Utah Tech,Mid-Major Play,273.0,158.0,280,309,163,236.6
-Canisius,Mid-Major Play,252.0,261.0,268,357,348,297.2
+Utah Tech,Mid-Major Play,273.0,158.0,280,309,164,236.8
+Canisius,Mid-Major Play,252.0,261.0,268,357,345,296.6
 UAlbany,Mid-Major Play,281.0,343.0,249,263,321,291.4
-Howard,Mid-Major Play,241.0,213.0,274,317,219,252.8
+Howard,Mid-Major Play,241.0,213.0,274,317,220,253.0
 Southeastern La.,Mid-Major Play,259.0,257.0,309,201,294,264.0
 Austin Peay,Mid-Major Play,289.0,325.0,236,285,134,253.8
 Evansville,Mid-Major Play,327.0,352.0,203,252,302,287.2
-Maine,Mid-Major Play,353.0,273.0,231,205,343,281.0
+Maine,Mid-Major Play,353.0,273.0,231,205,342,280.8
 Western Ill.,Mid-Major Play,239.0,248.0,260,337,362,289.2
-Lafayette,Mid-Major Play,319.0,271.0,316,284,325,303.0
+Lafayette,Mid-Major Play,319.0,271.0,316,284,324,302.8
 UT Martin,Mid-Major Play,303.0,251.0,204,290,190,247.6
 Loyola Maryland,Mid-Major Play,260.0,319.0,346,308,330,312.6
 Grambling,Mid-Major Play,304.0,186.0,276,323,279,273.6
-N.C. Central,Mid-Major Play,290.0,187.0,271,320,344,282.4
+N.C. Central,Mid-Major Play,290.0,187.0,271,320,343,282.2
 The Citadel,Mid-Major Play,229.0,330.0,261,361,350,306.2
 Jackson St.,Mid-Major Play,277.0,308.0,299,264,341,297.8
 Lehigh,Mid-Major Play,299.0,272.0,267,283,299,284.0
 Lamar University,Mid-Major Play,354.0,356.0,221,165,211,261.4
 Central Conn. St.,Mid-Major Play,345.0,341.0,245,171,271,274.6
 Northwestern St.,Mid-Major Play,330.0,205.0,332,226,300,278.6
-Tennessee St.,Mid-Major Play,274.0,280.0,283,248,234,263.8
-Manhattan,Mid-Major Play,249.0,299.0,334,250,322,290.8
-Omaha,Mid-Major Play,346.0,317.0,272,164,244,268.6
+Tennessee St.,Mid-Major Play,274.0,280.0,283,248,233,263.6
+Manhattan,Mid-Major Play,249.0,299.0,334,250,325,291.4
+Omaha,Mid-Major Play,346.0,317.0,272,164,245,268.8
 North Dakota,Mid-Major Play,348.0,277.0,239,275,275,282.8
 Central Mich.,Mid-Major Play,318.0,331.0,264,214,292,283.8
 UTRGV,Mid-Major Play,307.0,259.0,329,245,141,256.2
 Morgan St.,Mid-Major Play,300.0,293.0,338,332,353,323.2
 Northern Ariz.,Mid-Major Play,336.0,230.0,313,251,301,286.2
-LIU,Mid-Major Play,244.0,362.0,347,280,195,285.6
-Sacred Heart,Mid-Major Play,323.0,322.0,286,255,296,296.4
+LIU,Mid-Major Play,244.0,362.0,347,280,196,285.8
+Sacred Heart,Mid-Major Play,323.0,322.0,286,255,298,296.8
 Sacramento St.,Mid-Major Play,311.0,226.0,318,345,263,292.6
 Presbyterian,Mid-Major Play,270.0,353.0,281,239,267,282.0
 Prairie View,Mid-Major Play,295.0,281.0,327,356,328,317.4
-Cal Poly,Mid-Major Play,308.0,311.0,341,182,229,274.2
+Cal Poly,Mid-Major Play,308.0,311.0,341,182,228,274.0
 Alcorn,Mid-Major Play,262.0,245.0,293,330,351,296.2
 Tennessee Tech,Mid-Major,261.0,274.0,336,292,312,295.0
 William & Mary,Mid-Major Play,339.0,316.0,326,218,117,263.2
@@ -325,23 +325,23 @@ Binghamton,Mid-Major Play,294.0,297.0,273,313,360,307.4
 Denver,Mid-Major Play,296.0,289.0,266,302,227,276.0
 Columbia,Mid-Major Play,351.0,339.0,227,274,175,273.2
 USC Upstate,Mid-Major Play,263.0,253.0,307,346,293,292.4
-South Carolina St.,Mid-Major Play,302.0,347.0,296,197,358,300.0
-FDU,Mid-Major Play,349.0,270.0,324,301,324,313.6
+South Carolina St.,Mid-Major Play,302.0,347.0,296,197,357,299.8
+FDU,Mid-Major Play,349.0,270.0,324,301,323,313.4
 ULM,Mid-Major Play,276.0,296.0,308,349,356,317.0
 Western Mich.,Mid-Major Play,329.0,326.0,294,278,290,303.4
 Hampton,Mid-Major Play,322.0,348.0,337,212,264,296.6
-Southern Ind.,Mid-Major Play,,266.0,330,331,347,318.5
-Eastern Mich.,Mid-Major Play,306.0,321.0,325,267,221,288.0
+Southern Ind.,Mid-Major Play,,266.0,330,331,348,318.8
+Eastern Mich.,Mid-Major Play,306.0,321.0,325,267,222,288.2
 NIU,Mid-Major Play,297.0,255.0,300,351,315,303.6
-Green Bay,Mid-Major Play,344.0,361.0,223,336,223,297.4
+Green Bay,Mid-Major Play,344.0,361.0,223,336,212,295.2
 Holy Cross,Mid-Major Play,343.0,336.0,351,310,332,334.4
-UMES,Mid-Major Play,309.0,229.0,349,362,346,319.0
+UMES,Mid-Major Play,309.0,229.0,349,362,347,319.2
 N.C. A&T,Mid-Major Play,286.0,318.0,342,334,272,310.4
 Idaho,Mid-Major Play,325.0,312.0,321,273,172,280.6
-New Orleans,Mid-Major Play,267.0,342.0,343,343,215,302.0
+New Orleans,Mid-Major Play,267.0,342.0,343,343,216,302.2
 Bethune-Cookman,Mid-Major Play,337.0,349.0,301,277,258,304.4
 Alabama St.,Mid-Major Play,312.0,346.0,311,265,314,309.6
-Charleston So.,Mid-Major Play,347.0,304.0,315,296,250,302.4
+Charleston So.,Mid-Major Play,347.0,304.0,315,296,248,302.0
 Coppin St.,Mid-Major Play,301.0,328.0,361,360,364,342.8
 NJIT,Mid-Major Play,332.0,334.0,331,352,309,331.6
 East Texas A&M,Mid-Major Play,,306.0,335,333,289,315.8
@@ -350,9 +350,9 @@ UIW,Mid-Major Play,350.0,344.0,348,228,291,312.2
 Le Moyne,Mid-Major Play,,,302,350,281,311.0
 Eastern Ill.,Mid-Major Play,356.0,345.0,312,319,320,330.4
 Stonehill,Mid-Major Play,,310.0,355,312,339,329.0
-Chicago St.,Mid-Major Play,340.0,302.0,289,358,345,326.8
+Chicago St.,Mid-Major Play,340.0,302.0,289,358,346,327.0
 Alabama A&M,Mid-Major Play,320.0,320.0,323,359,303,325.0
-Central Ark.,Mid-Major Play,317.0,329.0,344,344,170,300.8
+Central Ark.,Mid-Major Play,317.0,329.0,344,344,169,300.6
 Delaware St.,Mid-Major Play,357.0,354.0,305,304,361,336.2
 IU Indy,Mid-Major Play,358.0,360.0,360,314,313,341.0
 Houston Christian,Mid-Major Play,338.0,357.0,358,282,295,326.0
