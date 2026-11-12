@@ -535,6 +535,12 @@
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        // Default sort per filter: Play/Consider show the worst 5-year average first,
+        // everything else shows the best first. Column headers can still re-sort.
+        currentSort = {
+          column: 'Average 5 Year NET',
+          ascending: !['Mid-Major Play', 'Mid-Major Consider'].includes(btn.dataset.filter),
+        };
         selectedTeam = null;
         searchInput.value = '';
         hideChart();
