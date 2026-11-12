@@ -41,8 +41,9 @@ EASTERN = ZoneInfo("America/New_York")
 WINDOW = 5  # seasons in the rolling average (current season + 4 finals)
 
 # Mid-majors are classified from their rolling 5-year average NET each run.
-AVOID_MAX = 150     # avg <= 150        -> Mid-Major Avoid
-CONSIDER_MAX = 200  # avg 150.1 - 200   -> Mid-Major Consider; above 200 -> Mid-Major Play
+# 182 / 208 is the best fit to the original hand-made Play/Consider/Avoid lists.
+AVOID_MAX = 182     # avg <= 182        -> Mid-Major Avoid
+CONSIDER_MAX = 208  # avg 182.1 - 208   -> Mid-Major Consider; above 208 -> Mid-Major Play
 
 ROOT = Path(__file__).resolve().parent
 RANKS_PATH = ROOT / "net_ranks_by_season.json"

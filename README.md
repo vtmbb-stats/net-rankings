@@ -36,9 +36,11 @@ Every team not listed as `Power 5` is classified from its 5-year average NET eac
 
 | 5-year average | Status |
 |---|---|
-| 150 or better | Mid-Major Avoid |
-| 150.1 – 200 | Mid-Major Consider |
-| worse than 200 | Mid-Major Play |
+| 182 or better | Mid-Major Avoid |
+| 182.1 – 208 | Mid-Major Consider |
+| worse than 208 | Mid-Major Play |
+
+These cutoffs were chosen as the closest match to the original hand-made lists (84% of mid-majors keep their label).
 
 Because the average rolls forward, a team's label can change as new seasons come in.
 
