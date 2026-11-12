@@ -1,397 +1,252 @@
 #!/usr/bin/env python3
 """
 NET Rankings Scraper
-Scrapes NCAA NET rankings and merges with historical data
+
+Pulls the current NCAA men's basketball NET rankings from NCAA.com and builds
+the files the dashboard reads:
+
+  net_ranks_by_season.json  NET rank per team for every season (the source of truth).
+                            The current season's entry is overwritten on every run,
+                            so once the season ends it simply holds the final NET.
+  net_rankings_data.csv     One row per team: status, last 4 final ranks, current
+                            rank and the rolling 5-year average.
+  net_rankings_daily.csv    Time series for the team charts (a snapshot is only
+                            appended in-season, when the rankings actually change).
+  net_meta.json             Season / "through games" info shown on the dashboard.
+
+Seasons are labelled by the year they END (2026-27 season = 2027), matching
+the dashboard. The season shown on NCAA.com is read from its "Through Games"
+date, so last season's final NET is never mistaken for the new season.
+
+Usage:
+  python scrape_net_rankings.py                   # live scrape
+  python scrape_net_rankings.py --html page.html  # use a saved copy of the page
 """
 
-import requests
-from bs4 import BeautifulSoup
-import pandas as pd
-from datetime import datetime
+import argparse
+import csv
+import json
+import re
 import sys
-import os
+from datetime import date, datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
-try:
-    from final_net_ranks import FINAL_NET_RANKS_BY_YEAR
-except Exception:
-    FINAL_NET_RANKS_BY_YEAR = None
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
 
-USE_EMBEDDED_FINAL_NET_RANKS = True
+NET_URL = "https://www.ncaa.com/rankings/basketball-men/d1/ncaa-mens-basketball-net-rankings"
+EASTERN = ZoneInfo("America/New_York")
+WINDOW = 5  # seasons in the rolling average (current season + 4 finals)
 
-def scrape_net_rankings():
-    url = "https://www.ncaa.com/rankings/basketball-men/d1/ncaa-mens-basketball-net-rankings"
+ROOT = Path(__file__).resolve().parent
+RANKS_PATH = ROOT / "net_ranks_by_season.json"
+STATUS_PATH = ROOT / "team_status.csv"
+DATA_PATH = ROOT / "net_rankings_data.csv"
+DAILY_PATH = ROOT / "net_rankings_daily.csv"
+META_PATH = ROOT / "net_meta.json"
 
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    }
+# NCAA.com name -> name used in our files, for any team NCAA renames.
+NAME_FIXES: dict[str, str] = {}
 
-    html_content = None
 
+def season_for(d: date) -> int:
+    """Season label (end year) for a date. Aug 2026 - Jul 2027 -> 2027."""
+    return d.year + 1 if d.month >= 8 else d.year
+
+
+def season_name(season: int) -> str:
+    return f"{season - 1}-{str(season)[2:]}"
+
+
+def fetch_html(html_path: str | None) -> str:
+    if html_path:
+        print(f"Reading saved page from {html_path}")
+        return Path(html_path).read_text(encoding="utf-8")
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+    resp = requests.get(NET_URL, headers=headers, timeout=30)
+    resp.raise_for_status()
+    print(f"Fetched NCAA.com ({len(resp.text):,} chars)")
+    return resp.text
+
+
+def parse_through_date(soup: BeautifulSoup) -> date | None:
+    """Parse the 'Through Games Apr. 06 2026' label above the table."""
+    el = soup.find(class_="rankings-last-updated")
+    text = el.get_text(" ", strip=True) if el else soup.get_text(" ")
+    m = re.search(r"Through Games\s+([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})", text)
+    if not m:
+        return None
+    month, day, year = m.groups()
     try:
-        print("Attempting to fetch from NCAA.com...")
-        response = requests.get(url, headers=headers, timeout=30)
-        response.raise_for_status()
-        html_content = response.text
-        print(f"Successfully fetched page ({len(html_content)} characters)")
-    except Exception as e:
-        print(f"WARNING: Network request failed ({e})")
-        print("Attempting to read from cached HTML file...")
-        try:
-            with open("net_rankings_cache.html", "r", encoding="utf-8") as f:
-                html_content = f.read()
-            print(f"Using cached HTML ({len(html_content)} characters)")
-        except Exception:
-            print("ERROR: Could not read cached file either")
-            print("\nDEBUG INFO:")
-            print(f"  Current directory: {os.getcwd()}")
-            print(f"  Files in directory: {os.listdir('.')}")
-            sys.exit(1)
+        return datetime.strptime(f"{month[:3]} {day} {year}", "%b %d %Y").date()
+    except ValueError:
+        return None
 
-    soup = BeautifulSoup(html_content, "html.parser")
+
+def parse_rankings(html: str) -> tuple[pd.DataFrame, date | None]:
+    soup = BeautifulSoup(html, "html.parser")
     table = soup.find("table")
+    if table is None or table.find("tbody") is None:
+        title = soup.title.get_text(strip=True) if soup.title else "no title"
+        sys.exit(f"ERROR: rankings table not found on page ({title})")
 
-    if not table:
-        print("ERROR: Could not find rankings table on page")
-        print("\nDEBUG INFO:")
-        print(f"  Page title: {soup.find('title').text if soup.find('title') else 'No title'}")
-        print(f"  HTML preview (first 500 chars): {html_content[:500]}")
-        sys.exit(1)
+    headers = [th.get_text(strip=True) for th in table.find_all("th")]
+    idx = {h: i for i, h in enumerate(headers)}
+    for required in ("Rank", "School"):
+        if required not in idx:
+            sys.exit(f"ERROR: table is missing a '{required}' column; headers were {headers}")
 
-    tbody = table.find("tbody")
-    if not tbody:
-        print("ERROR: Table found but missing tbody")
-        sys.exit(1)
+    def cell(cols, name):
+        i = idx.get(name)
+        return cols[i].get_text(strip=True) if i is not None and i < len(cols) else ""
 
-    rows = tbody.find_all("tr")
-    rankings_data = []
+    rows = []
+    for tr in table.find("tbody").find_all("tr"):
+        cols = tr.find_all("td")
+        rank = cell(cols, "Rank")
+        if not rank.isdigit():
+            continue
+        school = cell(cols, "School")
+        rows.append({
+            "Team": NAME_FIXES.get(school, school),
+            "Rank": int(rank),
+            "Record": cell(cols, "Record"),
+            "Conference": cell(cols, "Conf"),
+            "Quad 1": cell(cols, "Quad 1"),
+        })
 
-    print(f"Found table with {len(rows)} rows")
+    df = pd.DataFrame(rows)
+    if len(df) < 300:
+        sys.exit(f"ERROR: only parsed {len(df)} teams; page layout may have changed")
+    if df["Team"].duplicated().any():
+        sys.exit(f"ERROR: duplicate teams on page: {df.loc[df['Team'].duplicated(), 'Team'].tolist()}")
 
-    for row in rows:
-        cols = row.find_all("td")
-        if len(cols) >= 2:
-            rank = cols[0].get_text(strip=True)
-            school = cols[1].get_text(strip=True)
-            rankings_data.append({"Rank": rank, "School": school})
+    through = parse_through_date(soup)
+    print(f"Parsed {len(df)} teams (#1 {df.iloc[0]['Team']}), through games {through or 'UNKNOWN'}")
+    return df, through
 
-    df = pd.DataFrame(rankings_data)
-    df["Rank"] = pd.to_numeric(df["Rank"], errors="coerce")
 
-    df = df.dropna(subset=["Rank", "School"])
-    df["Rank"] = df["Rank"].astype(int)
+def load_status() -> dict[str, str]:
+    with open(STATUS_PATH, newline="", encoding="utf-8") as f:
+        return {r["Team"].strip(): r["Status"].strip() for r in csv.DictReader(f)}
 
-    print(f"Successfully extracted {len(df)} teams")
-    if len(df) > 0:
-        print(f"  First team: #{df.iloc[0]['Rank']} {df.iloc[0]['School']}")
-        print(f"  Last team: #{df.iloc[-1]['Rank']} {df.iloc[-1]['School']}")
 
+def determine_page_season(through: date | None, ranks: dict, current_season: int, scraped: dict) -> int:
+    if through is not None:
+        return season_for(through)
+    # Fallback: if the page is identical to last season's stored final, it is still last season.
+    if ranks.get(str(current_season - 1)) == scraped:
+        print("WARNING: no 'Through Games' date; page matches last season's final")
+        return current_season - 1
+    print("WARNING: no 'Through Games' date; assuming the page shows the current season")
+    return current_season
+
+
+def build_dashboard(ranks: dict, status: dict, current_season: int, page_df: pd.DataFrame,
+                    current_live: bool) -> pd.DataFrame:
+    seasons = list(range(current_season - WINDOW + 1, current_season + 1))
+    cols = [f"NET {s}" for s in seasons]
+
+    # Team universe: the teams on the NCAA page right now (the current D-I field),
+    # minus anything marked Exclude in team_status.csv.
+    teams = sorted(t for t in page_df["Team"] if status.get(t) != "Exclude")
+
+    info = page_df.set_index("Team")
+    out = []
+    for t in teams:
+        row = {
+            "Team": t,
+            "Status": status.get(t, "Mid-Major"),
+            "Conference": info.at[t, "Conference"],
+            "Record": info.at[t, "Record"] if current_live else "",
+            "Quad 1": info.at[t, "Quad 1"] if current_live else "",
+        }
+        for s, c in zip(seasons, cols):
+            row[c] = ranks.get(str(s), {}).get(t)
+        out.append(row)
+
+    df = pd.DataFrame(out)
+    for c in cols:
+        df[c] = pd.to_numeric(df[c], errors="coerce").astype("Int64")
+    df["Average 5 Year NET"] = df[cols].astype("float").mean(axis=1, skipna=True).round(1)
     return df
 
-def load_historical_data(filepath):
-    try:
-        df = pd.read_excel(filepath, sheet_name="Overall List")
-        print(f"Loaded {len(df)} teams from historical data")
-        return df
-    except Exception as e:
-        print(f"ERROR loading historical data: {e}")
-        sys.exit(1)
 
-def merge_and_update(historical_df, current_rankings_df):
-    current_rankings_df = current_rankings_df.rename(columns={"School": "Team", "Rank": "2025 NET Rank"})
-
-    special_mappings = {
-        "Middle Tenn.": "Mid Majordle Tenn."
-    }
-
-    def get_display_name(team_name):
-        if pd.isna(team_name):
-            return team_name
-        import re
-        if team_name == "Mid Majordle Tenn.":
-            return "Middle Tenn."
-        display = re.sub(r"\(AQ\)$", "", str(team_name)).strip()
-        return display
-
-    def clean_for_matching(name):
-        if pd.isna(name):
-            return name
-        import re
-        cleaned = re.sub(r"\(AQ\)$", "", str(name)).strip()
-        return cleaned
-
-    historical_df["Display Name"] = historical_df["Team"].apply(get_display_name)
-
-    if USE_EMBEDDED_FINAL_NET_RANKS and FINAL_NET_RANKS_BY_YEAR is not None:
-        def _norm_team_name(x):
-            if pd.isna(x):
-                return x
-            s = str(x).strip()
-            s = s.replace("(AQ)", "").strip()
-            return s
-
-        for yr in (2021, 2022, 2023, 2024):
-            col = f"{yr} NET Rank"
-            if col in historical_df.columns:
-                historical_df[f"{col} Spreadsheet"] = historical_df[col]
-
-            ranks = FINAL_NET_RANKS_BY_YEAR.get(str(yr), FINAL_NET_RANKS_BY_YEAR.get(yr))
-            if not ranks:
-                continue
-
-            historical_df[col] = historical_df["Display Name"].apply(lambda n: ranks.get(_norm_team_name(n), pd.NA))
-
-    historical_df["2025 NET Rank"] = pd.NA
-    historical_df["_clean_name"] = historical_df["Team"].apply(clean_for_matching)
-
-    matches_found = 0
-    matches_details = []
-
-    for _, row in current_rankings_df.iterrows():
-        ncaa_team = row["Team"]
-        rank = row["2025 NET Rank"]
-
-        excel_name = special_mappings.get(ncaa_team)
-        if excel_name:
-            mask = historical_df["Team"] == excel_name
-            if mask.any():
-                historical_df.loc[mask, "2025 NET Rank"] = rank
-                display_name = historical_df.loc[mask, "Display Name"].iloc[0]
-                matches_found += 1
-                matches_details.append(f"  ✓ {ncaa_team} (#{rank}) → {excel_name} [Display: {display_name}] [SPECIAL MAPPING]")
-                continue
-
-        mask = historical_df["_clean_name"] == ncaa_team
-        if mask.any():
-            historical_df.loc[mask, "2025 NET Rank"] = rank
-            original_name = historical_df.loc[mask, "Team"].iloc[0]
-            display_name = historical_df.loc[mask, "Display Name"].iloc[0]
-            matches_found += 1
-            matches_details.append(f"  ✓ {ncaa_team} (#{rank}) → {original_name} [Display: {display_name}]")
-            continue
-
-        mask = historical_df["_clean_name"].str.lower() == str(ncaa_team).lower()
-        if mask.any():
-            historical_df.loc[mask, "2025 NET Rank"] = rank
-            original_name = historical_df.loc[mask, "Team"].iloc[0]
-            matches_found += 1
-            matches_details.append(f"  ✓ {ncaa_team} (#{rank}) → {original_name} [case-insensitive]")
-            continue
-
-        matches_details.append(f"  ✗ {ncaa_team} (#{rank}) - NO MATCH FOUND")
-
-    historical_df.drop("_clean_name", axis=1, inplace=True)
-
-    power_5_teams = [
-        'Alabama', 'Arizona', 'Arizona St.', 'Arkansas', 'Auburn', 'BYU', 'Baylor',
-        'Boston College', 'Butler', 'California', 'Cincinnati', 'Clemson', 'Colorado',
-        'Creighton', 'DePaul', 'Duke', 'Florida', 'Florida St.', 'Georgetown', 'Georgia',
-        'Georgia Tech', 'Houston', 'Illinois', 'Indiana', 'Iowa', 'Iowa St.', 'Kansas',
-        'Kansas St.', 'Kentucky', 'LSU', 'Louisville', 'Marquette', 'Maryland', 'Miami (FL)',
-        'Michigan', 'Michigan St.', 'Minnesota', 'Mississippi St.', 'Missouri', 'NC State',
-        'Nebraska', 'North Carolina', 'Northwestern', 'Notre Dame', 'Ohio St.', 'Oklahoma',
-        'Oklahoma St.', 'Ole Miss', 'Oregon', 'Penn St.', 'Pittsburgh', 'Providence',
-        'Purdue', 'Rutgers', 'SMU', 'Seton Hall', 'South Carolina', 'Southern California',
-        "St. John's (NY)", 'Stanford', 'Syracuse', 'TCU', 'Tennessee', 'Texas', 'Texas A&M',
-        'Texas Tech', 'UCF', 'UCLA', 'UConn', 'Utah', 'Vanderbilt', 'Villanova', 'Virginia',
-        'Virginia Tech', 'Wake Forest', 'Washington', 'West Virginia', 'Wisconsin', 'Xavier'
-    ]
-
-    mid_major_avoid_teams = [
-        'Gonzaga', "Saint Mary's (CA)", 'San Diego St.', 'Boise St.', 'Utah St.', 'Memphis',
-        'VCU', 'Colorado St.', 'Drake', 'North Texas', 'Dayton', 'San Francisco', 'Nevada',
-        'Washington St.', 'UAB', 'Grand Canyon', 'Liberty', 'Yale', 'Santa Clara', 'UC Irvine',
-        'Fla. Atlantic', 'Bradley', 'St. Bonaventure', 'Loyola Chicago', 'Saint Louis', 'Furman',
-        'Davidson', 'Belmont', 'Akron', 'UNLV', 'George Mason', 'Princeton', 'Wichita St.',
-        'Louisiana Tech', 'New Mexico', 'Toledo', 'Kent St.', 'South Dakota St.', 'Colgate',
-        'Vermont', 'Chattanooga', 'Richmond', 'UNC Greensboro', 'UC Santa Barbara', 'Ohio',
-        'Tulane', 'James Madison', 'Col. of Charleston', 'Cornell', 'Western Ky.', 'Indiana St.',
-        'Utah Valley', 'Hofstra', 'Missouri St.', 'UNI', 'Sam Houston', 'Wyoming', 'Murray St.',
-        'Temple', 'Wofford', 'Samford', 'Duquesne', "Saint Joseph's", 'LMU (CA)', 'UNCW',
-        'Southern Ill.', 'UC Riverside', 'Towson', 'Drexel', 'Seattle U', 'South Alabama', 'Troy',
-        'New Mexico St.', 'South Fla.', 'Cleveland St.', 'Morehead St.', 'ETSU', 'Longwood',
-        'Lipscomb', 'Middle Tenn.', 'Montana', 'North Dakota St.', 'Louisiana', 'Arkansas St.',
-        'Youngstown St.', 'UC San Diego', 'High Point', 'Oregon St.'
-    ]
-
-    mid_major_consider_teams = [
-        'Iona', 'Winthrop', 'App State', 'Massachusetts', 'Bryant', 'Wright St.', 'Marshall',
-        'Montana St.', 'UTEP', 'SFA', 'Abilene Christian', 'Rhode Island', 'Jacksonville St.',
-        'Texas St.', 'Eastern Wash.', 'Hawaii', 'Norfolk St.', 'Charlotte', 'East Carolina',
-        'Fresno St.', 'Weber St.', 'UNC Asheville', 'Oral Roberts', 'UMass Lowell', 'St. Thomas (MN)',
-        'Northern Colo.', 'Oakland', 'George Washington', 'Illinois St.', 'Purdue Fort Wayne',
-        'Kennesaw St.', 'Long Beach St.', 'Miami (OH)', 'McNeese', 'Milwaukee', 'San Jose St.',
-        'UIC', 'Western Caro.', 'North Ala.', 'CSUN', 'Dartmouth', 'Air Force', 'VMI', 'Robert Morris'
-    ]
-
-    mid_major_play_teams = [
-        'Northern Ky.', 'Brown', 'Delaware', 'Eastern Ky.', 'UC Davis', 'Southern Utah',
-        'California Baptist', 'Mercer', 'Quinnipiac', 'Gardner-Webb', 'Navy', 'Fordham',
-        'Pepperdine', 'Rice', 'Harvard', 'Nicholls', 'La Salle', 'Georgia St.', 'Old Dominion',
-        'Buffalo', 'Tarleton St.', 'Penn', 'FGCU', 'UT Arlington', "Saint Peter's", 'A&M-Corpus Christi',
-        'Radford', 'Tulsa', 'Cal St. Fullerton', 'Queens (NC)', 'Ball St.', 'Monmouth',
-        "Mount St. Mary's", 'Jacksonville', 'Northeastern', 'Marist', 'Campbell', 'UMBC', 'Siena',
-        'Boston U.', 'Merrimack', 'Bowling Green', 'South Dakota', 'CSU Bakersfield', 'Valparaiso',
-        'Fairfield', 'Portland St.', 'Southern Miss.', 'Kansas City', 'Wagner', 'UTSA', 'Niagara',
-        'Portland', 'Coastal Carolina', 'Ga. Southern', 'Southern U.', 'Texas Southern', 'Elon',
-        'Rider', 'Pacific', 'San Diego', 'Little Rock', 'Army West Point', 'Detroit Mercy', 'Stetson',
-        'Stony Brook', 'American', 'Bellarmine', 'Southeast Mo. St.', 'Idaho St.', 'SIUE',
-        'North Florida', 'New Hampshire', 'Bucknell', 'FIU', 'Utah Tech', 'Canisius', 'UAlbany',
-        'Howard', 'Southeastern La.', 'Austin Peay', 'Evansville', 'Maine', 'Western Ill.',
-        'Lafayette', 'UT Martin', 'Loyola Maryland', 'Grambling', 'N.C. Central', 'The Citadel',
-        'Jackson St.', 'Lehigh', 'Lamar University', 'Central Conn. St.', 'Northwestern St.',
-        'Tennessee St.', 'Manhattan', 'Omaha', 'North Dakota', 'Central Mich.', 'UTRGV', 'Morgan St.',
-        'Northern Ariz.', 'LIU', 'Sacred Heart', 'Sacramento St.', 'Presbyterian', 'Prairie View',
-        'Cal Poly', 'Alcorn', 'William & Mary', 'Binghamton', 'Denver', 'Columbia', 'USC Upstate',
-        'South Carolina St.', 'FDU', 'ULM', 'Western Mich.', 'Hampton', 'Southern Ind.', 'Eastern Mich.',
-        'NIU', 'Green Bay', 'Holy Cross', 'UMES', 'N.C. A&T', 'Idaho', 'New Orleans', 'Bethune-Cookman',
-        'Alabama St.', 'Charleston So.', 'Coppin St.', 'NJIT', 'East Texas A&M', 'Florida A&M', 'UIW',
-        'Le Moyne', 'Eastern Ill.', 'Stonehill', 'Chicago St.', 'Alabama A&M', 'Central Ark.',
-        'Delaware St.', 'IU Indy', 'Houston Christian', 'Lindenwood', 'Ark.-Pine Bluff', 'Mississippi Val.'
-    ]
-
-    def assign_status(display_name):
-        if display_name in power_5_teams:
-            return "Power 5"
-        if display_name in mid_major_avoid_teams:
-            return "Mid-Major Avoid"
-        if display_name in mid_major_consider_teams:
-            return "Mid-Major Consider"
-        if display_name in mid_major_play_teams:
-            return "Mid-Major Play"
-        return "Mid-Major"
-
-    historical_df["Status"] = historical_df["Display Name"].apply(assign_status)
-
-    historical_df = historical_df[historical_df["Display Name"] != "Saint Francis"]
-
-    year_cols = ["2021 NET Rank", "2022 NET Rank", "2023 NET Rank", "2024 NET Rank", "2025 NET Rank"]
-    for col in year_cols:
-        historical_df[col] = pd.to_numeric(historical_df[col], errors="coerce")
-    historical_df["Average 5 Year NET"] = historical_df[year_cols].mean(axis=1, skipna=True).round(1)
-
-    teams_updated = historical_df["2025 NET Rank"].notna().sum()
-    print(f"Updated {teams_updated} teams with 2025 rankings ({matches_found} matches from {len(current_rankings_df)} NCAA teams)")
-
-    mismatches = [d for d in matches_details if "NO MATCH" in d]
-    if mismatches:
-        print(f"\n⚠️  WARNING: {len(mismatches)} teams from NCAA could not be matched:")
-        for detail in mismatches[:20]:
-            print(detail)
-        if len(mismatches) > 20:
-            print(f"  ... and {len(mismatches) - 20} more")
+def update_daily(page_df: pd.DataFrame, today: str) -> None:
+    snapshot = page_df[["Team", "Rank"]].rename(columns={"Rank": "NET_Rank"})
+    if DAILY_PATH.exists():
+        daily = pd.read_csv(DAILY_PATH)
+        daily = daily[daily["Date"] != today]  # a re-run on the same day replaces that day
     else:
-        print("✓ All NCAA teams matched successfully!")
+        daily = pd.DataFrame(columns=["Date", "Team", "NET_Rank"])
 
-    not_updated = historical_df[historical_df["2025 NET Rank"].isna()]
-    if len(not_updated) > 0:
-        print(f"\n📊 {len(not_updated)} teams in your Excel file did not receive 2025 rankings")
-        print("   (This is normal - these teams may not be in the current NET rankings)")
+    if len(daily):
+        last_date = daily["Date"].max()
+        last = daily[daily["Date"] == last_date]
+        if dict(zip(last["Team"], last["NET_Rank"])) == dict(zip(snapshot["Team"], snapshot["NET_Rank"])):
+            print(f"Daily history: rankings unchanged since {last_date}, nothing appended")
+            daily.to_csv(DAILY_PATH, index=False)
+            return
 
-    column_order = [
-        "Display Name", "Status",
-        "2021 NET Rank", "2022 NET Rank", "2023 NET Rank", "2024 NET Rank", "2025 NET Rank",
-        "Average 5 Year NET"
-    ]
-    historical_df = historical_df[column_order]
-    print("\n✓ Status categories assigned and columns reordered")
+    snapshot.insert(0, "Date", today)
+    daily = pd.concat([daily, snapshot], ignore_index=True).sort_values(["Date", "Team"])
+    daily.to_csv(DAILY_PATH, index=False)
+    print(f"Daily history: appended {len(snapshot)} rows for {today} ({daily['Date'].nunique()} snapshots)")
 
-    return historical_df
 
-def update_daily_history(updated_df, daily_history_path="net_rankings_daily.csv"):
-    """
-    Append today's rankings to the daily history file for time-series tracking
-    """
-    # Use Eastern Time to get the correct date
-    eastern = ZoneInfo("America/New_York")
-    today = datetime.now(eastern).strftime('%Y-%m-%d')
-    
-    # Load existing daily history if it exists
-    if os.path.exists(daily_history_path):
-        try:
-            daily_df = pd.read_csv(daily_history_path)
-            print(f"Loaded existing daily history: {len(daily_df)} records")
-            
-            # Remove any existing entries for today (in case we're re-running)
-            daily_df = daily_df[daily_df['Date'] != today]
-            print(f"Removed any existing entries for {today}")
-        except Exception as e:
-            print(f"Warning: Could not load existing daily history ({e}), creating new file")
-            daily_df = pd.DataFrame(columns=['Date', 'Team', 'NET_Rank'])
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--html", help="parse a saved copy of the NCAA page instead of fetching it")
+    args = ap.parse_args()
+
+    now = datetime.now(EASTERN)
+    today = now.date().isoformat()
+    current_season = season_for(now.date())
+    print(f"=== NET Rankings Scraper  {now:%Y-%m-%d %H:%M %Z}  (current season {season_name(current_season)}) ===")
+
+    page_df, through = parse_rankings(fetch_html(args.html))
+    scraped = dict(zip(page_df["Team"], page_df["Rank"].astype(int)))
+
+    ranks = json.loads(RANKS_PATH.read_text(encoding="utf-8")) if RANKS_PATH.exists() else {}
+    page_season = determine_page_season(through, ranks, current_season, scraped)
+    if page_season > current_season:
+        sys.exit(f"ERROR: page season {page_season} is ahead of the calendar season {current_season}")
+
+    current_live = page_season == current_season
+    ranks[str(page_season)] = dict(sorted(scraped.items()))
+    RANKS_PATH.write_text(json.dumps(dict(sorted(ranks.items())), indent=1, ensure_ascii=False) + "\n",
+                          encoding="utf-8")
+    if current_live:
+        print(f"{season_name(current_season)} NET is live: stored {len(scraped)} ranks")
     else:
-        print("No existing daily history found, creating new file")
-        daily_df = pd.DataFrame(columns=['Date', 'Team', 'NET_Rank'])
-    
-    # Create today's entries from the updated rankings
-    new_entries = []
-    for _, row in updated_df.iterrows():
-        team_name = row['Display Name']
-        current_rank = row['2025 NET Rank']
-        
-        # Only add if team has a valid current ranking
-        if pd.notna(current_rank):
-            new_entries.append({
-                'Date': today,
-                'Team': team_name,
-                'NET_Rank': int(current_rank)
-            })
-    
-    # Append new entries
-    if new_entries:
-        new_df = pd.DataFrame(new_entries)
-        daily_df = pd.concat([daily_df, new_df], ignore_index=True)
-        print(f"Added {len(new_entries)} rankings for {today}")
+        print(f"{season_name(current_season)} NET not released yet; page still shows the "
+              f"{season_name(page_season)} final (refreshed that season's stored ranks)")
+
+    status = load_status()
+    df = build_dashboard(ranks, status, current_season, page_df, current_live)
+    df.to_csv(DATA_PATH, index=False)
+    print(f"Wrote {DATA_PATH.name}: {len(df)} teams")
+    unclassified = sorted(t for t in df["Team"] if t not in status)
+    if unclassified:
+        print(f"  Not in team_status.csv (shown as 'Mid-Major'): {', '.join(unclassified)}")
+
+    if current_live:
+        update_daily(page_df, today)
     else:
-        print("Warning: No new rankings to add for today")
-    
-    # Sort by date and team
-    daily_df = daily_df.sort_values(['Date', 'Team'])
-    
-    # Save updated daily history
-    daily_df.to_csv(daily_history_path, index=False)
-    print(f"✓ Daily history updated: {len(daily_df)} total records in {daily_history_path}")
-    
-    # Show some stats
-    unique_dates = daily_df['Date'].nunique()
-    print(f"  Tracking {unique_dates} unique dates")
-    
-    return daily_df
+        print("Daily history: off-season, nothing appended")
 
-def save_output(df, output_path):
-    try:
-        df.to_csv(output_path, index=False)
-        print(f"Saved output to {output_path}")
-    except Exception as e:
-        print(f"ERROR saving output: {e}")
-        sys.exit(1)
+    META_PATH.write_text(json.dumps({
+        "current_season": current_season,
+        "seasons": list(range(current_season - WINDOW + 1, current_season + 1)),
+        "current_live": current_live,
+        "page_season": page_season,
+        "through_games": through.isoformat() if through else None,
+        "scraped_at": now.isoformat(timespec="minutes"),
+    }, indent=1) + "\n", encoding="utf-8")
+    print("Done.")
 
-def main():
-    print("=== NET Rankings Scraper ===")
-    print(f"Run time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print()
-
-    print("Step 1: Scraping current NET rankings from NCAA.com...")
-    current_rankings = scrape_net_rankings()
-    print()
-
-    print("Step 2: Loading historical data...")
-    historical_data_path = "ACC_Who_to_Play.xlsx"
-    historical_df = load_historical_data(historical_data_path)
-    print()
-
-    print("Step 3: Merging data and recalculating averages...")
-    updated_df = merge_and_update(historical_df, current_rankings)
-    print()
-
-    print("Step 4: Saving updated rankings...")
-    save_output(updated_df, "net_rankings_data.csv")
-    print()
-
-    print("Step 5: Updating daily history for time-series tracking...")
-    update_daily_history(updated_df, "net_rankings_daily.csv")
-    print()
-
-    print("✓ Complete! Current rankings and daily history updated.")
 
 if __name__ == "__main__":
     main()

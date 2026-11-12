@@ -11,9 +11,6 @@ env/
 # Data files (keep these commented - we WANT to commit the CSV)
 # net_rankings_data.csv
 
-# Cache
-net_rankings_cache.html
-create_cache.py
 
 # IDE
 .vscode/

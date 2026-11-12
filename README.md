@@ -1,165 +1,59 @@
 # NET Rankings Dashboard
 
-Automated NCAA Men's Basketball NET Rankings tracker with historical data (2021-2025).
+Live dashboard for tracking NCAA men's basketball NET rankings, built for Virginia Tech scheduling.
+It shows each team's last four final NET ranks, the live current-season NET, and a rolling 5-year average,
+plus a daily ranking chart for any team (click a row or use `index.html?team=Virginia%20Tech`).
 
-## Features
+## How it works
 
-- **Daily Updates**: Automatically scrapes NCAA NET rankings every day at 8 AM EST
-- **Historical Tracking**: Shows rankings from 2021-2025 with 5-year averages
-- **Interactive Filtering**: Filter by Power Conference vs Mid-Major
-- **Search**: Find teams quickly by name
-- **Sorting**: Click any column header to sort
-- **Color Coding**: Visual indicators for ranking tiers (Elite, Great, Good, Okay, Poor)
+1. **GitHub Actions** (`.github/workflows/main.yml`) runs `scrape_net_rankings.py` twice a day
+   (about 9 AM and 3 PM ET). It can also be started manually from the Actions tab ("Run workflow").
+2. The scraper reads the NET table and the **"Through Games" date** from NCAA.com. That date tells it which
+   season the page is showing, so last season's final NET is never counted as the new season.
+3. It commits the data files only when the rankings actually changed.
+4. **Netlify** redeploys the static site on every push.
 
-## Setup Instructions
+## Seasons and the 5-year window
 
-### 1. Clone the Repository
+Seasons are labelled by the year they **end** (2026-27 = `2027`). The current season is derived from today's date
+(August onward counts as the next season), so the table rolls forward on its own every August:
 
-```bash
-git clone <your-repo-url>
-cd net-rankings-dashboard
-```
+| Today | Columns shown | 5-year average |
+|---|---|---|
+| Nov 2026 | 2023–2026 Final + 2027 NET | 2023–2027 |
+| Nov 2027 | 2024–2027 Final + 2028 NET | 2024–2028 |
 
-### 2. Add Your Historical Data
+Before the NCAA releases the first NET of a season (usually early December), the current column is blank,
+the dashboard says so, and the average uses the four completed seasons.
 
-Replace `ACC_Who_to_Play.xlsx` with your own historical rankings file, or use the provided template.
+A season's "final" is simply the last rankings the scraper saw for it, so nothing needs to be entered by hand
+at the end of a season.
 
-### 3. Set up GitHub Repository
+## Files
 
-1. Create a new repository on GitHub
-2. Push your code:
+| File | What it is |
+|---|---|
+| `scrape_net_rankings.py` | Scraper; rebuilds every data file below |
+| `team_status.csv` | **Edit this** to classify teams: `Power 5`, `Mid-Major Play`, `Mid-Major Consider`, `Mid-Major Avoid`, or `Exclude` (hide). Unlisted teams show as `Mid-Major`, and the scraper log names them. |
+| `net_ranks_by_season.json` | NET rank for every team, every season (source of truth for finals) |
+| `net_rankings_data.csv` | One row per team, read by the dashboard |
+| `net_rankings_daily.csv` | Date / Team / NET_Rank history for the charts (in-season, changes only) |
+| `net_meta.json` | Current season, "through games" date, last check time |
+| `index.html` | The dashboard (vanilla JS + Chart.js) |
 
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin <your-repo-url>
-git push -u origin main
-```
-
-### 4. Set up Netlify
-
-1. Go to [netlify.com](https://netlify.com) and sign in
-2. Click "Add new site" → "Import an existing project"
-3. Choose GitHub and select your repository
-4. **Build settings:**
-   - Build command: **(leave empty)**
-   - Publish directory: `.`
-5. Click "Deploy site"
-6. Done! Deploys in ~30 seconds
-
-**Important:** Don't add a build command. Netlify should only deploy the static files. Python scraping happens in GitHub Actions.
-
-**You don't need Netlify API tokens** - Netlify automatically redeploys when it sees changes pushed to your GitHub repo.
-
-### 5. Test the Workflow
-
-The workflow will run automatically daily at 8 AM EST. To test it manually:
-
-1. Go to your repository on GitHub
-2. Click "Actions" tab
-3. Select "Update NET Rankings" workflow
-4. Click "Run workflow" → "Run workflow"
-5. Wait ~30 seconds for completion
-6. Netlify will auto-redeploy (~30 seconds more)
-7. Check your live site!
-
-## Local Development
-
-### Run the scraper locally:
+## Local development
 
 ```bash
-python3 scrape_net_rankings.py
+pip install -r .github/scripts/requirements.txt
+python scrape_net_rankings.py                    # live scrape
+python scrape_net_rankings.py --html saved.html  # parse a saved copy of the NCAA page
+python -m http.server 8000                       # then open http://localhost:8000
 ```
-
-### View the site locally:
-
-```bash
-# Simple HTTP server
-python3 -m http.server 8000
-
-# Or use Node.js
-npx serve .
-```
-
-Then open http://localhost:8000 in your browser.
-
-## File Structure
-
-```
-.
-├── scrape_net_rankings.py      # Python scraper script
-├── ACC_Who_to_Play.xlsx        # Historical data (your file)
-├── net_rankings_data.csv       # Generated data file
-├── index.html                  # Main dashboard page
-├── .github/
-│   └── workflows/
-│       └── update-rankings.yml # GitHub Actions workflow
-└── README.md
-```
-
-## How It Works
-
-**Simple & Fast Architecture:**
-
-1. **GitHub Actions** runs the Python scraper daily at 8 AM EST
-   - Fetches current NET rankings from NCAA.com
-   - Merges with historical data
-   - Updates `net_rankings_data.csv`
-   - Commits and pushes to GitHub
-
-2. **Netlify** detects the push and redeploys automatically
-   - Only deploys static files (HTML, CSS, CSV)
-   - No Python installation needed
-   - **Deploys in 10-30 seconds** ⚡
-
-This separation keeps deployments fast and reliable. Python runs where it should (GitHub Actions), and Netlify does what it does best (instant static file hosting).
 
 ## Troubleshooting
 
-### Python version issues on Netlify?
-The project uses Python 3.11 (specified in `runtime.txt`). If you see build errors about pandas compilation:
-- Make sure `runtime.txt` exists in your repository root
-- Verify it contains exactly: `python-3.11`
-- Don't use Python 3.14 - pandas doesn't have prebuilt wheels for it yet
-
-### Scraper not updating?
-- Check GitHub Actions logs for errors
-- Verify NCAA.com hasn't changed their page structure
-- Make sure secrets are configured correctly
-
-### Netlify deploy fails?
-- Verify NETLIFY_AUTH_TOKEN and NETLIFY_SITE_ID are correct
-- Check Netlify build logs
-- Ensure the repository is connected to Netlify
-
-### Data not showing on site?
-- Check that `net_rankings_data.csv` exists
-- Open browser console (F12) for JavaScript errors
-- Verify CSV format matches expected structure
-
-## Customization
-
-### Change update schedule:
-Edit `.github/workflows/update-rankings.yml`:
-```yaml
-schedule:
-  - cron: '0 13 * * *'  # Change time here (UTC)
-```
-
-### Add more color tiers:
-Edit the `getRankColorClass()` function in `index.html`
-
-### Modify team classification:
-Update the historical data Excel file's "Mid Major" column
-
-## License
-
-MIT License - Feel free to use and modify!
-
-## Credits
-
-- NCAA data from NCAA.com
-- Built with vanilla JavaScript (no frameworks needed!)
-- Automated with GitHub Actions and Netlify
+- **Action fails with "rankings table not found" or "only parsed N teams"**: NCAA.com changed its page layout,
+  so the parser in `parse_rankings()` needs updating. The previous data is left untouched.
+- **"no 'Through Games' date" warning**: the date label moved. The scraper falls back to comparing the page
+  with last season's stored final, but `parse_through_date()` should be fixed.
+- **A team shows as plain `Mid-Major`**: add it to `team_status.csv`.
