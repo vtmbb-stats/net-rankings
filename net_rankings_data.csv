@@ -1,7 +1,7 @@
 Team,Status,Conference,Record,Quad 1,NET 2023,NET 2024,NET 2025,NET 2026,NET 2027,Average 5 Year NET
-A&M-Corpus Christi,Mid-Major Play,Southland,,,174,194,162,190,,180.0
-Abilene Christian,Mid-Major Consider,WAC,,,204,224,230,248,,226.5
-Air Force,Mid-Major Consider,Mountain West,,,152,270,324,350,,274.0
+A&M-Corpus Christi,Mid-Major Consider,Southland,,,174,194,162,190,,180.0
+Abilene Christian,Mid-Major Play,WAC,,,204,224,230,248,,226.5
+Air Force,Mid-Major Play,Mountain West,,,152,270,324,350,,274.0
 Akron,Mid-Major Avoid,MAC,,,105,114,94,58,,92.8
 Alabama,Power 5,SEC,,,2,10,6,14,,8.0
 Alabama A&M,Mid-Major Play,SWAC,,,320,323,359,310,,328.0
@@ -13,7 +13,7 @@ Arizona,Power 5,Big 12,,,10,4,10,3,,6.8
 Arizona St.,Power 5,Big 12,,,61,131,75,73,,85.0
 Ark.-Pine Bluff,Mid-Major Play,SWAC,,,333,328,363,316,,335.0
 Arkansas,Power 5,SEC,,,20,115,35,18,,47.0
-Arkansas St.,Mid-Major Avoid,Sun Belt,,,285,144,90,155,,168.5
+Arkansas St.,Mid-Major Consider,Sun Belt,,,285,144,90,155,,168.5
 Army West Point,Mid-Major Play,Patriot,,,246,339,300,336,,305.2
 Auburn,Power 5,SEC,,,35,7,3,37,,20.5
 Austin Peay,Mid-Major Play,ASUN,,,325,236,285,164,,252.5
@@ -30,16 +30,16 @@ Boston U.,Mid-Major Play,Patriot,,,256,292,291,266,,276.2
 Bowling Green,Mid-Major Play,MAC,,,286,230,289,159,,241.0
 Bradley,Mid-Major Avoid,MVC,,,78,60,77,117,,83.0
 Brown,Mid-Major Play,Ivy League,,,176,177,216,297,,216.5
-Bryant,Mid-Major Consider,America East,,,179,163,146,354,,210.5
+Bryant,Mid-Major Play,America East,,,179,163,146,354,,210.5
 Bucknell,Mid-Major Play,Patriot,,,292,279,215,334,,280.0
 Buffalo,Mid-Major Play,MAC,,,194,345,341,197,,269.2
 Butler,Power 5,Big East,,,125,67,81,84,,89.2
 CSU Bakersfield,Mid-Major Play,Big West,,,298,259,249,330,,284.0
-CSUN,Mid-Major Consider,Big West,,,335,226,111,189,,215.2
+CSUN,Mid-Major Play,Big West,,,335,226,111,189,,215.2
 Cal Poly,Mid-Major Play,Big West,,,311,341,182,227,,265.2
 Cal St. Fullerton,Mid-Major Play,Big West,,,126,235,348,180,,222.2
 California,Power 5,ACC,,,315,127,126,72,,160.0
-California Baptist,Mid-Major Play,WAC,,,171,200,174,98,,160.8
+California Baptist,Mid-Major Consider,WAC,,,171,200,174,98,,160.8
 Campbell,Mid-Major Play,CAA,,,231,306,220,200,,239.2
 Canisius,Mid-Major Play,MAAC,,,261,268,357,344,,307.5
 Central Ark.,Mid-Major Play,ASUN,,,329,344,344,166,,295.8
@@ -47,21 +47,21 @@ Central Conn. St.,Mid-Major Play,NEC,,,341,245,171,289,,261.5
 Central Mich.,Mid-Major Play,MAC,,,331,264,214,281,,272.5
 Charleston So.,Mid-Major Play,Big South,,,304,315,296,241,,289.0
 Charlotte,Mid-Major Consider,American,,,98,116,270,171,,163.8
-Chattanooga,Mid-Major Avoid,SoCon,,,178,136,96,288,,174.5
+Chattanooga,Mid-Major Consider,SoCon,,,178,136,96,288,,174.5
 Chicago St.,Mid-Major Play,NEC,,,302,289,358,343,,323.0
 Cincinnati,Power 5,Big 12,,,63,39,49,49,,50.0
 Clemson,Power 5,ACC,,,67,23,25,35,,37.5
-Cleveland St.,Mid-Major Avoid,Horizon,,,185,197,168,318,,217.0
+Cleveland St.,Mid-Major Play,Horizon,,,185,197,168,318,,217.0
 Coastal Carolina,Mid-Major Play,Sun Belt,,,295,320,328,226,,292.2
 Col. of Charleston,Mid-Major Avoid,CAA,,,52,100,147,165,,116.0
-Colgate,Mid-Major Avoid,Patriot,,,101,132,247,228,,177.0
+Colgate,Mid-Major Consider,Patriot,,,101,132,247,228,,177.0
 Colorado,Power 5,Big 12,,,76,25,87,76,,66.0
 Colorado St.,Mid-Major Avoid,Mountain West,,,115,33,42,88,,69.5
 Columbia,Mid-Major Play,Ivy League,,,339,227,274,188,,257.0
 Coppin St.,Mid-Major Play,MEAC,,,328,361,360,363,,353.0
 Cornell,Mid-Major Avoid,Ivy League,,,128,97,123,149,,124.2
 Creighton,Power 5,Big East,,,14,11,37,83,,36.2
-Dartmouth,Mid-Major Consider,Ivy League,,,275,333,211,267,,271.5
+Dartmouth,Mid-Major Play,Ivy League,,,275,333,211,267,,271.5
 Davidson,Mid-Major Avoid,Atlantic 10,,,145,123,155,112,,133.8
 Dayton,Mid-Major Avoid,Atlantic 10,,,77,24,71,66,,59.5
 DePaul,Power 5,Big East,,,155,314,125,101,,173.8
@@ -70,11 +70,11 @@ Delaware St.,Mid-Major Play,MEAC,,,354,305,304,362,,331.2
 Denver,Mid-Major Play,Summit League,,,289,266,302,245,,275.5
 Detroit Mercy,Mid-Major Play,Horizon,,,212,356,329,220,,279.2
 Drake,Mid-Major Avoid,MVC,,,59,49,55,201,,91.0
-Drexel,Mid-Major Avoid,CAA,,,189,124,184,212,,177.2
+Drexel,Mid-Major Consider,CAA,,,189,124,184,212,,177.2
 Duke,Power 5,ACC,,,16,9,1,2,,7.0
 Duquesne,Mid-Major Avoid,Atlantic 10,,,137,83,150,130,,125.0
-ETSU,Mid-Major Avoid,SoCon,,,265,179,142,139,,181.2
-East Carolina,Mid-Major Consider,American,,,190,186,176,262,,203.5
+ETSU,Mid-Major Consider,SoCon,,,265,179,142,139,,181.2
+East Carolina,Mid-Major Play,American,,,190,186,176,262,,203.5
 East Texas A&M,Mid-Major Play,Southland,,,306,335,333,304,,319.5
 Eastern Ill.,Mid-Major Play,OVC,,,345,312,319,320,,324.0
 Eastern Ky.,Mid-Major Play,ASUN,,,146,219,188,291,,211.0
@@ -90,8 +90,8 @@ Fla. Atlantic,Mid-Major Avoid,American,,,13,44,113,123,,73.2
 Florida,Power 5,SEC,,,73,30,4,4,,27.8
 Florida A&M,Mid-Major Play,SWAC,,,359,340,321,311,,332.8
 Florida St.,Power 5,ACC,,,220,88,91,63,,115.5
-Fordham,Mid-Major Play,Atlantic 10,,,132,176,241,174,,180.8
-Fresno St.,Mid-Major Consider,Mountain West,,,148,233,279,151,,202.8
+Fordham,Mid-Major Consider,Atlantic 10,,,132,176,241,174,,180.8
+Fresno St.,Mid-Major Play,Mountain West,,,148,233,279,151,,202.8
 Furman,Mid-Major Avoid,SoCon,,,88,146,124,183,,135.2
 Ga. Southern,Mid-Major Play,Sun Belt,,,207,285,254,221,,241.8
 Gardner-Webb,Mid-Major Play,Big South,,,195,192,269,361,,254.2
@@ -106,7 +106,7 @@ Grambling,Mid-Major Play,SWAC,,,186,276,323,305,,272.5
 Grand Canyon,Mid-Major Avoid,Mountain West,,,106,50,97,71,,81.0
 Green Bay,Mid-Major Play,Horizon,,,361,223,336,218,,284.5
 Hampton,Mid-Major Play,CAA,,,348,337,212,269,,291.5
-Harvard,Mid-Major Play,Ivy League,,,150,205,256,154,,191.2
+Harvard,Mid-Major Consider,Ivy League,,,150,205,256,154,,191.2
 Hawaii,Mid-Major Consider,Big West,,,131,173,224,103,,157.8
 High Point,Mid-Major Avoid,Big South,,,290,113,83,68,,138.5
 Hofstra,Mid-Major Avoid,CAA,,,85,112,217,90,,126.0
@@ -135,7 +135,7 @@ Kennesaw St.,Mid-Major Consider,CUSA,,,116,263,138,147,,166.0
 Kent St.,Mid-Major Avoid,MAC,,,68,172,117,153,,127.5
 Kentucky,Power 5,SEC,,,26,20,15,28,,22.2
 LIU,Mid-Major Play,NEC,,,362,347,280,198,,296.8
-LMU (CA),Mid-Major Avoid,WCC,,,111,199,161,182,,163.2
+LMU (CA),Mid-Major Consider,WCC,,,111,199,161,182,,163.2
 LSU,Power 5,SEC,,,153,99,88,75,,103.8
 La Salle,Mid-Major Play,Atlantic 10,,,223,191,219,244,,219.2
 Lafayette,Mid-Major Play,Patriot,,,271,316,284,324,,298.8
@@ -146,12 +146,12 @@ Liberty,Mid-Major Avoid,CUSA,,,46,140,66,102,,88.5
 Lindenwood,Mid-Major Play,OVC,,,338,354,311,264,,316.8
 Lipscomb,Mid-Major Avoid,ASUN,,,147,167,86,193,,148.2
 Little Rock,Mid-Major Play,OVC,,,323,185,231,309,,262.0
-Long Beach St.,Mid-Major Consider,Big West,,,167,171,326,257,,230.2
-Longwood,Mid-Major Avoid,Big South,,,164,168,210,263,,201.2
-Louisiana,Mid-Major Avoid,Sun Belt,,,86,149,318,313,,216.5
+Long Beach St.,Mid-Major Play,Big West,,,167,171,326,257,,230.2
+Longwood,Mid-Major Play,Big South,,,164,168,210,263,,201.2
+Louisiana,Mid-Major Play,Sun Belt,,,86,149,318,313,,216.5
 Louisiana Tech,Mid-Major Avoid,CUSA,,,161,101,129,208,,149.8
 Louisville,Power 5,ACC,,,314,206,28,19,,141.8
-Loyola Chicago,Mid-Major Avoid,Atlantic 10,,,269,91,104,278,,185.5
+Loyola Chicago,Mid-Major Consider,Atlantic 10,,,269,91,104,278,,185.5
 Loyola Maryland,Mid-Major Play,Patriot,,,319,346,308,329,,325.5
 Maine,Mid-Major Play,America East,,,273,231,205,339,,262.0
 Manhattan,Mid-Major Play,MAAC,,,299,334,250,328,,302.8
@@ -160,29 +160,29 @@ Marquette,Power 5,Big East,,,12,13,29,93,,36.8
 Marshall,Mid-Major Consider,Sun Belt,,,83,247,173,170,,168.2
 Maryland,Power 5,Big Ten,,,32,77,11,131,,62.8
 Massachusetts,Mid-Major Consider,MAC,,,203,92,223,202,,180.0
-McNeese,Mid-Major Consider,Southland,,,340,63,59,57,,129.8
+McNeese,Mid-Major Avoid,Southland,,,340,63,59,57,,129.8
 Memphis,Mid-Major Avoid,American,,,22,75,51,128,,69.0
 Mercer,Mid-Major Play,SoCon,,,227,215,259,184,,221.2
-Mercyhurst,Mid-Major,NEC,,,,,338,274,,306.0
+Mercyhurst,Mid-Major Play,NEC,,,,,338,274,,306.0
 Merrimack,Mid-Major Play,MAAC,,,301,210,180,178,,217.2
 Miami (FL),Power 5,ACC,,,21,98,225,32,,94.0
 Miami (OH),Mid-Major Consider,MAC,,,287,237,141,65,,182.5
 Michigan,Power 5,Big Ten,,,57,130,18,1,,51.5
 Michigan St.,Power 5,Big Ten,,,33,22,9,11,,18.8
-Middle Tenn.,Mid-Major Avoid,CUSA,,,109,290,107,162,,167.0
-Milwaukee,Mid-Major Consider,Horizon,,,210,212,132,253,,201.8
+Middle Tenn.,Mid-Major Consider,CUSA,,,109,290,107,162,,167.0
+Milwaukee,Mid-Major Play,Horizon,,,210,212,132,253,,201.8
 Minnesota,Power 5,Big Ten,,,222,84,93,82,,120.2
 Mississippi St.,Power 5,SEC,,,53,36,34,108,,57.8
 Mississippi Val.,Mid-Major Play,SWAC,,,358,362,364,365,,362.2
 Missouri,Power 5,SEC,,,47,157,22,59,,71.2
-Missouri St.,Mid-Major Avoid,CUSA,,,144,147,242,205,,184.5
+Missouri St.,Mid-Major Consider,CUSA,,,144,147,242,205,,184.5
 Monmouth,Mid-Major Play,CAA,,,351,189,257,168,,241.2
-Montana,Mid-Major Avoid,Big Sky,,,170,154,148,196,,167.0
+Montana,Mid-Major Consider,Big Sky,,,170,154,148,196,,167.0
 Montana St.,Mid-Major Consider,Big Sky,,,104,217,186,132,,159.8
-Morehead St.,Mid-Major Avoid,OVC,,,219,108,316,265,,227.0
+Morehead St.,Mid-Major Play,OVC,,,219,108,316,265,,227.0
 Morgan St.,Mid-Major Play,MEAC,,,293,338,332,352,,328.8
 Mount St. Mary's,Mid-Major Play,MAAC,,,268,242,236,277,,255.8
-Murray St.,Mid-Major Avoid,MVC,,,214,170,140,110,,158.5
+Murray St.,Mid-Major Consider,MVC,,,214,170,140,110,,158.5
 N.C. A&T,Mid-Major Play,CAA,,,318,342,334,276,,317.5
 N.C. Central,Mid-Major Play,MEAC,,,187,271,320,341,,279.8
 NC State,Power 5,ACC,,,43,48,133,36,,65.0
@@ -192,37 +192,37 @@ Navy,Mid-Major Play,Patriot,,,172,317,272,141,,225.5
 Nebraska,Power 5,Big Ten,,,92,35,54,12,,48.2
 Nevada,Mid-Major Avoid,Mountain West,,,48,38,79,67,,58.0
 New Hampshire,Mid-Major Play,America East,,,267,228,355,348,,299.5
-New Haven,Mid-Major,NEC,,,,,,325,,325.0
+New Haven,Mid-Major Play,NEC,,,,,,325,,325.0
 New Mexico,Mid-Major Avoid,Mountain West,,,64,26,41,46,,44.2
-New Mexico St.,Mid-Major Avoid,CUSA,,,191,291,143,187,,203.0
+New Mexico St.,Mid-Major Play,CUSA,,,191,291,143,187,,203.0
 New Orleans,Mid-Major Play,Southland,,,342,343,343,215,,310.8
 Niagara,Mid-Major Play,MAAC,,,244,257,322,340,,290.8
 Nicholls,Mid-Major Play,Southland,,,264,240,167,250,,230.2
-Norfolk St.,Mid-Major Consider,MEAC,,,183,208,181,317,,222.2
-North Ala.,Mid-Major Consider,ASUN,,,242,253,121,338,,238.5
+Norfolk St.,Mid-Major Play,MEAC,,,183,208,181,317,,222.2
+North Ala.,Mid-Major Play,ASUN,,,242,253,121,338,,238.5
 North Carolina,Power 5,ACC,,,44,8,32,26,,27.5
 North Dakota,Mid-Major Play,Summit League,,,277,239,275,271,,265.5
-North Dakota St.,Mid-Major Avoid,Summit League,,,217,256,137,116,,181.5
+North Dakota St.,Mid-Major Consider,Summit League,,,217,256,137,116,,181.5
 North Florida,Mid-Major Play,ASUN,,,236,252,262,337,,271.8
 North Texas,Mid-Major Avoid,American,,,30,81,64,135,,77.5
 Northeastern,Mid-Major Play,CAA,,,309,243,208,287,,261.8
 Northern Ariz.,Mid-Major Play,Big Sky,,,230,313,251,315,,277.2
 Northern Colo.,Mid-Major Consider,Big Sky,,,237,187,119,148,,172.8
-Northern Ky.,Mid-Major Play,Horizon,,,151,180,227,186,,186.0
+Northern Ky.,Mid-Major Consider,Horizon,,,151,180,227,186,,186.0
 Northwestern,Power 5,Big Ten,,,37,51,53,61,,50.5
 Northwestern St.,Mid-Major Play,Southland,,,205,332,226,300,,265.8
 Notre Dame,Power 5,ACC,,,184,121,103,95,,125.8
 Oakland,Mid-Major Consider,Horizon,,,276,120,187,175,,189.5
-Ohio,Mid-Major Avoid,MAC,,,133,142,175,232,,170.5
+Ohio,Mid-Major Consider,MAC,,,133,142,175,232,,170.5
 Ohio St.,Power 5,Big Ten,,,49,52,39,30,,42.5
 Oklahoma,Power 5,SEC,,,70,45,46,47,,52.0
 Oklahoma St.,Power 5,Big 12,,,42,126,92,81,,85.2
 Old Dominion,Mid-Major Play,Sun Belt,,,154,297,293,255,,249.8
 Ole Miss,Power 5,SEC,,,129,90,24,80,,80.8
 Omaha,Mid-Major Play,Summit League,,,317,272,164,261,,253.5
-Oral Roberts,Mid-Major Consider,Summit League,,,50,278,335,314,,244.2
+Oral Roberts,Mid-Major Play,Summit League,,,50,278,335,314,,244.2
 Oregon,Power 5,Big Ten,,,45,54,27,107,,58.2
-Oregon St.,Mid-Major Avoid,WCC,,,225,161,84,172,,160.5
+Oregon St.,Mid-Major Consider,WCC,,,225,161,84,172,,160.5
 Pacific,Mid-Major Play,WCC,,,198,359,297,114,,242.0
 Penn,Mid-Major Play,Ivy League,,,138,214,306,146,,201.0
 Penn St.,Power 5,Big Ten,,,41,85,62,138,,81.5
@@ -237,13 +237,13 @@ Providence,Power 5,Big East,,,51,59,100,78,,72.0
 Purdue,Power 5,Big Ten,,,6,3,16,8,,8.2
 Purdue Fort Wayne,Mid-Major Consider,Horizon,,,238,151,154,254,,199.2
 Queens (NC),Mid-Major Play,ASUN,,,202,269,207,192,,217.5
-Quinnipiac,Mid-Major Play,MAAC,,,175,164,193,210,,185.5
+Quinnipiac,Mid-Major Consider,MAAC,,,175,164,193,210,,185.5
 Radford,Mid-Major Play,Big South,,,173,234,160,252,,204.8
 Rhode Island,Mid-Major Consider,Atlantic 10,,,263,211,149,150,,193.2
 Rice,Mid-Major Play,American,,,188,241,206,242,,219.2
-Richmond,Mid-Major Avoid,Atlantic 10,,,160,80,258,161,,164.8
+Richmond,Mid-Major Consider,Atlantic 10,,,160,80,258,161,,164.8
 Rider,Mid-Major Play,MAAC,,,215,220,315,357,,276.8
-Robert Morris,Mid-Major Consider,Horizon,,,247,304,131,143,,206.2
+Robert Morris,Mid-Major Play,Horizon,,,247,304,131,143,,206.2
 Rutgers,Power 5,Big Ten,,,40,102,74,136,,88.0
 SFA,Mid-Major Consider,Southland,,,136,174,268,89,,166.8
 SIUE,Mid-Major Play,OVC,,,221,282,221,259,,245.8
@@ -264,11 +264,11 @@ Santa Clara,Mid-Major Avoid,WCC,,,87,105,57,42,,72.8
 Seattle U,Mid-Major Avoid,WCC,,,142,107,157,119,,131.2
 Seton Hall,Power 5,Big East,,,74,53,209,53,,97.2
 Siena,Mid-Major Play,MAAC,,,206,353,260,173,,248.0
-South Alabama,Mid-Major Avoid,Sun Belt,,,108,246,122,185,,165.2
+South Alabama,Mid-Major Consider,Sun Belt,,,108,246,122,185,,165.2
 South Carolina,Power 5,SEC,,,235,56,85,104,,120.0
 South Carolina St.,Mid-Major Play,MEAC,,,347,296,197,356,,299.0
 South Dakota,Mid-Major Play,Summit League,,,300,322,233,286,,285.2
-South Dakota St.,Mid-Major Avoid,Summit League,,,162,139,130,211,,160.5
+South Dakota St.,Mid-Major Consider,Summit League,,,162,139,130,211,,160.5
 South Fla.,Mid-Major Avoid,American,,,159,78,189,45,,117.8
 Southeast Mo. St.,Mid-Major Play,OVC,,,243,350,183,224,,250.0
 Southeastern La.,Mid-Major Play,Southland,,,257,309,201,295,,265.5
@@ -280,7 +280,7 @@ Southern U.,Mid-Major Play,SWAC,,,278,255,222,279,,258.5
 Southern Utah,Mid-Major Play,WAC,,,113,265,307,272,,239.2
 St. Bonaventure,Mid-Major Avoid,Atlantic 10,,,200,89,105,140,,133.5
 St. John's (NY),Power 5,Big East,,,91,29,13,13,,36.5
-St. Thomas (MN),Mid-Major Consider,Summit League,,,199,159,120,113,,147.8
+St. Thomas (MN),Mid-Major Avoid,Summit League,,,199,159,120,113,,147.8
 Stanford,Power 5,ACC,,,96,111,80,62,,87.2
 Stetson,Mid-Major Play,ASUN,,,163,218,354,312,,261.8
 Stonehill,Mid-Major Play,NEC,,,310,355,312,332,,327.2
@@ -288,26 +288,26 @@ Stony Brook,Mid-Major Play,CAA,,,327,175,340,233,,268.8
 Syracuse,Power 5,ACC,,,121,79,134,85,,104.8
 TCU,Power 5,Big 12,,,27,46,78,39,,47.5
 Tarleton St.,Mid-Major Play,WAC,,,165,135,303,230,,208.2
-Temple,Mid-Major Avoid,American,,,123,190,166,167,,161.5
+Temple,Mid-Major Consider,American,,,123,190,166,167,,161.5
 Tennessee,Power 5,SEC,,,5,5,5,17,,8.0
 Tennessee St.,Mid-Major Play,OVC,,,280,283,248,176,,246.8
-Tennessee Tech,Mid-Major,OVC,,,274,336,292,308,,302.5
+Tennessee Tech,Mid-Major Play,OVC,,,274,336,292,308,,302.5
 Texas,Power 5,SEC,,,7,28,40,38,,28.2
 Texas A&M,Power 5,SEC,,,28,37,20,43,,32.0
 Texas Southern,Mid-Major Play,SWAC,,,307,277,281,322,,296.8
-Texas St.,Mid-Major Consider,Sun Belt,,,193,207,195,237,,208.0
+Texas St.,Mid-Major Play,Sun Belt,,,193,207,195,237,,208.0
 Texas Tech,Power 5,Big 12,,,62,34,8,20,,31.0
 The Citadel,Mid-Major Play,SoCon,,,330,261,361,346,,324.5
 Toledo,Mid-Major Avoid,MAC,,,82,134,235,134,,146.2
 Towson,Mid-Major Avoid,CAA,,,130,148,145,160,,145.8
 Troy,Mid-Major Avoid,Sun Belt,,,134,137,99,137,,126.8
-Tulane,Mid-Major Avoid,American,,,107,141,151,206,,151.2
+Tulane,Mid-Major Consider,American,,,107,141,151,206,,151.2
 Tulsa,Mid-Major Play,American,,,324,198,271,51,,211.0
 UAB,Mid-Major Avoid,American,,,39,104,98,118,,89.8
 UAlbany,Mid-Major Play,America East,,,343,249,263,326,,295.2
-UC Davis,Mid-Major Play,Big West,,,149,169,240,179,,184.2
+UC Davis,Mid-Major Consider,Big West,,,149,169,240,179,,184.2
 UC Irvine,Mid-Major Avoid,Big West,,,102,82,63,120,,91.8
-UC Riverside,Mid-Major Avoid,Big West,,,140,229,153,273,,198.8
+UC Riverside,Mid-Major Consider,Big West,,,140,229,153,273,,198.8
 UC San Diego,Mid-Major Avoid,Big West,,,282,128,36,124,,142.5
 UC Santa Barbara,Mid-Major Avoid,Big West,,,103,209,144,142,,149.5
 UCF,Power 5,Big 12,,,66,66,68,52,,63.0
@@ -318,14 +318,14 @@ UIW,Mid-Major Play,Southland,,,344,348,228,280,,300.0
 ULM,Mid-Major Play,Sun Belt,,,296,308,349,355,,327.0
 UMBC,Mid-Major Play,America East,,,239,284,298,199,,255.0
 UMES,Mid-Major Play,MEAC,,,229,349,362,351,,322.8
-UMass Lowell,Mid-Major Consider,America East,,,118,143,244,321,,206.5
+UMass Lowell,Mid-Major Play,America East,,,118,143,244,321,,206.5
 UNC Asheville,Mid-Major Consider,Big South,,,143,160,192,235,,182.5
-UNC Greensboro,Mid-Major Avoid,SoCon,,,117,133,135,293,,169.5
+UNC Greensboro,Mid-Major Consider,SoCon,,,117,133,135,293,,169.5
 UNCW,Mid-Major Avoid,CAA,,,141,119,102,100,,115.5
 UNI,Mid-Major Avoid,MVC,,,218,109,95,79,,125.2
 UNLV,Mid-Major Avoid,Mountain West,,,94,74,101,105,,93.5
 USC Upstate,Mid-Major Play,Big South,,,253,307,346,302,,302.0
-UT Arlington,Mid-Major Play,WAC,,,249,125,232,163,,192.2
+UT Arlington,Mid-Major Consider,WAC,,,249,125,232,163,,192.2
 UT Martin,Mid-Major Play,OVC,,,251,204,290,207,,238.0
 UTEP,Mid-Major Consider,CUSA,,,182,182,159,268,,197.8
 UTRGV,Mid-Major Play,Southland,,,259,329,245,126,,239.8
@@ -335,10 +335,10 @@ Utah St.,Mid-Major Avoid,Mountain West,,,23,43,43,25,,33.5
 Utah Tech,Mid-Major Play,WAC,,,158,280,309,177,,231.0
 Utah Valley,Mid-Major Avoid,WAC,,,58,166,108,86,,104.5
 VCU,Mid-Major Avoid,Atlantic 10,,,54,70,33,44,,50.2
-VMI,Mid-Major Consider,SoCon,,,355,357,294,359,,341.2
+VMI,Mid-Major Play,SoCon,,,355,357,294,359,,341.2
 Valparaiso,Mid-Major Play,MVC,,,294,303,203,157,,239.2
 Vanderbilt,Power 5,SEC,,,81,202,47,15,,86.2
-Vermont,Mid-Major Avoid,America East,,,112,103,234,229,,169.5
+Vermont,Mid-Major Consider,America East,,,112,103,234,229,,169.5
 Villanova,Power 5,Big East,,,71,42,56,34,,50.8
 Virginia,Power 5,ACC,,,29,55,110,16,,52.5
 Virginia Tech,Power 5,ACC,,,75,58,170,56,,89.8
@@ -346,20 +346,20 @@ Wagner,Mid-Major Play,NEC,,,303,288,339,303,,308.2
 Wake Forest,Power 5,ACC,,,89,40,69,69,,66.8
 Washington,Power 5,Big Ten,,,124,69,109,55,,89.2
 Washington St.,Mid-Major Avoid,WCC,,,79,41,112,144,,94.0
-Weber St.,Mid-Major Consider,Big Sky,,,192,156,305,203,,214.0
-West Ga.,Mid-Major,ASUN,,,,,347,298,,322.5
+Weber St.,Mid-Major Play,Big Sky,,,192,156,305,203,,214.0
+West Ga.,Mid-Major Play,ASUN,,,,,347,298,,322.5
 West Virginia,Power 5,Big 12,,,24,158,50,54,,71.5
-Western Caro.,Mid-Major Consider,SoCon,,,232,110,342,225,,227.2
+Western Caro.,Mid-Major Play,SoCon,,,232,110,342,225,,227.2
 Western Ill.,Mid-Major Play,OVC,,,248,260,337,364,,302.2
-Western Ky.,Mid-Major Avoid,CUSA,,,169,138,158,156,,155.2
+Western Ky.,Mid-Major Consider,CUSA,,,169,138,158,156,,155.2
 Western Mich.,Mid-Major Play,MAC,,,326,294,278,283,,295.2
 Wichita St.,Mid-Major Avoid,American,,,110,153,139,70,,118.0
 William & Mary,Mid-Major Play,CAA,,,316,326,218,127,,246.8
 Winthrop,Mid-Major Consider,Big South,,,250,181,163,129,,180.8
 Wisconsin,Power 5,Big Ten,,,72,19,14,27,,33.0
-Wofford,Mid-Major Avoid,SoCon,,,228,183,127,246,,196.0
+Wofford,Mid-Major Consider,SoCon,,,228,183,127,246,,196.0
 Wright St.,Mid-Major Consider,Horizon,,,197,150,213,125,,171.2
-Wyoming,Mid-Major Avoid,Mountain West,,,180,155,198,97,,157.5
+Wyoming,Mid-Major Consider,Mountain West,,,180,155,198,97,,157.5
 Xavier,Power 5,Big East,,,18,64,45,96,,55.8
 Yale,Mid-Major Avoid,Ivy League,,,65,86,70,74,,73.8
-Youngstown St.,Mid-Major Avoid,Horizon,,,127,129,185,219,,165.0
+Youngstown St.,Mid-Major Consider,Horizon,,,127,129,185,219,,165.0

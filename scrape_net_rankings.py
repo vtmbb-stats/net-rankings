@@ -40,6 +40,10 @@ NET_URL = "https://www.ncaa.com/rankings/basketball-men/d1/ncaa-mens-basketball-
 EASTERN = ZoneInfo("America/New_York")
 WINDOW = 5  # seasons in the rolling average (current season + 4 finals)
 
+# Mid-majors are classified from their rolling 5-year average NET each run.
+AVOID_MAX = 150     # avg <= 150        -> Mid-Major Avoid
+CONSIDER_MAX = 200  # avg 150.1 - 200   -> Mid-Major Consider; above 200 -> Mid-Major Play
+
 ROOT = Path(__file__).resolve().parent
 RANKS_PATH = ROOT / "net_ranks_by_season.json"
 STATUS_PATH = ROOT / "team_status.csv"
@@ -133,6 +137,16 @@ def load_status() -> dict[str, str]:
         return {r["Team"].strip(): r["Status"].strip() for r in csv.DictReader(f)}
 
 
+def mid_major_status(avg: float) -> str:
+    if pd.isna(avg):
+        return "Mid-Major"
+    if avg <= AVOID_MAX:
+        return "Mid-Major Avoid"
+    if avg <= CONSIDER_MAX:
+        return "Mid-Major Consider"
+    return "Mid-Major Play"
+
+
 def determine_page_season(through: date | None, ranks: dict, current_season: int, scraped: dict) -> int:
     if through is not None:
         return season_for(through)
@@ -158,7 +172,7 @@ def build_dashboard(ranks: dict, status: dict, current_season: int, page_df: pd.
     for t in teams:
         row = {
             "Team": t,
-            "Status": status.get(t, "Mid-Major"),
+            "Status": status.get(t, ""),  # Power 5 from team_status.csv; mid-majors filled below
             "Conference": info.at[t, "Conference"],
             "Record": info.at[t, "Record"] if current_live else "",
             "Quad 1": info.at[t, "Quad 1"] if current_live else "",
@@ -171,6 +185,8 @@ def build_dashboard(ranks: dict, status: dict, current_season: int, page_df: pd.
     for c in cols:
         df[c] = pd.to_numeric(df[c], errors="coerce").astype("Int64")
     df["Average 5 Year NET"] = df[cols].astype("float").mean(axis=1, skipna=True).round(1)
+    mid = df["Status"] != "Power 5"
+    df.loc[mid, "Status"] = df.loc[mid, "Average 5 Year NET"].apply(mid_major_status)
     return df
 
 
@@ -228,9 +244,7 @@ def main() -> None:
     df = build_dashboard(ranks, status, current_season, page_df, current_live)
     df.to_csv(DATA_PATH, index=False)
     print(f"Wrote {DATA_PATH.name}: {len(df)} teams")
-    unclassified = sorted(t for t in df["Team"] if t not in status)
-    if unclassified:
-        print(f"  Not in team_status.csv (shown as 'Mid-Major'): {', '.join(unclassified)}")
+    print("  " + ", ".join(f"{k}: {v}" for k, v in df["Status"].value_counts().items()))
 
     if current_live:
         update_daily(page_df, today)

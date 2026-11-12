@@ -29,12 +29,25 @@ the dashboard says so, and the average uses the four completed seasons.
 A season's "final" is simply the last rankings the scraper saw for it, so nothing needs to be entered by hand
 at the end of a season.
 
+## Mid-major classification
+
+Every team not listed as `Power 5` is classified from its 5-year average NET each run
+(cutoffs are `AVOID_MAX` / `CONSIDER_MAX` at the top of the scraper):
+
+| 5-year average | Status |
+|---|---|
+| 150 or better | Mid-Major Avoid |
+| 150.1 – 200 | Mid-Major Consider |
+| worse than 200 | Mid-Major Play |
+
+Because the average rolls forward, a team's label can change as new seasons come in.
+
 ## Files
 
 | File | What it is |
 |---|---|
 | `scrape_net_rankings.py` | Scraper; rebuilds every data file below |
-| `team_status.csv` | **Edit this** to classify teams: `Power 5`, `Mid-Major Play`, `Mid-Major Consider`, `Mid-Major Avoid`, or `Exclude` (hide). Unlisted teams show as `Mid-Major`, and the scraper log names them. |
+| `team_status.csv` | **Edit this** for the hand-maintained labels only: `Power 5` schools and `Exclude` (hide a team). Every other team is a mid-major, classified automatically (see above). |
 | `net_ranks_by_season.json` | NET rank for every team, every season (source of truth for finals) |
 | `net_rankings_data.csv` | One row per team, read by the dashboard |
 | `net_rankings_daily.csv` | Date / Team / NET_Rank history for the charts (in-season, changes only) |
@@ -56,4 +69,4 @@ python -m http.server 8000                       # then open http://localhost:80
   so the parser in `parse_rankings()` needs updating. The previous data is left untouched.
 - **"no 'Through Games' date" warning**: the date label moved. The scraper falls back to comparing the page
   with last season's stored final, but `parse_through_date()` should be fixed.
-- **A team shows as plain `Mid-Major`**: add it to `team_status.csv`.
+- **A power-conference school shows as a mid-major**: add it to `team_status.csv` as `Power 5`.
